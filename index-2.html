@@ -1,0 +1,88 @@
+<!doctype html>
+<html lang="sv">
+<head>
+<meta charset="utf-8"><meta name="viewport" content="width=device-width,initial-scale=1,viewport-fit=cover">
+<title>DX START – Tommy Forsman</title>
+<meta name="theme-color" content="#0b0f1a">
+<style>
+:root{--bg:#0b0f1a;--panel:#111827;--panel2:#172033;--text:#f8fafc;--muted:#aab4c5;--gold:#eab308;--line:#2a3549;--ok:#22c55e;--warn:#f59e0b;--bad:#ef4444}
+*{box-sizing:border-box}body{margin:0;background:var(--bg);color:var(--text);font-family:system-ui,-apple-system,Segoe UI,Roboto,Arial,sans-serif}header{padding:22px 16px;border-bottom:1px solid var(--line);background:#0a0e17;position:sticky;top:0;z-index:5}.wrap{max-width:1150px;margin:auto}.brand{display:flex;gap:12px;align-items:center}.brand b{font-size:1.45rem}.brand small{display:block;color:var(--muted);margin-top:2px}.status{margin-left:auto;font-size:.85rem;color:var(--muted)}main{padding:18px 14px 40px}.hero{background:linear-gradient(135deg,#111827,#172033);border:1px solid var(--line);border-radius:18px;padding:18px;margin-bottom:16px}.hero h1{margin:0 0 7px;color:var(--gold);font-size:1.45rem}.hero p{margin:0;color:var(--muted);line-height:1.5}.grid{display:grid;grid-template-columns:repeat(auto-fit,minmax(210px,1fr));gap:12px}.card{background:var(--panel);border:1px solid var(--line);border-radius:16px;padding:14px}.card h2{font-size:1rem;margin:0 0 10px;color:#fff}.btn{display:flex;align-items:center;justify-content:center;gap:8px;width:100%;min-height:48px;margin:8px 0;padding:10px 12px;border-radius:12px;border:1px solid #344158;background:#182235;color:#fff;text-decoration:none;font-weight:650;cursor:pointer}.btn:hover{border-color:var(--gold)}.btn.primary{background:var(--gold);color:#111827;border-color:var(--gold)}.btn.danger{background:#3a1518;border-color:#6f252b}.btn.good{background:#12331f;border-color:#235b38}.btn.small{min-height:40px;font-size:.9rem}.section{margin-top:18px}.section-title{font-size:1.1rem;margin:0 0 10px;color:var(--gold)}.note{font-size:.86rem;color:var(--muted);line-height:1.45}.receiver-list{display:grid;gap:8px;margin-top:8px}.receiver{display:flex;gap:8px;align-items:center;background:#0e1625;border:1px solid var(--line);border-radius:10px;padding:8px}.receiver a{color:#fff;flex:1;text-decoration:none}.receiver button{background:none;color:#fca5a5;border:0;font-size:1.1rem}.formrow{display:grid;grid-template-columns:1fr 1fr;gap:8px}.input{width:100%;background:#0d1422;color:#fff;border:1px solid #344158;border-radius:10px;padding:11px}.recstate{padding:10px;border-radius:10px;background:#0d1422;color:var(--muted);margin:8px 0}.footer{color:var(--muted);font-size:.8rem;text-align:center;margin-top:28px}.pill{display:inline-block;padding:3px 8px;border:1px solid var(--line);border-radius:999px;font-size:.75rem;color:var(--muted)}@media(max-width:600px){.status{display:none}.formrow{grid-template-columns:1fr}}
+</style>
+</head>
+<body>
+<header><div class="wrap brand"><div style="font-size:2rem">📡</div><div><b>DX START</b><small>Personligt DX- och SWL-kontrollcenter</small></div><div class="status" id="clock">UTC</div></div></header>
+<main class="wrap">
+<section class="hero"><h1>Lyssna → identifiera → verifiera → logga</h1><p>Din startpunkt för MW/LW/SW, FM-DX, amatörradio, CW, NDB, Utility, flyg, maritim radio, satellit, DAB, meteor scatter, aurora, numbers och piratradio.</p></section>
+
+<section class="grid">
+<div class="card"><h2>📒 Loggar</h2>
+<a class="btn primary" target="_blank" rel="noopener" href="https://docs.google.com/spreadsheets/d/1ewZNIP4F0FHp2Z3jx53ORuR5qSWy0XxOLu26AEZPG-U/edit#gid=1929791472">Öppna DX Loggbok</a>
+<a class="btn" target="_blank" rel="noopener" href="https://docs.google.com/spreadsheets/d/1KBSC8PQMdFLni0BRucLgibo96Q2Y_R4SOJi1UpI1f60/edit">Öppna FM-DX Loggbok</a>
+<a class="btn" target="_blank" rel="noopener" href="https://docs.google.com/spreadsheets/d/1ewZNIP4F0FHp2Z3jx53ORuR5qSWy0XxOLu26AEZPG-U/edit#gid=715296592">🎙 DX LJUDARKIV</a>
+</div>
+<div class="card"><h2>🧠 DX-expert</h2>
+<a class="btn primary" target="_blank" rel="noopener" href="https://chatgpt.com/">Öppna ChatGPT</a>
+<p class="note">Klistra vid behov in: <b>”Var min personliga DX- och SWL-expert av högsta rang.”</b> Din etablerade DX-arbetsmetod används i den här ChatGPT-miljön.</p>
+</div>
+<div class="card"><h2>🔊 Ljudkontroll</h2>
+<button class="btn danger" onclick="stopAllAudio()">■ Stoppa allt ljud här</button>
+<button class="btn" onclick="window.speechSynthesis&&speechSynthesis.cancel()">Stoppa uppläsning</button>
+<p class="note">Knappen stoppar ljud som DX START själv spelar. Ljud i en separat SDR-flik måste normalt stoppas i den fliken.</p>
+</div>
+</section>
+
+<section class="section"><h2 class="section-title">Mottagare och DX-källor</h2><div class="grid">
+<div class="card"><h2>🌐 SDR</h2>
+<a class="btn" target="_blank" rel="noopener" href="https://kiwisdr.com/public/">KiwiSDR – publika mottagare</a>
+<a class="btn" target="_blank" rel="noopener" href="https://www.websdr.org/">WebSDR</a>
+<a class="btn" target="_blank" rel="noopener" href="https://instances.ubersdr.org/">UberSDR</a>
+</div>
+<div class="card"><h2>📍 Special</h2>
+<a class="btn" target="_blank" rel="noopener" href="https://rxx.classaxe.com/">NDB – RXX/Classaxe</a>
+<a class="btn" target="_blank" rel="noopener" href="https://www.dxinfocentre.com/hfdl.htm">HFDL / flyg</a>
+<a class="btn" target="_blank" rel="noopener" href="https://priyom.org/">Numbers – Priyom</a>
+</div>
+<div class="card"><h2>📚 Register</h2>
+<a class="btn" target="_blank" rel="noopener" href="https://docs.google.com/spreadsheets/d/1ewZNIP4F0FHp2Z3jx53ORuR5qSWy0XxOLu26AEZPG-U/edit#gid=1104989522">Mottagarregister</a>
+<a class="btn" target="_blank" rel="noopener" href="https://docs.google.com/spreadsheets/d/1g4WMbHHJ_RfVv2DkObzJBmL47EiHRoXhFqVDmFFcJ8k/edit">Stationsregister</a>
+</div>
+</div></section>
+
+<section class="section"><h2 class="section-title">🎙 Inspelning</h2><div class="grid">
+<div class="card"><h2>Spela in via enheten</h2><div id="recState" class="recstate">Ingen inspelning pågår.</div>
+<div class="formrow"><button class="btn good" id="recBtn" onclick="startRecording()">● Spela in</button><button class="btn danger" id="stopBtn" onclick="stopRecording()" disabled>■ Stoppa</button></div>
+<audio id="preview" controls style="width:100%;margin-top:8px"></audio><button class="btn" id="saveBtn" onclick="saveRecording()" disabled>💾 Spara ljudfil</button>
+<p class="note">Använder mikrofon/ljudingång efter webbläsarens tillstånd. För SDR-ljud kan du även spela in i mottagaren och sedan importera filen.</p></div>
+<div class="card"><h2>Importera ljud</h2><input class="input" id="audioFile" type="file" accept="audio/*" onchange="previewFile(this)"><p class="note">När filen är sparad i Drive lägger du dess klickbara länk i <b>DX LJUDARKIV</b> eller i loggens fält <b>Ljudfil Drive</b>.</p><a class="btn" target="_blank" rel="noopener" href="https://drive.google.com/drive/my-drive">Öppna Google Drive</a></div>
+</div></section>
+
+<section class="section"><h2 class="section-title">➕ Egna mottagare</h2><div class="card">
+<div class="formrow"><input id="rxName" class="input" placeholder="Namn, t.ex. Min FM-mottagare"><input id="rxUrl" class="input" placeholder="https://..."></div>
+<select id="rxCat" class="input" style="margin-top:8px"><option>FM</option><option>MW/LW</option><option>SW</option><option>Amatörradio/CW</option><option>NDB</option><option>Utility</option><option>Flyg</option><option>Maritim</option><option>Satellit/NOAA</option><option>DAB</option><option>Numbers</option><option>Piratradio</option><option>Meteor/Aurora</option><option>Övrigt</option></select>
+<button class="btn primary" onclick="addReceiver()">Lägg till mottagare</button><div id="receivers" class="receiver-list"></div>
+<p class="note">Egna länkar sparas lokalt i just den här webbläsaren. De kan senare flyttas till det centrala mottagarregistret.</p></div></section>
+
+<section class="section"><h2 class="section-title">Snabbval</h2><div class="grid">
+<div class="card"><h2>📻 Rundradio</h2><button class="btn small" onclick="hint('MW/LW','Kväll och natt: prova MW/LW och logga UTC, frekvens, språk, ID och SINPO.')">MW / LW</button><button class="btn small" onclick="hint('SW','Prova kortvåg efter tid och konditioner. Börja gärna med 49, 41, 31 och 25 meter.')">Kortvåg</button><button class="btn small" onclick="hint('FM-DX','Kontrollera tropo/Sporadic-E och logga RDS PI/PS/RT när det finns.')">FM-DX</button></div>
+<div class="card"><h2>📡 Signaler</h2><button class="btn small" onclick="hint('CW','Notera frekvens, UTC, callsign och vad som faktiskt hörs.')">CW / Amatör</button><button class="btn small" onclick="hint('Utility','Notera mode, rytm/struktur, ID och eventuell dekodering.')">Utility</button><button class="btn small" onclick="hint('NDB','Lyssna efter morsesignatur och kontrollera mot NDB-registret.')">NDB</button></div>
+<div class="card"><h2>🛰 Övrigt</h2><button class="btn small" onclick="hint('Satellit','Logga satellit/fyr, frekvens, mode, pass och mottagare.')">Satellit / NOAA</button><button class="btn small" onclick="hint('Flyg/Maritim','Logga frekvens, mode, callsign/selcal/fartyg och innehåll.')">Flyg / Maritim</button><button class="btn small" onclick="hint('Special','Numbers, pirat, DAB, meteor scatter och aurora loggas med samma verifieringsprincip.')">Special-DX</button></div>
+</div><div id="hint" class="hero" style="display:none;margin-top:12px"></div></section>
+
+<div class="footer">DX START • personlig arbetsversion • data i Google Drive + lokala hjälpinställningar i webbläsaren<br><span class="pill">v1.0 FINAL TEST</span></div>
+</main>
+<script>
+const $=id=>document.getElementById(id);let mediaRecorder=null,chunks=[],lastBlob=null,lastExt='webm';
+function tick(){const d=new Date();$('clock').textContent=d.toISOString().slice(0,16).replace('T',' ')+' UTC'}tick();setInterval(tick,30000);
+function stopAllAudio(){document.querySelectorAll('audio,video').forEach(m=>{try{m.pause();m.currentTime=0}catch(e){}});if(window.speechSynthesis)speechSynthesis.cancel();$('recState').textContent='Ljud i DX START stoppat.'}
+async function startRecording(){try{const stream=await navigator.mediaDevices.getUserMedia({audio:true});chunks=[];mediaRecorder=new MediaRecorder(stream);mediaRecorder.ondataavailable=e=>{if(e.data.size)chunks.push(e.data)};mediaRecorder.onstop=()=>{lastBlob=new Blob(chunks,{type:mediaRecorder.mimeType||'audio/webm'});lastExt=(lastBlob.type.includes('ogg')?'ogg':lastBlob.type.includes('mp4')?'m4a':'webm');$('preview').src=URL.createObjectURL(lastBlob);$('saveBtn').disabled=false;stream.getTracks().forEach(t=>t.stop());$('recState').textContent='Inspelning klar – lyssna eller spara.'};mediaRecorder.start();$('recBtn').disabled=true;$('stopBtn').disabled=false;$('recState').textContent='● Inspelning pågår…'}catch(e){$('recState').textContent='Kunde inte starta inspelning. Kontrollera mikrofontillstånd i webbläsaren.'}}
+function stopRecording(){if(mediaRecorder&&mediaRecorder.state!=='inactive')mediaRecorder.stop();$('recBtn').disabled=false;$('stopBtn').disabled=true}
+function saveRecording(){if(!lastBlob)return;const a=document.createElement('a'),now=new Date().toISOString().replace(/[:.]/g,'-');a.href=URL.createObjectURL(lastBlob);a.download=`DX_${now}.${lastExt}`;a.click();setTimeout(()=>URL.revokeObjectURL(a.href),1000)}
+function previewFile(inp){const f=inp.files&&inp.files[0];if(!f)return;$('preview').src=URL.createObjectURL(f);lastBlob=f;lastExt=(f.name.split('.').pop()||'audio');$('saveBtn').disabled=false;$('recState').textContent='Importerad ljudfil redo.'}
+function loadReceivers(){let list=[];try{list=JSON.parse(localStorage.getItem('dx_receivers')||'[]')}catch(e){};$('receivers').innerHTML=list.map((r,i)=>`<div class="receiver"><span class="pill">${esc(r.cat)}</span><a target="_blank" rel="noopener" href="${escAttr(r.url)}">${esc(r.name)}</a><button title="Ta bort" onclick="removeReceiver(${i})">✕</button></div>`).join('')||'<span class="note">Inga egna mottagare tillagda ännu.</span>'}
+function addReceiver(){const name=$('rxName').value.trim(),url=$('rxUrl').value.trim(),cat=$('rxCat').value;if(!name||!/^https?:\/\//i.test(url)){alert('Skriv ett namn och en fullständig webbadress som börjar med http:// eller https://');return}let list=JSON.parse(localStorage.getItem('dx_receivers')||'[]');list.push({name,url,cat});localStorage.setItem('dx_receivers',JSON.stringify(list));$('rxName').value='';$('rxUrl').value='';loadReceivers()}
+function removeReceiver(i){let list=JSON.parse(localStorage.getItem('dx_receivers')||'[]');list.splice(i,1);localStorage.setItem('dx_receivers',JSON.stringify(list));loadReceivers()}
+function esc(s){return String(s).replace(/[&<>"']/g,m=>({'&':'&amp;','<':'&lt;','>':'&gt;','"':'&quot;',"'":'&#39;'}[m]))}function escAttr(s){return esc(s)}
+function hint(title,text){$('hint').style.display='block';$('hint').innerHTML=`<h1>${esc(title)}</h1><p>${esc(text)}</p>`;$('hint').scrollIntoView({behavior:'smooth',block:'nearest'})}
+loadReceivers();
+</script>
+</body></html>
