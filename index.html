@@ -17,6 +17,14 @@ h1{margin:0;font-size:clamp(30px,5vw,48px)}
 h1,h2,h3,h4,h5,h6{color:#eab308}
 .sub{color:var(--muted);margin-top:6px}
 .clock{background:var(--panel);border:1px solid var(--line);border-radius:14px;padding:12px 16px;font-size:18px}
+.dx-central-nav{
+  position:sticky;top:0;z-index:9999;display:flex;justify-content:flex-end;
+  padding:10px 0;background:linear-gradient(180deg,#06101d 80%,rgba(6,16,29,0));
+}
+.dx-central-nav a{
+  display:inline-block;text-decoration:none;background:#eab308;color:#111;
+  border:2px solid #111;border-radius:10px;padding:10px 14px;font-weight:900
+}
 .tabs{display:flex;gap:8px;flex-wrap:wrap;margin:22px 0}
 .tabs button,.btn{
   background:#142138;color:#fff;border:1px solid #2a3b58;border-radius:10px;padding:10px 14px;
@@ -231,6 +239,7 @@ html[data-dx-tool] header,html[data-dx-tool] .tabs{display:none !important;}
 </head>
 <body>
 <div class="wrap">
+<div class="dx-central-nav"><a href="https://1kuli1.github.io/dx-system/">← DX CENTRALEN</a></div>
 <header>
   <div>
     <h1>📻 DX Start 7.29 Online</h1>
@@ -260,18 +269,10 @@ html[data-dx-tool] header,html[data-dx-tool] .tabs{display:none !important;}
   <h2>Mottagare och hjälpsidor</h2>
   <div class="notice"><b>Tips:</b> mottagare som öppnas härifrån registreras av DX Start. Tryck <b>⏹ Stäng mottagning</b> när du vill stänga deras ljud och samtidigt stoppa eventuell CW-ljudingång.</div>
   <div class="receiver-grid">
-    <a class="linkcard" href="http://websdr.ewi.utwente.nl:8901/" target="_blank"><b>🌍 Twente WebSDR</b><div class="small">Kortvåg / HF</div></a>
-    <a class="linkcard" href="http://sa4bna.hopto.org:8073/" target="_blank"><b>🇸🇪 SA4BNA KiwiSDR</b><div class="small">Svensk mottagare</div></a>
-    <a class="linkcard" href="http://rx.linkfanel.net/" target="_blank"><b>🗺️ SDR karta</b><div class="small">Karta över SDR-mottagare</div></a>
-    <a class="linkcard" href="https://websdr.org/" target="_blank"><b>🌍 WebSDR lista</b><div class="small">WebSDR-mottagare</div></a>
-<a class="linkcard" href="https://kiwisdr.com/public/" target="_blank"><b>🌍 KiwiSDR lista</b><div class="small">KiwiSDR-mottagare i hela världen</div></a>
-    <a class="linkcard" href="https://fmscan.org/" target="_blank"><b>📻 FMscan</b><div class="small">FM-DX och sändaruppgifter</div></a>
-    <a class="linkcard" href="https://www.fmlist.org/" target="_blank"><b>🗺️ FMList</b><div class="small">FM-stationer och PI-koder</div></a>
-    <a class="linkcard" href="https://www.satnogs.org/" target="_blank"><b>🛰️ SatNOGS</b><div class="small">Satellitmottagning</div></a>
-    <a class="linkcard" href="https://www.liveatc.net/" target="_blank"><b>✈️ LiveATC</b><div class="small">Flygradio där strömmar finns</div></a>
-    <a class="linkcard" href="https://www.flightradar24.com/" target="_blank"><b>✈️ Flightradar24</b><div class="small">Identifiera flygplan</div></a>
-    <a class="linkcard" href="https://www.marinetraffic.com/" target="_blank"><b>🚢 MarineTraffic</b><div class="small">AIS och fartyg</div></a>
-    <a class="linkcard" href="https://www.vesselfinder.com/" target="_blank"><b>⚓ VesselFinder</b><div class="small">AIS och fartygsdata</div></a>
+    <a class="linkcard" href="https://1kuli1.github.io/dX-START/receiver-hub.html">
+      <b>🎧 Öppna Receiver Hub</b>
+      <div class="small">Alla publika mottagare samlade och sorterade efter band och användningsområde</div>
+    </a>
   </div>
 
   <div style="margin-top:20px;border-top:1px solid #31425f;padding-top:16px">
