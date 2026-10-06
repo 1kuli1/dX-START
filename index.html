@@ -213,8 +213,6 @@ footer{color:#7f8da3;font-size:13px;margin:28px 0 10px}
 .contest-ok{color:#86efac;font-weight:700}.contest-check{color:#fde68a;font-weight:700}
 </style>
 
-<link rel="stylesheet" href="https://unpkg.com/leaflet@1.9.4/dist/leaflet.css" integrity="sha256-p4NxAoJBhIINfQ3ynj6VfA8F28ZlMZp06p8p6b0r3p4=" crossorigin="">
-<script src="https://unpkg.com/leaflet@1.9.4/dist/leaflet.js" integrity="sha256-20nQCchB9co0qIjJZRGuk2/Z9VM+kNiyxNV1lvTlZBo=" crossorigin=""></script>
 <script>
 // DX Start 7.29b: visa vald verktygssida redan under sidladdningen.
 (function(){
@@ -1260,7 +1258,6 @@ function bearing(a,b){
   return (d(Math.atan2(y,x))+360)%360;
 }
 function compass(deg){const d=['N','NÖ','Ö','SÖ','S','SV','V','NV'];return d[Math.round(deg/45)%8]}
-function pinIcon(kind){return L.divIcon({className:'',html:`<div class="pin ${kind}"></div>`,iconSize:[18,18],iconAnchor:[9,9],popupAnchor:[0,-8]})}
 function allMapLogs(){
   const merged=[...EMBEDDED_VERIFIED_LOGS,...getLogs()];
   const seen=new Set(), out=[];
