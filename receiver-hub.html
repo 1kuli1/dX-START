@@ -23,6 +23,29 @@ body{
     color:#ffffff;
 }
 
+/* ===== TILLBAKA ===== */
+.back-row{
+    width:100%;
+    max-width:1400px;
+    margin:0 auto;
+    padding:14px 20px 0;
+}
+.back-btn{
+    display:inline-block;
+    background:#1f2937;
+    color:#ffffff;
+    border:1px solid #475569;
+    border-radius:10px;
+    padding:11px 16px;
+    font-weight:bold;
+    cursor:pointer;
+    font-size:16px;
+}
+.back-btn:hover{
+    background:#eab308;
+    color:#000000;
+}
+
 /* ===== HEADER ===== */
 header{
     background:#0b1220;
@@ -261,6 +284,10 @@ footer{
 </head>
 
 <body>
+
+<div class="back-row">
+<button class="back-btn" id="receiverBackBtn" onclick="goBackReceiverHub()">← Tillbaka</button>
+</div>
 
 <!-- ===== HEADER ===== -->
 <header>
@@ -831,6 +858,15 @@ DX-OS Receiver Hub • SDR • DX • AI • Signal Intelligence
 </footer>
 
 <script>
+
+/* ===== TILLBAKA ===== */
+function goBackReceiverHub(){
+    if(document.referrer && document.referrer !== location.href){
+        history.back();
+    }else{
+        location.href = "https://1kuli1.github.io/dX-START/";
+    }
+}
 
 /* ===== DIREKTÖPPNING FÖR UHF / UBERSDR ===== */
 function openReceiverCategory(type,url){
