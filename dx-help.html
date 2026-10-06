@@ -7,7 +7,7 @@
 <title>DX-hjälp – DX Centralen</title>
 <style>
 :root{--bg:#07111f;--panel:#101b2d;--panel2:#16243a;--line:#2d405e;--text:#f4f7fb;--muted:#b5c0d2;--accent:#eab308}
-*{box-sizing:border-box}html{scroll-behavior:smooth}body{margin:0;background:linear-gradient(180deg,#06101d,#0b1525);color:var(--text);font:16px system-ui,-apple-system,Segoe UI,Roboto,Arial,sans-serif}
+*{box-sizing:border-box}.skip-link{position:absolute;left:-9999px;top:6px;z-index:10001;background:#fff;color:#000;padding:10px 14px;border-radius:8px;font-weight:800}.skip-link:focus{left:8px}a:focus-visible,button:focus-visible,input:focus-visible,select:focus-visible,textarea:focus-visible,summary:focus-visible{outline:3px solid #fff;outline-offset:3px}html{scroll-behavior:smooth}body{margin:0;background:linear-gradient(180deg,#06101d,#0b1525);color:var(--text);font:16px system-ui,-apple-system,Segoe UI,Roboto,Arial,sans-serif}
 .top{position:sticky;top:0;z-index:9999;background:#07111f;border-bottom:1px solid var(--line);padding:9px 12px;display:flex;gap:8px;justify-content:flex-end;flex-wrap:wrap}
 .top a,.btn{display:inline-block;text-decoration:none;border:1px solid #405577;border-radius:9px;padding:10px 12px;font-weight:800;color:#fff;background:#17243a}
 .top a.main,.btn.main{background:var(--accent);color:#111;border-color:var(--accent)}
@@ -22,13 +22,14 @@ details{background:#0b1525;border:1px solid #263955;border-radius:10px;padding:1
 </style>
 </head>
 <body>
-<nav class="top">
+<a class="skip-link" href="#main-content">Hoppa till huvudinnehåll</a>
+<nav class="top" aria-label="DX-hjälpens navigation">
 <a href="https://1kuli1.github.io/dX-START/asta.html" target="_blank" rel="noopener">🤖 Asta</a>
 <a href="https://1kuli1.github.io/dx-system/">← DX Centralen</a>
 <a href="https://1kuli1.github.io/dX-START/receiver-hub.html">🎧 Receiver Hub</a>
 <a class="main" href="https://1kuli1.github.io/dX-START/">📻 DX Start</a>
 </nav>
-<main class="wrap">
+<main class="wrap" id="main-content">
 <h1>❓ DX-hjälp</h1>
 <p class="lead">Hjälpen är till för frågan <b>”Hur gör jag just nu?”</b>. Börja med det du har framför dig. Du behöver inte läsa allt.</p>
 
