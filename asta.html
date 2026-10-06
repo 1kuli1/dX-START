@@ -13,121 +13,37 @@ body{margin:0;width:100%;max-width:100%;overflow-x:hidden;background:linear-grad
 .top{position:sticky;top:0;z-index:9999;background:#07111f;border-bottom:1px solid var(--line);padding:9px 12px;display:flex;gap:8px;justify-content:flex-end;flex-wrap:wrap}
 .top a,.btn{display:inline-block;text-decoration:none;border:1px solid #405577;border-radius:9px;padding:10px 12px;font-weight:800;color:#fff;background:#17243a;cursor:pointer}
 .top .main,.btn.main{background:var(--accent);color:#111;border-color:var(--accent)}
-.wrap{width:100%;max-width:900px;margin:auto;padding:20px}.hero{display:grid;grid-template-columns:auto minmax(0,1fr);gap:16px;align-items:center;margin:10px 0 22px}
+.wrap{width:100%;max-width:900px;margin:auto;padding:20px}
+.hero{display:grid;grid-template-columns:auto minmax(0,1fr);gap:16px;align-items:center;margin:10px 0 22px}
 .avatar{width:76px;height:76px;border-radius:50%;background:var(--accent);color:#111;display:grid;place-items:center;font-size:42px;border:3px solid #fff}
-h1,h2,h3{color:var(--accent)}h1{margin:0;font-size:clamp(32px,6vw,48px)}.lead{color:var(--muted);line-height:1.55;margin:4px 0}
-.grid{display:grid;grid-template-columns:repeat(auto-fit,minmax(min(220px,100%),1fr));gap:10px;margin:18px 0}.choice{width:100%;min-width:0;background:var(--panel);border:1px solid var(--line);border-radius:13px;padding:15px;cursor:pointer;color:#fff;text-align:left;font:inherit}.choice:hover,.choice.active{border-color:var(--accent);background:#17243a}.choice b{color:var(--accent);display:block;font-size:17px;margin-bottom:5px}.choice span{color:var(--muted);font-size:13px;line-height:1.4}
-.card{width:100%;min-width:0;max-width:100%;overflow:hidden;background:var(--panel);border:1px solid var(--line);border-radius:16px;padding:18px;margin:16px 0}.fields{display:grid;grid-template-columns:repeat(2,minmax(0,1fr));gap:10px}label{display:block;min-width:0;color:var(--muted);font-size:13px}input,textarea,select{width:100%;min-width:0;max-width:100%;margin-top:5px;background:#0b1525;color:#fff;border:1px solid #405577;border-radius:9px;padding:11px;font:inherit;font-size:16px}textarea{min-height:105px;resize:vertical}.actions{display:flex;gap:8px;flex-wrap:wrap;margin-top:14px}.note{background:#0b1525;border-left:4px solid var(--accent);border-radius:9px;padding:12px 14px;color:#dce5f3;line-height:1.5}.small{font-size:13px;color:var(--muted);line-height:1.45}.hidden{display:none}
+h1,h2,h3{color:var(--accent)}h1{margin:0;font-size:clamp(32px,6vw,48px)}
+.lead{color:var(--muted);line-height:1.55;margin:4px 0}
+.card{width:100%;min-width:0;max-width:100%;overflow:hidden;background:var(--panel);border:1px solid var(--line);border-radius:16px;padding:18px;margin:16px 0}
+label{display:block;min-width:0;color:var(--muted);font-size:13px}
+textarea{width:100%;min-width:0;max-width:100%;margin-top:7px;background:#0b1525;color:#fff;border:1px solid #405577;border-radius:12px;padding:14px;font:inherit;font-size:18px;line-height:1.5;min-height:210px;resize:vertical}
+textarea:focus{outline:2px solid var(--accent);outline-offset:1px}
+.actions{display:flex;gap:8px;flex-wrap:wrap;margin-top:14px}
+.note{background:#0b1525;border-left:4px solid var(--accent);border-radius:9px;padding:12px 14px;color:#dce5f3;line-height:1.5}
+.small{font-size:13px;color:var(--muted);line-height:1.5}
+details{background:#0b1525;border:1px solid #31425f;border-radius:12px;padding:12px 14px;margin-top:14px}
+summary{cursor:pointer;font-weight:800;color:#fff}
+.inspiration{margin:10px 0 0;padding-left:20px;color:#dce5f3;line-height:1.55}
+.context{margin-top:10px;color:#7f8da3;font-size:12px}
+.status{margin-top:10px;color:#fde68a;font-size:13px;line-height:1.4}
 @media(max-width:650px){
-  .top{
-    width:100%;
-    max-width:100%;
-    display:grid;
-    grid-template-columns:minmax(0,1fr) minmax(0,1fr);
-    gap:7px;
-    padding:8px 10px;
-  }
-  .top a{
-    min-width:0;
-    width:100%;
-    text-align:center;
-    font-size:13px;
-    line-height:1.2;
-    padding:9px 7px;
-    white-space:normal;
-    overflow-wrap:anywhere;
-  }
-  .top a.main{
-    grid-column:1 / -1;
-  }
-  .wrap{
-    width:100%;
-    max-width:100%;
-    padding:12px;
-    overflow:hidden;
-  }
-  .hero{
-    grid-template-columns:1fr;
-    gap:8px;
-    text-align:center;
-    margin:8px 0 15px;
-  }
-  .avatar{
-    width:64px;
-    height:64px;
-    margin:auto;
-    font-size:34px;
-  }
-  h1{
-    font-size:34px;
-  }
-  h2{
-    font-size:21px;
-    line-height:1.2;
-    overflow-wrap:anywhere;
-  }
-  .lead{
-    font-size:15px;
-    line-height:1.4;
-  }
-  .note{
-    padding:11px 12px;
-    font-size:14px;
-  }
-  .grid{
-    width:100%;
-    min-width:0;
-    grid-template-columns:minmax(0,1fr);
-    gap:8px;
-    margin:14px 0;
-  }
-  .choice{
-    width:100%;
-    min-width:0;
-    padding:13px;
-  }
-  .choice b,.choice span{
-    overflow-wrap:anywhere;
-  }
-  .card{
-    width:100%;
-    min-width:0;
-    max-width:100%;
-    padding:14px;
-    margin:12px 0;
-    border-radius:14px;
-  }
-  .fields{
-    width:100%;
-    min-width:0;
-    grid-template-columns:minmax(0,1fr);
-    gap:9px;
-  }
-  input,textarea,select{
-    width:100%;
-    min-width:0;
-    max-width:100%;
-    font-size:16px;
-  }
-  textarea{
-    min-height:90px;
-  }
-  .actions{
-    width:100%;
-    display:grid;
-    grid-template-columns:minmax(0,1fr);
-    gap:8px;
-  }
-  .actions .btn{
-    width:100%;
-    min-width:0;
-    text-align:center;
-    white-space:normal;
-    overflow-wrap:anywhere;
-  }
-  .small{
-    overflow-wrap:anywhere;
-  }
+  .top{width:100%;max-width:100%;display:grid;grid-template-columns:minmax(0,1fr) minmax(0,1fr);gap:7px;padding:8px 10px}
+  .top a{min-width:0;width:100%;text-align:center;font-size:13px;line-height:1.2;padding:9px 7px;white-space:normal;overflow-wrap:anywhere}
+  .top a.main{grid-column:1 / -1}
+  .wrap{width:100%;max-width:100%;padding:12px;overflow:hidden}
+  .hero{grid-template-columns:1fr;gap:8px;text-align:center;margin:8px 0 15px}
+  .avatar{width:64px;height:64px;margin:auto;font-size:34px}
+  h1{font-size:34px}
+  h2{font-size:21px;line-height:1.2}
+  .lead{font-size:15px;line-height:1.4}
+  .card{padding:14px;margin:12px 0;border-radius:14px}
+  textarea{font-size:16px;min-height:190px;padding:12px}
+  .actions{width:100%;display:grid;grid-template-columns:minmax(0,1fr);gap:8px}
+  .actions .btn{width:100%;min-width:0;text-align:center;white-space:normal;overflow-wrap:anywhere}
 }
 </style>
 </head>
@@ -141,100 +57,113 @@ h1,h2,h3{color:var(--accent)}h1{margin:0;font-size:clamp(32px,6vw,48px)}.lead{co
 <main class="wrap">
 <div class="hero">
 <div class="avatar" aria-hidden="true">🤖</div>
-<div><h1>Asta</h1><p class="lead"><b>DX- och SWL-assistent.</b> Fråga när du fastnar, när något inte fungerar eller när du behöver hjälp att identifiera en station eller signal.</p></div>
+<div>
+<h1>Asta</h1>
+<p class="lead"><b>Fråga vad du vill om DX.</b> Mottagare, signaler, stationer, problem, knappar, loggning, identifiering – eller något helt annat du kommer på.</p>
+</div>
 </div>
 
-<div class="note"><b>Du behöver inte veta exakt vad du ska fråga.</b> Välj det som ligger närmast ditt problem. Asta hjälper dig att formulera resten.</div>
-
-<div class="grid">
-<button class="choice active" data-kind="identify" onclick="choose(this,'identify')"><b>🔎 Identifiera station</b><span>Frekvens, UTC, mottagare, språk, det du hörde och signalstyrka.</span></button>
-<button class="choice" data-kind="receiver" onclick="choose(this,'receiver')"><b>🎧 Mottagarproblem</b><span>Ingen signal, fel mode, lösenord, död länk, konstigt gränssnitt eller annan SDR-fråga.</span></button>
-<button class="choice" data-kind="page" onclick="choose(this,'page')"><b>❓ Hur använder jag sidan?</b><span>Förklara en knapp, ett fält, ett verktyg eller vad nästa steg är.</span></button>
-<button class="choice" data-kind="log" onclick="choose(this,'log')"><b>📝 Hjälp med loggning</b><span>Vad ska loggas, SINPO, verifiering, sändarplats, rapport och QSL.</span></button>
-<button class="choice" data-kind="other" onclick="choose(this,'other')"><b>💬 Annan DX-fråga</b><span>Band, konditioner, signaltyper, stationer, teknik eller något annat.</span></button>
-</div>
-
-<section class="card" id="identifyForm">
-<h2>🔎 Identifiera en station eller signal</h2>
-<div class="fields">
-<label>Frekvens<input id="freq" placeholder="t.ex. 999 kHz eller 97,4 MHz"></label>
-<label>UTC / tid<input id="utc" placeholder="t.ex. 20:15 UTC"></label>
-<label>Mode<input id="mode" placeholder="AM, USB, LSB, FM..."></label>
-<label>Mottagare / SDR<input id="rx" placeholder="t.ex. KiwiSDR Heby"></label>
-<label>Mottagarplats<input id="rxplace" placeholder="t.ex. Heby, Sverige"></label>
-<label>Språk / land som du misstänker<input id="lang" placeholder="t.ex. spanska"></label>
-</div>
-<label>Vad hörde du?<textarea id="heard" placeholder="Ord, stations-ID, reklam, musik, ortsnamn, program, anropssignal..."></textarea></label>
-<label>Signal / störningar<textarea id="signal" placeholder="t.ex. svag men tydlig, fading, störd av station på grannkanal, SINPO om du vet"></textarea></label>
-<p class="small">Har du en skärmbild eller ljudinspelning? Lägg till den i ChatGPT efter att Asta öppnats. Det kan vara avgörande för identifieringen.</p>
-</section>
-
-<section class="card hidden" id="simpleForm">
-<h2 id="simpleTitle">Fråga Asta</h2>
-<label>Beskriv vad som händer<textarea id="question" placeholder="Skriv med egna ord. Det behöver inte vara tekniskt formulerat."></textarea></label>
-<label>Vilken sida eller mottagare gäller det?<input id="where" placeholder="t.ex. Receiver Hub, KiwiSDR, Ny logg..."></label>
-</section>
+<div class="note"><b>Skriv med egna ord.</b> Du behöver inte kunna rätt facktermer och du behöver inte välja en kategori först.</div>
 
 <section class="card">
-<h2>Skicka frågan till Asta</h2>
-<p class="small">Knappen förbereder en tydlig DX-fråga och kopierar den. ChatGPT öppnas i en ny flik; klistra in frågan där. Din DX-sida ligger kvar.</p>
-<label>Förberedd fråga<textarea id="prompt"></textarea></label>
+<h2>Vad vill du fråga Asta?</h2>
+<label for="question">Din fråga</label>
+<textarea id="question" autofocus placeholder="Skriv precis det du funderar på..."></textarea>
+
+<details>
+<summary>Behöver du inspiration?</summary>
+<ul class="inspiration">
+<li>Vad är det jag ser på den här sidan?</li>
+<li>Varför hör jag två stationer samtidigt?</li>
+<li>Kan du hjälpa mig identifiera det här?</li>
+<li>Vilken mottagare passar bäst för det jag vill höra?</li>
+<li>Vad betyder den här knappen eller inställningen?</li>
+<li>Är den här signalen värd att logga?</li>
+<li>Hur kan jag prova något jag aldrig lyssnat på tidigare?</li>
+</ul>
+<p class="small">Det här är bara exempel. Du kan fråga om precis vad som helst.</p>
+</details>
+
+<p class="small">Du kan också lägga till en <b>skärmbild eller ljudinspelning</b> när ChatGPT öppnats. Det är ofta mycket värdefullt vid stationsidentifiering eller felsökning.</p>
+
 <div class="actions">
-<button class="btn" onclick="buildPrompt()">Uppdatera frågan</button>
-<button class="btn main" onclick="askAsta()">🤖 Kopiera & öppna Asta</button>
+<button class="btn main" onclick="askAsta()">🤖 Fråga Asta</button>
+<button class="btn" onclick="clearQuestion()">Töm frågan</button>
 </div>
-<div id="status" class="small" style="margin-top:10px"></div>
+
+<div id="context" class="context"></div>
+<div id="status" class="status"></div>
 </section>
 </main>
 
 <script>
-let kind="identify";
-const labels={
- identify:"Identifiera station eller signal",
- receiver:"Problem med mottagare eller SDR",
- page:"Förklara hur en sida eller funktion används",
- log:"Hjälp med DX-loggning",
- other:"Annan DX- eller SWL-fråga"
-};
-function choose(btn,k){
- kind=k;
- document.querySelectorAll(".choice").forEach(x=>x.classList.remove("active"));
- btn.classList.add("active");
- document.getElementById("identifyForm").classList.toggle("hidden",k!=="identify");
- document.getElementById("simpleForm").classList.toggle("hidden",k==="identify");
- if(k!=="identify") document.getElementById("simpleTitle").textContent=labels[k];
- buildPrompt();
+function sourceContext(){
+  try{
+    const ref=document.referrer||"";
+    if(!ref) return "";
+    const u=new URL(ref);
+    if(u.hostname!=="1kuli1.github.io") return "";
+
+    if(u.pathname.toLowerCase().includes("/dX-START/receiver-hub.html".toLowerCase())){
+      const band=u.searchParams.get("band");
+      return band ? "Receiver Hub, band: "+band : "Receiver Hub";
+    }
+    if(u.pathname.toLowerCase().includes("/dX-START/".toLowerCase())){
+      const tool=u.searchParams.get("tool");
+      return tool ? "DX Start, verktyg: "+tool : "DX Start";
+    }
+    if(u.pathname.toLowerCase().includes("/dx-system/")) return "DX Centralen";
+    if(u.pathname.toLowerCase().includes("/dx-academy/")) return "DX Academy";
+  }catch(e){}
+  return "";
 }
-function v(id){return (document.getElementById(id)?.value||"").trim()}
+
+const pageContext=sourceContext();
+
 function buildPrompt(){
- let p="Du är Asta, min DX- och SWL-assistent. Svara på svenska, konkret och steg för steg. ";
- if(kind==="identify"){
-   p+="Hjälp mig identifiera stationen/signalen. Bedöm resultatet som BEKRÄFTAD, TROLIG eller OSÄKER och säg vilka ledtrådar som saknas.\n\n"+
-   "Frekvens: "+v("freq")+"\nUTC/tid: "+v("utc")+"\nMode: "+v("mode")+"\nMottagare/SDR: "+v("rx")+"\nMottagarplats: "+v("rxplace")+"\nSpråk/misstänkt land: "+v("lang")+"\nDet jag hörde: "+v("heard")+"\nSignal/störningar: "+v("signal")+
-   "\n\nOm identifieringen går att göra, ge station, sändarplats och varför. Tala om exakt vad jag bör lyssna efter härnäst för att bekräfta den.";
- }else{
-   p+=labels[kind]+".\n\nSida/mottagare: "+v("where")+"\nMin fråga/problem: "+v("question")+
-   "\n\nFörklara först vad som sannolikt händer och ge sedan de enklaste stegen jag ska göra nu.";
- }
- document.getElementById("prompt").value=p;
- return p;
+  const q=(document.getElementById("question").value||"").trim();
+  let p="Du är Asta, min DX- och SWL-assistent. Svara på svenska, konkret och hjälpsamt. Min fråga är:\n\n"+q;
+  if(pageContext){
+    p+="\n\nBakgrund: Jag öppnade Asta från "+pageContext+". Använd bara den informationen om den hjälper dig att förstå frågan; låt den inte begränsa vad frågan kan handla om.";
+  }
+  p+="\n\nOm något är oklart, hjälp mig vidare med den minsta följdfråga som behövs. Om jag försöker identifiera en station eller signal, skilj mellan bekräftad, trolig och osäker identifiering.";
+  return p;
 }
-["freq","utc","mode","rx","rxplace","lang","heard","signal","question","where"].forEach(id=>{
- document.addEventListener("input",e=>{if(e.target.id===id) buildPrompt()});
-});
+
 async function askAsta(){
- const p=buildPrompt();
- const status=document.getElementById("status");
- try{
-   await navigator.clipboard.writeText(p);
-   status.textContent="Frågan är kopierad. Klistra in den i ChatGPT.";
- }catch(e){
-   const ta=document.getElementById("prompt"); ta.focus(); ta.select();
-   status.textContent="Markera och kopiera frågan, och klistra sedan in den i ChatGPT.";
- }
- window.open("https://chatgpt.com/","_blank","noopener");
+  const q=(document.getElementById("question").value||"").trim();
+  const status=document.getElementById("status");
+  if(!q){
+    status.textContent="Skriv en fråga först.";
+    document.getElementById("question").focus();
+    return;
+  }
+  const p=buildPrompt();
+  try{
+    await navigator.clipboard.writeText(p);
+    status.textContent="Frågan är kopierad. ChatGPT öppnas – klistra in frågan där och lägg gärna till bild eller ljud om det hjälper.";
+  }catch(e){
+    try{
+      const ta=document.createElement("textarea");
+      ta.value=p; ta.style.position="fixed"; ta.style.opacity="0";
+      document.body.appendChild(ta); ta.select(); document.execCommand("copy"); ta.remove();
+      status.textContent="Frågan är kopierad. Klistra in den i ChatGPT.";
+    }catch(err){
+      status.textContent="ChatGPT öppnas. Kopiera din fråga manuellt om den inte följer med.";
+    }
+  }
+  window.open("https://chatgpt.com/","_blank","noopener");
 }
-buildPrompt();
+
+function clearQuestion(){
+  document.getElementById("question").value="";
+  document.getElementById("status").textContent="";
+  document.getElementById("question").focus();
+}
+
+if(pageContext){
+  document.getElementById("context").textContent="Asta ser att du kom från "+pageContext+", men du kan fråga om vad som helst.";
+}
 </script>
 </body>
 </html>
