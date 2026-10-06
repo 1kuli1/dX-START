@@ -10,6 +10,9 @@
   --text:#f4f7fb;--muted:#aebbd0;--accent:#eab308;--good:#22c55e;--danger:#ef4444
 }
 *{box-sizing:border-box}
+.skip-link{position:absolute;left:-9999px;top:6px;z-index:10001;background:#fff;color:#000;padding:10px 14px;border-radius:8px;font-weight:800}
+.skip-link:focus{left:8px}
+a:focus-visible,button:focus-visible,input:focus-visible,select:focus-visible,textarea:focus-visible{outline:3px solid #fff;outline-offset:3px}
 body{margin:0;font-family:system-ui,-apple-system,Segoe UI,Roboto,Arial,sans-serif;background:linear-gradient(180deg,#06101d,#0b1525);color:var(--text)}
 .wrap{max-width:1250px;margin:auto;padding:22px}
 header{display:flex;justify-content:space-between;gap:16px;align-items:flex-start;flex-wrap:wrap}
@@ -238,8 +241,9 @@ html[data-dx-tool] header,html[data-dx-tool] .tabs{display:none !important;}
 </style>
 </head>
 <body>
+<a class="skip-link" href="#main-content">Hoppa till huvudinnehåll</a>
 <div class="wrap">
-<div class="dx-central-nav"><a href="https://1kuli1.github.io/dX-START/asta.html" target="_blank" rel="noopener">🤖 ASTA</a><a id="dxHelpLink" href="https://1kuli1.github.io/dX-START/dx-help.html#start" target="_blank" rel="noopener">❓ HJÄLP</a><a href="https://1kuli1.github.io/dx-system/">← DX CENTRALEN</a></div>
+<nav class="dx-central-nav" aria-label="DX-navigation"><a href="https://1kuli1.github.io/dX-START/asta.html" target="_blank" rel="noopener">🤖 ASTA</a><a id="dxHelpLink" href="https://1kuli1.github.io/dX-START/dx-help.html#start" target="_blank" rel="noopener">❓ HJÄLP</a><a href="https://1kuli1.github.io/dx-system/">← DX CENTRALEN</a></nav>
 <script>
 (function(){
   const map={receivers:"receiverhub",log:"log",book:"book",sync:"sync",map:"map",cw:"cw",digital:"digital",audio:"audio",profile:"profile",special:"special"};
@@ -259,19 +263,20 @@ html[data-dx-tool] header,html[data-dx-tool] .tabs{display:none !important;}
 <div class="notice" style="margin-top:16px"><b>Onlineversion 7.23:</b> CW-känsligheten, Drive-synken och stoppknappen är kvar. Nytt: <b>🤖 DX-expert</b>, uppdaterad NDB-adress och möjlighet att lägga till egna mottagare per område.</div>
 
 <div class="tabs">
-  <button onclick="dxOpenToolWindow('receivers')">Mottagare ↗</button>
-  <button onclick="dxOpenToolWindow('log')">Ny logg ↗</button>
-  <button onclick="dxOpenToolWindow('book')">Loggbok ↗</button>
-  <button onclick="dxOpenToolWindow('sync')">☁️ Synk ↗</button>
-  <button onclick="dxOpenToolWindow('map')">🗺️ Karta ↗</button>
-  <button onclick="dxOpenToolWindow('cw')">·− CW ↗</button>
-  <button onclick="dxOpenToolWindow('digital')">📡 FT8 / FT4 ↗</button>
-  <button onclick="dxOpenToolWindow('audio')">🎙 Ljud ↗</button>
-  <button onclick="dxOpenToolWindow('profile')">Stationsfakta ↗</button>
-  <button onclick="dxOpenToolWindow('special')">Special ↗</button>
-  <button class="btn" onclick="dxOpenExpert()" title="Öppna ChatGPT som DX-expert">🤖 DX-expert ↗</button>
+  <button type="button" onclick="dxOpenToolWindow('receivers')">Mottagare ↗</button>
+  <button type="button" onclick="dxOpenToolWindow('log')">Ny logg ↗</button>
+  <button type="button" onclick="dxOpenToolWindow('book')">Loggbok ↗</button>
+  <button type="button" onclick="dxOpenToolWindow('sync')">☁️ Synk ↗</button>
+  <button type="button" onclick="dxOpenToolWindow('map')">🗺️ Karta ↗</button>
+  <button type="button" onclick="dxOpenToolWindow('cw')">·− CW ↗</button>
+  <button type="button" onclick="dxOpenToolWindow('digital')">📡 FT8 / FT4 ↗</button>
+  <button type="button" onclick="dxOpenToolWindow('audio')">🎙 Ljud ↗</button>
+  <button type="button" onclick="dxOpenToolWindow('profile')">Stationsfakta ↗</button>
+  <button type="button" onclick="dxOpenToolWindow('special')">Special ↗</button>
+  <button type="button" class="btn" onclick="dxOpenExpert()" title="Öppna ChatGPT som DX-expert">🤖 DX-expert ↗</button>
 </div>
 
+<main id="main-content">
 <section id="receivers">
   <div class="kicker">Snabbstart</div>
   <h2>Mottagare och hjälpsidor</h2>
@@ -316,18 +321,18 @@ html[data-dx-tool] header,html[data-dx-tool] .tabs{display:none !important;}
       </label>
     </div>
     <div class="row" style="margin-top:10px;gap:10px;flex-wrap:wrap">
-      <button class="btn" onclick="dxAddCustomReceiver()">➕ Lägg till mottagare</button>
+      <button type="button" class="btn" onclick="dxAddCustomReceiver()">➕ Lägg till mottagare</button>
     </div>
     <div id="customReceiverGroups" style="margin-top:14px"></div>
   </div>
   <div style="margin-top:20px;border-top:1px solid #31425f;padding-top:16px">
     <div class="kicker">Google Drive – levande DX-böcker</div><h3>Loggar, register och ljudarkiv</h3>
     <div class="receiver-grid">
-      <a class="linkcard" href="https://docs.google.com/spreadsheets/d/1ewZNIP4F0FHp2Z3jx53ORuR5qSWy0XxOLu26AEZPG-U/edit#gid=1929791472" target="_blank"><b>📒 DX MASTER LOGGBOK – LIVE</b><div class="small">Gemensam DX-loggbok</div></a>
-      <a class="linkcard" href="https://docs.google.com/spreadsheets/d/1KBSC8PQMdFLni0BRucLgibo96Q2Y_R4SOJi1UpI1f60/edit" target="_blank"><b>📻 FM-DX MASTER LOGGBOK – LIVE</b><div class="small">FM-DX-loggbok</div></a>
-      <a class="linkcard" href="https://docs.google.com/spreadsheets/d/1ewZNIP4F0FHp2Z3jx53ORuR5qSWy0XxOLu26AEZPG-U/edit#gid=715296592" target="_blank"><b>🎙 DX LJUDARKIV</b><div class="small">Ljudklipp och länkar</div></a>
-      <a class="linkcard" href="https://docs.google.com/spreadsheets/d/1g4WMbHHJ_RfVv2DkObzJBmL47EiHRoXhFqVDmFFcJ8k/edit" target="_blank"><b>📚 Stationsregister</b><div class="small">Stationer och bakgrund</div></a>
-      <a class="linkcard" href="https://docs.google.com/spreadsheets/d/1X5tWIYfx2ejC1MiUcPrQG4n7CPrH9NkCnw5Kcb4_-AY/edit" target="_blank"><b>📡 Mottagarregister</b><div class="small">Dina SDR- och mottagarlänkar</div></a>
+      <a class="linkcard" href="https://docs.google.com/spreadsheets/d/1ewZNIP4F0FHp2Z3jx53ORuR5qSWy0XxOLu26AEZPG-U/edit#gid=1929791472" target="_blank" rel="noopener noreferrer"><b>📒 DX MASTER LOGGBOK – LIVE</b><div class="small">Gemensam DX-loggbok</div></a>
+      <a class="linkcard" href="https://docs.google.com/spreadsheets/d/1KBSC8PQMdFLni0BRucLgibo96Q2Y_R4SOJi1UpI1f60/edit" target="_blank" rel="noopener noreferrer"><b>📻 FM-DX MASTER LOGGBOK – LIVE</b><div class="small">FM-DX-loggbok</div></a>
+      <a class="linkcard" href="https://docs.google.com/spreadsheets/d/1ewZNIP4F0FHp2Z3jx53ORuR5qSWy0XxOLu26AEZPG-U/edit#gid=715296592" target="_blank" rel="noopener noreferrer"><b>🎙 DX LJUDARKIV</b><div class="small">Ljudklipp och länkar</div></a>
+      <a class="linkcard" href="https://docs.google.com/spreadsheets/d/1g4WMbHHJ_RfVv2DkObzJBmL47EiHRoXhFqVDmFFcJ8k/edit" target="_blank" rel="noopener noreferrer"><b>📚 Stationsregister</b><div class="small">Stationer och bakgrund</div></a>
+      <a class="linkcard" href="https://docs.google.com/spreadsheets/d/1X5tWIYfx2ejC1MiUcPrQG4n7CPrH9NkCnw5Kcb4_-AY/edit" target="_blank" rel="noopener noreferrer"><b>📡 Mottagarregister</b><div class="small">Dina SDR- och mottagarlänkar</div></a>
     </div>
   </div>
 
@@ -345,9 +350,9 @@ html[data-dx-tool] header,html[data-dx-tool] .tabs{display:none !important;}
     <span class="small">DX Start sparar alltid lokalt först. När internet finns slås den lokala loggboken ihop med Drive-loggen så att dina enheter kan dela samma poster.</span>
   </div>
   <div class="row" style="margin-top:12px;gap:10px;flex-wrap:wrap">
-    <button class="btn accent" id="dxSyncNowBtn" onclick="dxCloudSync(true)">🔄 Synka nu</button>
-    <button class="btn" id="dxSyncPullBtn" onclick="dxCloudPullOnly()">⬇ Hämta från Drive</button>
-    <button class="btn" id="dxSyncPushBtn" onclick="dxCloudPushMerged()">⬆ Skicka/sammanfoga</button>
+    <button type="button" class="btn accent" id="dxSyncNowBtn" onclick="dxCloudSync(true)">🔄 Synka nu</button>
+    <button type="button" class="btn" id="dxSyncPullBtn" onclick="dxCloudPullOnly()">⬇ Hämta från Drive</button>
+    <button type="button" class="btn" id="dxSyncPushBtn" onclick="dxCloudPushMerged()">⬆ Skicka/sammanfoga</button>
   </div>
   <div class="small" style="margin-top:12px">
     Senaste lyckade synk: <span id="dxSyncLast">–</span><br>
@@ -359,15 +364,15 @@ html[data-dx-tool] header,html[data-dx-tool] .tabs{display:none !important;}
   <div class="kicker">Specialområden</div>
   <h2>Speciallyssning – snabbguide</h2>
   <div class="guide-grid">
-    <div class="guide"><h3>🧭 NDB</h3><div class="pills"><span class="pill">190–535 kHz</span><span class="pill">CW/AM</span><span class="pill">Kväll/natt</span></div><div class="tip">Lyssna efter korta morsekoder som upprepas. Rekommenderad mottagare: SA4BNA KiwiSDR med LF-stöd.</div><div class="actions"><a class="btn accent" href="http://sa4bna.hopto.org:8073/?f=190.00amz10" target="_blank">▶ Lyssna från 190 kHz</a><a class="btn" href="https://rxx.classaxe.com/" target="_blank">NDB-databas</a></div></div>
-    <div class="guide"><h3>🛠️ Utility</h3><div class="pills"><span class="pill">2–30 MHz</span><span class="pill">USB/FSK</span><span class="pill">Dygnet runt</span></div><div class="tip">Flyg, maritim trafik, väderfax, HFDL och andra tjänster. Rekommenderad mottagare: SA4BNA KiwiSDR.</div><div class="actions"><a class="btn accent" href="http://sa4bna.hopto.org:8073/?f=2000.00usbz10" target="_blank">▶ Lyssna från 2 MHz</a><a class="btn" href="https://www.sigidwiki.com/" target="_blank">Signalwiki</a></div></div>
-    <div class="guide"><h3>🔢 Numbers stations</h3><div class="pills"><span class="pill">HF</span><span class="pill">AM/USB</span><span class="pill">Schema viktigt</span></div><div class="tip">Rekommenderad mottagare: SA4BNA KiwiSDR. Start vid 2 MHz och använd Priyom för aktuella scheman.</div><div class="actions"><a class="btn accent" href="http://sa4bna.hopto.org:8073/?f=2000.00amz10" target="_blank">▶ Lyssna från 2 MHz</a><a class="btn" href="https://priyom.org/" target="_blank">Priyom</a></div></div>
-    <div class="guide"><h3>🏴‍☠️ Piratradio</h3><div class="pills"><span class="pill">ca 6.2–6.4 MHz</span><span class="pill">AM/USB</span><span class="pill">Kväll/helg</span></div><div class="tip">Rekommenderad mottagare: SA4BNA KiwiSDR. Europa är särskilt intressant kvällstid.</div><div class="actions"><a class="btn accent" href="http://sa4bna.hopto.org:8073/?f=6200.00amz10" target="_blank">▶ Lyssna från 6,2 MHz</a><a class="btn" href="https://www.hfunderground.com/" target="_blank">HF Underground</a></div></div>
-    <div class="guide"><h3>🌦️ NOAA</h3><div class="pills"><span class="pill">137 MHz</span><span class="pill">VHF</span><span class="pill">Satellitpassager</span></div><div class="tip">Här krävs en VHF-kapabel SDR. VibeSDR-nätet kan innehålla mottagare som täcker VHF. Startfrekvens: 137 MHz.</div><div class="actions"><a class="btn accent" href="https://vibesdr.net/" target="_blank">▶ VHF-mottagare – 137 MHz</a><a class="btn" href="https://www.noaa.gov/" target="_blank">NOAA</a></div></div>
-    <div class="guide"><h3>📻 DAB</h3><div class="pills"><span class="pill">174–240 MHz</span><span class="pill">Band III</span><span class="pill">DAB+</span></div><div class="tip">Rekommenderad tjänst: VibeSDR. Välj en mottagare märkt DAB+ och börja vid 174 MHz. DAB-avkodningen sker på servern när mottagaren stöder den.</div><div class="actions"><a class="btn accent" href="https://vibesdr.net/" target="_blank">▶ DAB-mottagare – 174 MHz</a><a class="btn" href="https://www.worlddab.org/" target="_blank">WorldDAB</a></div></div>
-    <div class="guide"><h3>📡 Amatörradio</h3><div class="pills"><span class="pill">1,8 MHz →</span><span class="pill">SSB/CW/Digitalt</span><span class="pill">Alla tider</span></div><div class="tip">Rekommenderad mottagare: SA4BNA KiwiSDR för HF. Start vid 1,8 MHz (160 m).</div><div class="actions"><a class="btn accent" href="http://sa4bna.hopto.org:8073/?f=1800.00lsbz10" target="_blank">▶ Lyssna från 1,8 MHz</a><a class="btn" href="https://www.qrz.com/" target="_blank">QRZ</a></div></div>
-    <div class="guide"><h3>☄️ Meteor scatter</h3><div class="pills"><span class="pill">50/70/144 MHz</span><span class="pill">MSK144</span><span class="pill">Gryning ofta bra</span></div><div class="tip">Här behövs VHF-kapabel mottagare. VibeSDR kan ge tillgång till bredbandsmottagare; börja vid 50 MHz.</div><div class="actions"><a class="btn accent" href="https://vibesdr.net/" target="_blank">▶ VHF-mottagare – 50 MHz</a><a class="btn" href="https://www.dxmaps.com/spots/mapg.php" target="_blank">DXMaps</a></div></div>
-    <div class="guide"><h3>🌌 Aurora</h3><div class="pills"><span class="pill">50–144 MHz</span><span class="pill">CW/SSB</span><span class="pill">Geomagnetisk aktivitet</span></div><div class="tip">Här behövs VHF-kapabel mottagare. Börja vid 50 MHz och följ rymdvädret parallellt.</div><div class="actions"><a class="btn accent" href="https://vibesdr.net/" target="_blank">▶ VHF-mottagare – 50 MHz</a><a class="btn" href="https://www.spaceweatherlive.com/" target="_blank">Rymdväder</a></div></div>
+    <div class="guide"><h3>🧭 NDB</h3><div class="pills"><span class="pill">190–535 kHz</span><span class="pill">CW/AM</span><span class="pill">Kväll/natt</span></div><div class="tip">Lyssna efter korta morsekoder som upprepas. Rekommenderad mottagare: SA4BNA KiwiSDR med LF-stöd.</div><div class="actions"><a class="btn accent" href="http://sa4bna.hopto.org:8073/?f=190.00amz10" target="_blank" rel="noopener noreferrer">▶ Lyssna från 190 kHz</a><a class="btn" href="https://rxx.classaxe.com/" target="_blank" rel="noopener noreferrer">NDB-databas</a></div></div>
+    <div class="guide"><h3>🛠️ Utility</h3><div class="pills"><span class="pill">2–30 MHz</span><span class="pill">USB/FSK</span><span class="pill">Dygnet runt</span></div><div class="tip">Flyg, maritim trafik, väderfax, HFDL och andra tjänster. Rekommenderad mottagare: SA4BNA KiwiSDR.</div><div class="actions"><a class="btn accent" href="http://sa4bna.hopto.org:8073/?f=2000.00usbz10" target="_blank" rel="noopener noreferrer">▶ Lyssna från 2 MHz</a><a class="btn" href="https://www.sigidwiki.com/" target="_blank" rel="noopener noreferrer">Signalwiki</a></div></div>
+    <div class="guide"><h3>🔢 Numbers stations</h3><div class="pills"><span class="pill">HF</span><span class="pill">AM/USB</span><span class="pill">Schema viktigt</span></div><div class="tip">Rekommenderad mottagare: SA4BNA KiwiSDR. Start vid 2 MHz och använd Priyom för aktuella scheman.</div><div class="actions"><a class="btn accent" href="http://sa4bna.hopto.org:8073/?f=2000.00amz10" target="_blank" rel="noopener noreferrer">▶ Lyssna från 2 MHz</a><a class="btn" href="https://priyom.org/" target="_blank" rel="noopener noreferrer">Priyom</a></div></div>
+    <div class="guide"><h3>🏴‍☠️ Piratradio</h3><div class="pills"><span class="pill">ca 6.2–6.4 MHz</span><span class="pill">AM/USB</span><span class="pill">Kväll/helg</span></div><div class="tip">Rekommenderad mottagare: SA4BNA KiwiSDR. Europa är särskilt intressant kvällstid.</div><div class="actions"><a class="btn accent" href="http://sa4bna.hopto.org:8073/?f=6200.00amz10" target="_blank" rel="noopener noreferrer">▶ Lyssna från 6,2 MHz</a><a class="btn" href="https://www.hfunderground.com/" target="_blank" rel="noopener noreferrer">HF Underground</a></div></div>
+    <div class="guide"><h3>🌦️ NOAA</h3><div class="pills"><span class="pill">137 MHz</span><span class="pill">VHF</span><span class="pill">Satellitpassager</span></div><div class="tip">Här krävs en VHF-kapabel SDR. VibeSDR-nätet kan innehålla mottagare som täcker VHF. Startfrekvens: 137 MHz.</div><div class="actions"><a class="btn accent" href="https://vibesdr.net/" target="_blank" rel="noopener noreferrer">▶ VHF-mottagare – 137 MHz</a><a class="btn" href="https://www.noaa.gov/" target="_blank" rel="noopener noreferrer">NOAA</a></div></div>
+    <div class="guide"><h3>📻 DAB</h3><div class="pills"><span class="pill">174–240 MHz</span><span class="pill">Band III</span><span class="pill">DAB+</span></div><div class="tip">Rekommenderad tjänst: VibeSDR. Välj en mottagare märkt DAB+ och börja vid 174 MHz. DAB-avkodningen sker på servern när mottagaren stöder den.</div><div class="actions"><a class="btn accent" href="https://vibesdr.net/" target="_blank" rel="noopener noreferrer">▶ DAB-mottagare – 174 MHz</a><a class="btn" href="https://www.worlddab.org/" target="_blank" rel="noopener noreferrer">WorldDAB</a></div></div>
+    <div class="guide"><h3>📡 Amatörradio</h3><div class="pills"><span class="pill">1,8 MHz →</span><span class="pill">SSB/CW/Digitalt</span><span class="pill">Alla tider</span></div><div class="tip">Rekommenderad mottagare: SA4BNA KiwiSDR för HF. Start vid 1,8 MHz (160 m).</div><div class="actions"><a class="btn accent" href="http://sa4bna.hopto.org:8073/?f=1800.00lsbz10" target="_blank" rel="noopener noreferrer">▶ Lyssna från 1,8 MHz</a><a class="btn" href="https://www.qrz.com/" target="_blank" rel="noopener noreferrer">QRZ</a></div></div>
+    <div class="guide"><h3>☄️ Meteor scatter</h3><div class="pills"><span class="pill">50/70/144 MHz</span><span class="pill">MSK144</span><span class="pill">Gryning ofta bra</span></div><div class="tip">Här behövs VHF-kapabel mottagare. VibeSDR kan ge tillgång till bredbandsmottagare; börja vid 50 MHz.</div><div class="actions"><a class="btn accent" href="https://vibesdr.net/" target="_blank" rel="noopener noreferrer">▶ VHF-mottagare – 50 MHz</a><a class="btn" href="https://www.dxmaps.com/spots/mapg.php" target="_blank" rel="noopener noreferrer">DXMaps</a></div></div>
+    <div class="guide"><h3>🌌 Aurora</h3><div class="pills"><span class="pill">50–144 MHz</span><span class="pill">CW/SSB</span><span class="pill">Geomagnetisk aktivitet</span></div><div class="tip">Här behövs VHF-kapabel mottagare. Börja vid 50 MHz och följ rymdvädret parallellt.</div><div class="actions"><a class="btn accent" href="https://vibesdr.net/" target="_blank" rel="noopener noreferrer">▶ VHF-mottagare – 50 MHz</a><a class="btn" href="https://www.spaceweatherlive.com/" target="_blank" rel="noopener noreferrer">Rymdväder</a></div></div>
   </div>
   <div class="notice">Frekvenserna ovan är startpunkter. Exakta stationer och scheman kan ändras.</div>
 </section>
@@ -387,9 +392,9 @@ html[data-dx-tool] header,html[data-dx-tool] .tabs{display:none !important;}
     </div>
     <div id="digitalBandGrid" class="digital-band-grid"></div>
     <div class="actions">
-      <button class="btn accent" onclick="dxDigitalOpenReceiver()">▶ Öppna mottagare</button>
-      <button class="btn" onclick="dxDigitalCopyFreq()">Kopiera frekvens</button>
-      <button class="btn" onclick="dxDigitalToLog()">📝 Skicka till logg</button>
+      <button type="button" class="btn accent" onclick="dxDigitalOpenReceiver()">▶ Öppna mottagare</button>
+      <button type="button" class="btn" onclick="dxDigitalCopyFreq()">Kopiera frekvens</button>
+      <button type="button" class="btn" onclick="dxDigitalToLog()">📝 Skicka till logg</button>
     </div>
     <div id="digitalHelp" class="notice">Välj ett band. FT8TW körs separat på plattan och kan avkoda ljudet från SDR:n.</div>
   </div>
@@ -404,10 +409,10 @@ html[data-dx-tool] header,html[data-dx-tool] .tabs{display:none !important;}
     <div class="kicker">Tävlingsläge</div><h3>2026–2027 – digitala tävlingar</h3>
     <div class="notice">Tävlingsregler ändras. För SWL är två kontroller extra viktiga: <b>är SWL-logg tillåten?</b> och <b>är fjärrmottagare/WebSDR/KiwiSDR tillåtna?</b> Kontrollera alltid den länkade regeltexten före start.</div>
     <div class="tablewrap" style="margin-top:12px"><table><thead><tr><th>Tävling</th><th>Mode</th><th>SWL</th><th>Remote SDR</th><th>Regler</th></tr></thead><tbody>
-      <tr><td>World Wide Digi DX Contest</td><td>FT8 / FT4</td><td class="contest-check">Kontrollera klass</td><td class="contest-check">Kontrollera regler</td><td><a target="_blank" style="color:#eab308" href="https://ww-digi.com/">Officiell sida</a></td></tr>
-      <tr><td>ARRL International Digital Contest</td><td>Digitalt</td><td class="contest-check">Kontrollera klass</td><td class="contest-check">Kontrollera regler</td><td><a target="_blank" style="color:#eab308" href="https://contests.arrl.org/">ARRL Contest Portal</a></td></tr>
-      <tr><td>RSGB FT4-tävlingar</td><td>FT4</td><td class="contest-check">Kontrollera klass</td><td class="contest-check">Kontrollera regler</td><td><a target="_blank" style="color:#eab308" href="https://www.rsgbcc.org/">RSGB Contest Committee</a></td></tr>
-      <tr><td>SWL-tävlingar med digitala moder</td><td>FT8 / FT4 när reglerna anger det</td><td class="contest-ok">SWL-inriktat</td><td class="contest-check">Varierar</td><td><a target="_blank" style="color:#eab308" href="https://swlradio.eu/swl-contest-calendar/">SWL Contest Calendar</a></td></tr>
+      <tr><td>World Wide Digi DX Contest</td><td>FT8 / FT4</td><td class="contest-check">Kontrollera klass</td><td class="contest-check">Kontrollera regler</td><td><a target="_blank" style="color:#eab308" href="https://ww-digi.com/" rel="noopener noreferrer">Officiell sida</a></td></tr>
+      <tr><td>ARRL International Digital Contest</td><td>Digitalt</td><td class="contest-check">Kontrollera klass</td><td class="contest-check">Kontrollera regler</td><td><a target="_blank" style="color:#eab308" href="https://contests.arrl.org/" rel="noopener noreferrer">ARRL Contest Portal</a></td></tr>
+      <tr><td>RSGB FT4-tävlingar</td><td>FT4</td><td class="contest-check">Kontrollera klass</td><td class="contest-check">Kontrollera regler</td><td><a target="_blank" style="color:#eab308" href="https://www.rsgbcc.org/" rel="noopener noreferrer">RSGB Contest Committee</a></td></tr>
+      <tr><td>SWL-tävlingar med digitala moder</td><td>FT8 / FT4 när reglerna anger det</td><td class="contest-ok">SWL-inriktat</td><td class="contest-check">Varierar</td><td><a target="_blank" style="color:#eab308" href="https://swlradio.eu/swl-contest-calendar/" rel="noopener noreferrer">SWL Contest Calendar</a></td></tr>
     </tbody></table></div>
   </div>
 </section>
@@ -416,10 +421,10 @@ html[data-dx-tool] header,html[data-dx-tool] .tabs{display:none !important;}
   <div class="kicker">Ljudarkiv</div><h2>🎙 Spela in och importera DX-ljud</h2>
   <div class="card">
     <div class="notice"><b>Inspelning:</b> använder mikrofon/ljudingång efter webbläsarens tillstånd. Direkt SDR-/systemljud beror på enhet och webbläsare.</div>
-    <div class="actions"><button class="btn accent" id="dxRecBtn" onclick="dxStartRecording()">● Spela in</button><button class="btn danger" id="dxRecStopBtn" onclick="dxStopRecording()" disabled>■ Stoppa inspelning</button><label class="btn" style="display:inline-block">Importera ljudfil<input type="file" accept="audio/*" onchange="dxPreviewAudioFile(this)" style="display:none"></label></div>
+    <div class="actions"><button type="button" class="btn accent" id="dxRecBtn" onclick="dxStartRecording()">● Spela in</button><button type="button" class="btn danger" id="dxRecStopBtn" onclick="dxStopRecording()" disabled>■ Stoppa inspelning</button><label class="btn" style="display:inline-block">Importera ljudfil<input type="file" accept="audio/*" onchange="dxPreviewAudioFile(this)" style="display:none"></label></div>
     <div id="dxRecState" class="notice">Ingen inspelning pågår.</div>
     <audio id="dxAudioPreview" controls style="width:100%;margin-top:12px"></audio>
-    <div class="actions"><button class="btn" id="dxSaveAudioBtn" onclick="dxSaveRecording()" disabled>💾 Spara ljudfil</button><a class="btn" href="https://docs.google.com/spreadsheets/d/1ewZNIP4F0FHp2Z3jx53ORuR5qSWy0XxOLu26AEZPG-U/edit#gid=715296592" target="_blank">Öppna DX LJUDARKIV</a><a class="btn" href="https://drive.google.com/drive/my-drive" target="_blank">Öppna Google Drive</a></div>
+    <div class="actions"><button type="button" class="btn" id="dxSaveAudioBtn" onclick="dxSaveRecording()" disabled>💾 Spara ljudfil</button><a class="btn" href="https://docs.google.com/spreadsheets/d/1ewZNIP4F0FHp2Z3jx53ORuR5qSWy0XxOLu26AEZPG-U/edit#gid=715296592" target="_blank" rel="noopener noreferrer">Öppna DX LJUDARKIV</a><a class="btn" href="https://drive.google.com/drive/my-drive" target="_blank" rel="noopener noreferrer">Öppna Google Drive</a></div>
     <div class="small">När ljudfilen ligger i Drive kan dess klickbara Drive-länk sparas i DX LJUDARKIV och i loggens ljudfält.</div>
   </div>
 </section>
@@ -476,9 +481,9 @@ html[data-dx-tool] header,html[data-dx-tool] .tabs{display:none !important;}
       </div>
     </div>
     <div class="actions">
-      <button class="btn accent" onclick="saveLog()">Spara logg</button>
-      <button class="btn" onclick="fillNow()">Använd aktuell UTC</button>
-      <button class="btn" onclick="clearForm()">Töm formulär</button>
+      <button type="button" class="btn accent" onclick="saveLog()">Spara logg</button>
+      <button type="button" class="btn" onclick="fillNow()">Använd aktuell UTC</button>
+      <button type="button" class="btn" onclick="clearForm()">Töm formulär</button>
     </div>
   </div>
 </section>
@@ -493,8 +498,8 @@ html[data-dx-tool] header,html[data-dx-tool] .tabs{display:none !important;}
     </div>
     <div class="actions">
       <label class="btn accent" style="display:inline-block">Importera Excel (.xlsx)<input type="file" accept=".xlsx,.xlsm" onchange="importExcel(event)" style="display:none"></label>
-      <button class="btn" onclick="exportJSON()">Exportera backup (JSON)</button>
-      <button class="btn" onclick="exportCSV()">Exportera till Excel (CSV)</button>
+      <button type="button" class="btn" onclick="exportJSON()">Exportera backup (JSON)</button>
+      <button type="button" class="btn" onclick="exportCSV()">Exportera till Excel (CSV)</button>
       <label class="btn" style="display:inline-block">Importera JSON<input type="file" accept=".json" onchange="importJSON(event)" style="display:none"></label>
     </div>
     <div class="notice"><b>Version 7.15 Online:</b> denna fil ersätter äldre dx_start_7_excel.html. Excel-importen stöder både USB/SSB-loggen och den stora DX-kontrollboken.</div>
@@ -518,7 +523,7 @@ html[data-dx-tool] header,html[data-dx-tool] .tabs{display:none !important;}
       <div><label>Visa</label><select id="mapType" onchange="renderMap(true)"><option value="all">Amatörer + radiostationer</option><option value="amateur">Endast radioamatörer</option><option value="broadcast">Endast radiostationer</option></select></div>
       <div><label>Mottagare</label><select id="mapReceiver" onchange="renderMap(true)"><option value="">Alla mottagare</option></select></div>
       <div><label>Period</label><select id="mapPeriod" onchange="renderMap(true)"><option value="all">Alla datum</option><option value="30">Senaste 30 dagarna</option><option value="365">Senaste året</option></select></div>
-      <div><button class="btn accent" onclick="renderMap(true)">Uppdatera karta</button></div>
+      <div><button type="button" class="btn accent" onclick="renderMap(true)">Uppdatera karta</button></div>
     </div>
     <div class="map-legend">
       <span><i class="legend-dot" style="background:#22c55e"></i>Verifierad radioamatör</span>
@@ -587,18 +592,18 @@ html[data-dx-tool] header,html[data-dx-tool] .tabs{display:none !important;}
     </div>
 
     <div class="actions">
-      <button id="cwSystemBtn" class="btn accent" onclick="cwStartDisplay()">Dela flik / systemljud</button>
-      <button id="cwMicBtn" class="btn" onclick="cwStartMic()">Mikrofon / ljudingång</button>
-      <button class="btn danger" onclick="cwStop()">Stoppa</button>
-      <button class="btn" onclick="cwAutoTune()">Hitta ton</button>
-      <button class="btn" onclick="cwMicPreset()">Mikrofonläge</button>
+      <button type="button" id="cwSystemBtn" class="btn accent" onclick="cwStartDisplay()">Dela flik / systemljud</button>
+      <button type="button" id="cwMicBtn" class="btn" onclick="cwStartMic()">Mikrofon / ljudingång</button>
+      <button type="button" class="btn danger" onclick="cwStop()">Stoppa</button>
+      <button type="button" class="btn" onclick="cwAutoTune()">Hitta ton</button>
+      <button type="button" class="btn" onclick="cwMicPreset()">Mikrofonläge</button>
       <select id="cwSensitivityMode" class="btn" onchange="cwSetSensitivityMode(this.value)" title="CW-känslighet">
         <option value="auto" selected>Auto känslighet</option>
         <option value="weak">Svag signal</option>
         <option value="normal">Normal</option>
         <option value="strong">Stark signal</option>
       </select>
-      <button class="btn" onclick="cwSelfTest()">Självtest</button>
+      <button type="button" class="btn" onclick="cwSelfTest()">Självtest</button>
     </div>
     <div id="cwDeviceNote" class="notice" style="display:none;margin-top:12px"></div>
     <div id="cwOnlineDiag" class="notice" style="margin-top:12px"></div>
@@ -624,10 +629,10 @@ html[data-dx-tool] header,html[data-dx-tool] .tabs{display:none !important;}
     </div>
 
     <div class="actions">
-      <button class="btn" onclick="cwClear()">Rensa</button>
-      <button class="btn" onclick="cwCopy()">Kopiera original</button>
-      <button class="btn" onclick="cwCopySwedish()">Kopiera svensk tolkning</button>
-      <button class="btn accent" onclick="cwToLog()">Skicka till logg</button>
+      <button type="button" class="btn" onclick="cwClear()">Rensa</button>
+      <button type="button" class="btn" onclick="cwCopy()">Kopiera original</button>
+      <button type="button" class="btn" onclick="cwCopySwedish()">Kopiera svensk tolkning</button>
+      <button type="button" class="btn accent" onclick="cwToLog()">Skicka till logg</button>
     </div>
 
 
@@ -671,11 +676,11 @@ html[data-dx-tool] header,html[data-dx-tool] .tabs{display:none !important;}
     <div id="pWebsite" style="margin-top:14px"></div>
 
     <div class="actions">
-      <button class="btn accent" onclick="wikiStation()">Hämta stationshistorik</button>
-      <button class="btn" onclick="wikiPlace()">Hämta ortens historik</button>
-      <button class="btn" onclick="searchOfficial()">Sök officiell hemsida</button>
-      <button class="btn" onclick="searchWeb()">Sök station på webben</button>
-      <button class="btn danger" onclick="deleteSelected()">Radera vald logg</button>
+      <button type="button" class="btn accent" onclick="wikiStation()">Hämta stationshistorik</button>
+      <button type="button" class="btn" onclick="wikiPlace()">Hämta ortens historik</button>
+      <button type="button" class="btn" onclick="searchOfficial()">Sök officiell hemsida</button>
+      <button type="button" class="btn" onclick="searchWeb()">Sök station på webben</button>
+      <button type="button" class="btn danger" onclick="deleteSelected()">Radera vald logg</button>
     </div>
 
     <div class="notice" id="stationInfo">Här visas historik och bakgrund om stationen när offentlig information kan hittas.</div>
@@ -693,6 +698,7 @@ html[data-dx-tool] header,html[data-dx-tool] .tabs{display:none !important;}
   </div>
 </section>
 
+</main>
 <footer>DX Start 7.29 Online • 7.23-design + specialmottagare + ljudarkiv + Drive-loggar • originalfiler ändras aldrig</footer>
 </div>
 
@@ -708,7 +714,7 @@ setInterval(tick,1000); tick();
 function dxOpenToolWindow(view){
   const u=new URL(window.location.href);
   u.searchParams.set('tool',view);
-  const w=window.open(u.toString(),'_blank');
+  const w=window.open(u.toString(),'_blank','noopener');
   if(!w) alert('Webbläsaren blockerade det nya fönstret. Tillåt popup-fönster för DX Start.');
 }
 
@@ -746,7 +752,7 @@ function dxApplyToolWindow(){
     const bar=document.createElement('div');
     bar.className='actions dx-tool-close';
     bar.style.margin='8px 0 14px';
-    bar.innerHTML='<button class="btn danger" onclick="dxCloseToolWindow()">✕ Stäng denna sida</button>';
+    bar.innerHTML='<button type="button" class="btn danger" onclick="dxCloseToolWindow()">✕ Stäng denna sida</button>';
     const heading=chosen.querySelector('h2');
     if(heading) heading.insertAdjacentElement('afterend',bar); else chosen.prepend(bar);
   }
@@ -945,7 +951,7 @@ function clearForm(){
 function esc(s){return (s||'').replace(/[&<>"']/g,m=>({'&':'&amp;','<':'&lt;','>':'&gt;','"':'&quot;',"'":'&#39;'}[m]))}
 function linkifyText(s){
   const safe=esc(String(s||''));
-  return safe.replace(/(https?:\/\/[^\s|<]+)/g,'<a target="_blank" style="color:#eab308" href="$1">$1</a>')
+  return safe.replace(/(https?:\/\/[^\s|<]+)/g,'<a target="_blank" style="color:#eab308" href="$1" rel="noopener noreferrer">$1</a>')
              .replace(/(^|[\s|])([A-Z0-9._%+-]+@[A-Z0-9.-]+\.[A-Z]{2,})/gi,'$1<a style="color:#eab308" href="mailto:$2">$2</a>');
 }
 function renderLogs(){
@@ -992,7 +998,7 @@ function openProfile(i){
 
   const websites=[...new Set(same.map(x=>x.website).filter(Boolean))];
   document.getElementById('pWebsite').innerHTML=websites.length
-    ? '<b>Hemsida:</b> '+websites.map(u=>'<a href="'+esc(u)+'" target="_blank" style="color:#eab308">'+esc(u)+'</a>').join(' • ')
+    ? '<b>Hemsida:</b> '+websites.map(u=>'<a href="'+esc(u)+'" target="_blank" style="color:#eab308" rel="noopener noreferrer">'+esc(u)+'</a>').join(' • ')
     : '<span class="small">Ingen hemsida sparad ännu.</span>';
 
   const hist = same
@@ -1020,9 +1026,9 @@ async function wikiExtract(query, target){
     const title=sj.query.search[0].title;
     const r=await fetch('https://sv.wikipedia.org/w/api.php?action=query&prop=extracts|info&exintro=1&explaintext=1&inprop=url&titles='+encodeURIComponent(title)+'&format=json&origin=*');
     const j=await r.json(); const page=Object.values(j.query.pages)[0];
-    document.getElementById(target).innerHTML='<b>'+esc(page.title)+'</b><p>'+esc(page.extract||'Ingen sammanfattning tillgänglig.')+'</p><a target="_blank" style="color:#eab308" href="'+page.fullurl+'">Läs mer på Wikipedia</a>';
+    document.getElementById(target).innerHTML='<b>'+esc(page.title)+'</b><p>'+esc(page.extract||'Ingen sammanfattning tillgänglig.')+'</p><a target="_blank" style="color:#eab308" href="'+page.fullurl+'" rel="noopener noreferrer">Läs mer på Wikipedia</a>';
   }catch(e){
-    document.getElementById(target).innerHTML='Ingen tydlig svensk Wikipedia-träff hittades. <button class="btn" onclick="searchWeb()">Sök på webben i stället</button>';
+    document.getElementById(target).innerHTML='Ingen tydlig svensk Wikipedia-träff hittades. <button type="button" class="btn" onclick="searchWeb()">Sök på webben i stället</button>';
   }
 }
 function currentLog(){return selectedIndex===null?null:getLogs()[selectedIndex]}
@@ -1030,7 +1036,7 @@ function wikiStation(){const l=currentLog(); wikiExtract(l?.station||'', 'statio
 function wikiPlace(){const l=currentLog(); wikiExtract([l?.place,l?.country].filter(Boolean).join(', '), 'placeInfo')}
 function searchOfficial(){
   const l=currentLog(); if(!l)return;
-  window.open('https://www.google.com/search?q='+encodeURIComponent((l.station||'')+' official website'),'_blank');
+  window.open('https://www.google.com/search?q='+encodeURIComponent((l.station||'')+' official website'),'_blank','noopener');
 }
 function searchWeb(){
   const l=currentLog(); if(!l)return;
@@ -1475,7 +1481,7 @@ const DX_EXPERT_URL='https://chatgpt.com/?q=Du%20%C3%A4r%20min%20personliga%20DX
 
 function dxOpenExpert(){
   // Open a new ChatGPT conversation with the DX-expert instruction prefilled.
-  window.open(DX_EXPERT_URL,'_blank');
+  window.open(DX_EXPERT_URL,'_blank','noopener');
 }
 
 function dxGetCustomReceivers(){
@@ -1528,7 +1534,7 @@ function dxRenderCustomReceivers(){
       <div class="receiver-grid">
         ${groups[cat].map(r=>`
           <div class="linkcard" style="position:relative">
-            <button onclick="dxDeleteCustomReceiver('${r.id}')" title="Ta bort" style="position:absolute;right:6px;top:6px;background:#7f1d1d;color:white;border:0;border-radius:7px;padding:3px 7px;cursor:pointer">×</button>
+            <button type="button" onclick="dxDeleteCustomReceiver('${r.id}')" title="Ta bort" style="position:absolute;right:6px;top:6px;background:#7f1d1d;color:white;border:0;border-radius:7px;padding:3px 7px;cursor:pointer">×</button>
             <a href="#" onclick="event.preventDefault();dxOpenReceiver('${String(r.url).replace(/'/g,"\\'")}')" style="color:inherit;text-decoration:none;display:block;padding-right:24px">
               <b>📻 ${dxEscRx(r.name)}</b>
               <div class="small">${dxEscRx(r.note||r.url)}</div>
@@ -1545,11 +1551,11 @@ function dxOpenReceiver(url){
   try{
     // Remove closed handles before opening a new receiver.
     dxReceiverWindows=dxReceiverWindows.filter(w=>w && !w.closed);
-    const w=window.open(url,'_blank');
+    const w=window.open(url,'_blank','noopener');
     if(w) dxReceiverWindows.push(w);
     else alert('Webbläsaren blockerade det nya fönstret/fliken. Tillåt popup-fönster för DX Start.');
   }catch(e){
-    window.open(url,'_blank');
+    window.open(url,'_blank','noopener');
   }
 }
 
@@ -2184,7 +2190,7 @@ function dxDigitalInit(){dxDigitalRenderBands();dxDigitalRenderTable()}
 function dxDigitalRenderBands(){
   const mode=document.getElementById('digitalMode')?.value||'FT8';
   const key=mode==='FT4'?'ft4':'ft8', box=document.getElementById('digitalBandGrid'); if(!box)return;
-  box.innerHTML=DX_DIGITAL_FREQS.map((x,i)=>`<button class="digital-band ${i===dxDigitalSelected?'active':''}" onclick="dxDigitalSelect(${i})"><b>${x.band}</b><span>${x[key]} MHz · USB</span><br><span>${x.note}</span></button>`).join('');
+  box.innerHTML=DX_DIGITAL_FREQS.map((x,i)=>`<button type="button" class="digital-band ${i===dxDigitalSelected?'active':''}" onclick="dxDigitalSelect(${i})"><b>${x.band}</b><span>${x[key]} MHz · USB</span><br><span>${x.note}</span></button>`).join('');
   dxDigitalApplySelected();
 }
 function dxDigitalSelect(i){dxDigitalSelected=i;dxDigitalRenderBands()}
@@ -2196,7 +2202,7 @@ function dxDigitalApplySelected(){
 function dxDigitalRenderTable(){
  const b=document.getElementById('digitalFreqRows');if(!b)return;b.innerHTML=DX_DIGITAL_FREQS.map(x=>`<tr><td>${x.band}</td><td>${x.ft8} MHz</td><td>${x.ft4} MHz</td><td>${x.note}</td></tr>`).join('');
 }
-function dxDigitalOpenReceiver(){const u=document.getElementById('digitalRx')?.value;if(u)window.open(u,'_blank')}
+function dxDigitalOpenReceiver(){const u=document.getElementById('digitalRx')?.value;if(u)window.open(u,'_blank','noopener')}
 async function dxDigitalCopyFreq(){const v=(document.getElementById('digitalFreq')?.value||'').replace(' MHz','');try{await navigator.clipboard.writeText(v);alert('Frekvens '+v+' MHz kopierad.')}catch(e){alert('Frekvens: '+v+' MHz')}}
 function dxDigitalToLog(){
  const x=DX_DIGITAL_FREQS[dxDigitalSelected]||DX_DIGITAL_FREQS[2],mode=document.getElementById('digitalMode')?.value||'FT8',f=mode==='FT4'?x.ft4:x.ft8;
