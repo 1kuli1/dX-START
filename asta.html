@@ -8,6 +8,9 @@
 <style>
 :root{--bg:#07111f;--panel:#101b2d;--line:#2d405e;--text:#f4f7fb;--muted:#b5c0d2;--accent:#eab308}
 *{box-sizing:border-box}
+.skip-link{position:absolute;left:-9999px;top:6px;z-index:10001;background:#fff;color:#000;padding:10px 14px;border-radius:8px;font-weight:800}
+.skip-link:focus{left:8px}
+a:focus-visible,button:focus-visible,input:focus-visible,select:focus-visible,textarea:focus-visible,summary:focus-visible{outline:3px solid #fff;outline-offset:3px}
 html{width:100%;max-width:100%;overflow-x:hidden;-webkit-text-size-adjust:100%;text-size-adjust:100%}
 body{margin:0;width:100%;max-width:100%;overflow-x:hidden;background:linear-gradient(180deg,#06101d,#0b1525);color:var(--text);font:16px system-ui,-apple-system,Segoe UI,Roboto,Arial,sans-serif}
 .top{position:sticky;top:0;z-index:9999;background:#07111f;border-bottom:1px solid var(--line);padding:9px 12px;display:flex;gap:8px;justify-content:flex-end;flex-wrap:wrap}
@@ -48,13 +51,14 @@ summary{cursor:pointer;font-weight:800;color:#fff}
 </style>
 </head>
 <body>
-<nav class="top">
+<a class="skip-link" href="#main-content">Hoppa till huvudinnehåll</a>
+<nav class="top" aria-label="Asta-navigation">
 <a href="https://1kuli1.github.io/dx-system/">← DX Centralen</a>
 <a href="https://1kuli1.github.io/dX-START/dx-help.html">❓ Hjälp</a>
 <a class="main" href="https://1kuli1.github.io/dX-START/receiver-hub.html">🎧 Receiver Hub</a>
 </nav>
 
-<main class="wrap">
+<main class="wrap" id="main-content">
 <div class="hero">
 <div class="avatar" aria-hidden="true">🤖</div>
 <div>
@@ -63,7 +67,7 @@ summary{cursor:pointer;font-weight:800;color:#fff}
 </div>
 </div>
 
-<div class="note"><b>Skriv med egna ord.</b> Du behöver inte kunna rätt facktermer och du behöver inte välja en kategori först.</div>
+<div class="note"><b>Asta är en AI-assistent som använder ChatGPT från OpenAI.</b> När du väljer att fråga öppnas ChatGPT i en ny flik. Du interagerar då med ett AI-system.<br><br><b>Skriv med egna ord.</b> Du behöver inte kunna rätt facktermer och du behöver inte välja en kategori först.</div>
 
 <section class="card">
 <h2>Vad vill du fråga Asta?</h2>
@@ -87,8 +91,8 @@ summary{cursor:pointer;font-weight:800;color:#fff}
 <p class="small">Du kan också lägga till en <b>skärmbild eller ljudinspelning</b> när ChatGPT öppnats. Det är ofta mycket värdefullt vid stationsidentifiering eller felsökning.</p>
 
 <div class="actions">
-<button class="btn main" onclick="askAsta()">🤖 Fråga Asta</button>
-<button class="btn" onclick="clearQuestion()">Töm frågan</button>
+<button type="button" class="btn main" onclick="askAsta()">🤖 Fråga Asta</button>
+<button type="button" class="btn" onclick="clearQuestion()">Töm frågan</button>
 </div>
 
 <div id="context" class="context"></div>
