@@ -346,7 +346,7 @@ html[data-dx-tool] header,html[data-dx-tool] .tabs{display:none !important;}
   <h2>☁️ Gemensam loggbok</h2>
   <div class="small">Synkmodul: 7.29b</div>
   <div class="notice">
-    <b>Status:</b> <span id="dxSyncStatus">Inte synkad ännu</span><br>
+    <b>Status:</b> <span id="dxSyncStatus" role="status" aria-live="polite">Inte synkad ännu</span><br>
     <span class="small">DX Start sparar alltid lokalt först. När internet finns slås den lokala loggboken ihop med Drive-loggen så att dina enheter kan dela samma poster.</span>
   </div>
   <div class="row" style="margin-top:12px;gap:10px;flex-wrap:wrap">
@@ -504,7 +504,7 @@ html[data-dx-tool] header,html[data-dx-tool] .tabs{display:none !important;}
     </div>
     <div class="notice"><b>Version 7.15 Online:</b> denna fil ersätter äldre dx_start_7_excel.html. Excel-importen stöder både USB/SSB-loggen och den stora DX-kontrollboken.</div>
     <div class="notice"><b>Excelkoppling:</b> välj en .xlsx-fil. DX Start läser igenkända loggblad direkt, hoppar över dubletter och sparar dem lokalt i webbläsaren. Originalfilen ändras aldrig.</div>
-    <div id="excelStatus" class="small" style="margin-top:10px">Ingen Excel-fil importerad i denna session.</div>
+    <div id="excelStatus" class="small" role="status" aria-live="polite" style="margin-top:10px">Ingen Excel-fil importerad i denna session.</div>
     <div class="tablewrap" style="margin-top:14px">
       <table>
         <thead><tr><th>Datum</th><th>UTC</th><th>Frekvens</th><th>Station</th><th>Land</th><th>Mottagare</th><th>SINPO</th><th>Rapport/QSL</th></tr></thead>
@@ -536,7 +536,7 @@ html[data-dx-tool] header,html[data-dx-tool] .tabs{display:none !important;}
       <div class="map-stat"><b id="mapReceivers">0</b>mottagarplatser</div>
       <div class="map-stat"><b id="mapLongest">–</b>längsta mottagning</div>
     </div>
-    <div id="mapStatus" class="notice">Kartan visar bara verifierade loggar med tillräcklig platsinformation. Avståndet räknas alltid från mottagarens plats för den aktuella loggen.</div>
+    <div id="mapStatus" class="notice" role="status" aria-live="polite">Kartan visar bara verifierade loggar med tillräcklig platsinformation. Avståndet räknas alltid från mottagarens plats för den aktuella loggen.</div>
     <div class="map-zoom-controls">
   <button class="btn" type="button" onclick="zoomMap(1.25)">＋</button>
   <button class="btn" type="button" onclick="zoomMap(0.8)">−</button>
@@ -605,11 +605,11 @@ html[data-dx-tool] header,html[data-dx-tool] .tabs{display:none !important;}
       </select>
       <button type="button" class="btn" onclick="cwSelfTest()">Självtest</button>
     </div>
-    <div id="cwDeviceNote" class="notice" style="display:none;margin-top:12px"></div>
-    <div id="cwOnlineDiag" class="notice" style="margin-top:12px"></div>
+    <div id="cwDeviceNote" class="notice" role="status" aria-live="polite" style="display:none;margin-top:12px"></div>
+    <div id="cwOnlineDiag" class="notice" role="status" aria-live="polite" style="margin-top:12px"></div>
 
 
-    <div id="cwStatus" class="notice" style="margin-top:12px">
+    <div id="cwStatus" class="notice" role="status" aria-live="polite" style="margin-top:12px">
       Avkodaren är stoppad. Starta ljud och ställ SDR:n på CW/USB så att tonen ligger ungefär 500–900 Hz.
     </div>
 
