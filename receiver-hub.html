@@ -906,8 +906,11 @@ function showAllReceivers(){
 /* ===== ÖPPNA VALT BAND FRÅN URL ===== */
 function applyBandFromUrl(){
     const band = new URLSearchParams(location.search).get("band");
+    const backBtn = document.getElementById("receiverBackBtn");
+
     if(band){
         filterReceivers(band);
+
         const titles = {
             "lw":"LW / NDB","mw":"MW","hf":"SW / HF","fm":"FM",
             "amateur":"Amatörradio","utility":"Utility / digitalt","vhf":"VHF",
@@ -916,8 +919,19 @@ function applyBandFromUrl(){
             "uhf-easy":"UHF – Enkel","uhf-advanced":"UHF – Avancerad SDR",
             "uber":"UberSDR"
         };
+
         const h1=document.querySelector("header h1");
         if(h1 && titles[band]) h1.textContent="Receiver Hub – "+titles[band];
+
+        if(backBtn){
+            backBtn.textContent="← TILLBAKA TILL RECEIVER HUB";
+            backBtn.href="https://1kuli1.github.io/dX-START/receiver-hub.html";
+        }
+    }else{
+        if(backBtn){
+            backBtn.textContent="← TILLBAKA TILL DX CENTRALEN";
+            backBtn.href="https://1kuli1.github.io/dx-system/";
+        }
     }
 }
 window.addEventListener("DOMContentLoaded", applyBandFromUrl);
