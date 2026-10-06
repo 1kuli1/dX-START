@@ -272,6 +272,68 @@ footer{
     margin-top:40px;
 }
 
+/* ===== KATEGORIVY / BANDVY ===== */
+.band-view header{
+    padding:16px 20px;
+}
+.band-view header p{
+    display:none;
+}
+.band-view .hub-guide,
+.band-view .filters,
+.band-view .search-box{
+    display:none;
+}
+.band-view .wrapper{
+    padding-top:12px;
+}
+
+/* ===== PLATTA ===== */
+@media(min-width:769px) and (max-width:1180px){
+    .wrapper{
+        padding:14px;
+    }
+    .grid{
+        grid-template-columns:repeat(2,minmax(0,1fr));
+        gap:12px;
+    }
+    .receiver-card{
+        padding:16px;
+        min-height:0;
+        height:auto;
+    }
+    .receiver-card h2{
+        font-size:20px;
+        line-height:1.2;
+        margin-bottom:8px;
+    }
+    .receiver-card p{
+        line-height:1.4;
+        margin:6px 0;
+    }
+    .info{
+        margin-top:8px;
+        margin-bottom:8px;
+    }
+    .info div{
+        margin-bottom:4px;
+    }
+    .status{
+        margin-top:6px;
+    }
+    .receiver-card .actions{
+        margin-top:12px;
+    }
+    .actions button{
+        height:46px;
+        font-size:14px;
+    }
+    .receiver-card.uber{
+        min-height:0;
+        height:auto;
+    }
+}
+
 /* ===== MOBIL ===== */
 @media(max-width:768px){
 
@@ -907,6 +969,8 @@ function showAllReceivers(){
 function applyBandFromUrl(){
     const band = new URLSearchParams(location.search).get("band");
     const backBtn = document.getElementById("receiverBackBtn");
+
+    document.body.classList.toggle("band-view", !!band);
 
     if(band){
         filterReceivers(band);
