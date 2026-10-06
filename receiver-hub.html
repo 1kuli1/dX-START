@@ -322,7 +322,7 @@ header p{
 footer{
     text-align:center;
     padding:30px 20px;
-    color:#64748b;
+    color:#94a3b8;
     border-top:1px solid #1f2937;
     margin-top:40px;
 }
@@ -608,6 +608,7 @@ DX Centralens mottagarlista för WebSDR, KiwiSDR, OpenWebRX, FM-DX, flygradio, s
 <!-- ===== SÖKFÄLT ===== -->
 <div class="search-box">
 <label class="visually-hidden" for="searchInput">Sök mottagare, land eller typ</label>
+<span class="visually-hidden" id="receiverSearchHelp">Sökresultatet filtreras medan du skriver.</span>
 
 <input
 type="text"
@@ -1235,6 +1236,21 @@ function addReceiverHelpButtons(){
     });
 }
 window.addEventListener("DOMContentLoaded", addReceiverHelpButtons);
+
+function improveReceiverAccessibility(){
+    document.querySelectorAll(".receiver-card").forEach(card=>{
+        const name=(card.querySelector("h2")?.textContent||"mottagaren").trim();
+        card.querySelectorAll(".open-btn").forEach(btn=>{
+            btn.setAttribute("aria-label","Öppna "+name+" i ny flik");
+        });
+        card.querySelectorAll(".favorite-btn").forEach(btn=>{
+            btn.setAttribute("aria-label","Spara "+name+" som favorit");
+        });
+    });
+    const search=document.getElementById("searchInput");
+    if(search) search.setAttribute("aria-describedby","receiverSearchHelp");
+}
+window.addEventListener("DOMContentLoaded", improveReceiverAccessibility);
 
 /* ===== FILTER ===== */
 function filterReceivers(type){
