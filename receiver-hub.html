@@ -6,7 +6,7 @@
 <meta charset="UTF-8">
 <meta name="viewport" content="width=device-width, initial-scale=1.0">
 
-<title>DX-OS Receiver Hub</title>
+<title>DX Centralen – Receiver Hub</title>
 
 <style>
 
@@ -29,7 +29,9 @@ body{
     top:0;
     z-index:9999;
     width:100%;
-    background:#eab308;
+    display:flex;
+    justify-content:flex-end;
+    background:#05070b;
     padding:10px 14px;
     box-shadow:0 2px 10px rgba(0,0,0,.45);
 }
@@ -73,6 +75,15 @@ header p{
     color:#cbd5e1;
     font-size:16px;
 }
+
+.hub-guide{
+    max-width:1400px;
+    margin:16px auto 0;
+    padding:0 25px;
+    color:#cbd5e1;
+    line-height:1.5;
+}
+.hub-guide b{color:#eab308}
 
 /* ===== WRAPPER ===== */
 .wrapper{
@@ -301,10 +312,12 @@ footer{
 <h1>Receiver Hub</h1>
 
 <p>
-Central mottagarhub för WebSDR, KiwiSDR, OpenWebRX och framtida DX-OS nätverk.
+DX Centralens mottagarlista för WebSDR, KiwiSDR, OpenWebRX, FM-DX, flygradio, satellit och UberSDR.
 </p>
 
 </header>
+
+<div class="hub-guide"><b>Så gör du:</b> 1. Välj band eller typ &nbsp;→&nbsp; 2. Välj mottagare &nbsp;→&nbsp; 3. Tryck <b>Öppna</b>. Använd sökrutan om du redan vet namn, land eller ort.</div>
 
 <!-- ===== WRAPPER ===== -->
 <div class="wrapper">
@@ -859,7 +872,7 @@ onclick="alert('Favorit sparad')"
 <!-- ===== FOOTER ===== -->
 <footer>
 
-DX-OS Receiver Hub • SDR • DX • AI • Signal Intelligence
+DX Centralen • Receiver Hub • välj mottagare och återvänd alltid via knappen högst upp
 
 </footer>
 
