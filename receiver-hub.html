@@ -1,0 +1,905 @@
+<!DOCTYPE html>
+<html lang="sv">
+
+<head>
+
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+
+<title>DX-OS Receiver Hub</title>
+
+<style>
+
+/* ===== GRUND ===== */
+*{
+    box-sizing:border-box;
+}
+
+/* ===== BODY ===== */
+body{
+    margin:0;
+    font-family:Arial,sans-serif;
+    background:#05070b;
+    color:#ffffff;
+}
+
+/* ===== HEADER ===== */
+header{
+    background:#0b1220;
+    padding:35px 20px;
+    text-align:center;
+    border-bottom:2px solid #1f2937;
+}
+
+/* ===== RUBRIK ===== */
+header h1{
+    margin:0;
+    font-size:42px;
+    color:#eab308;
+}
+
+/* ===== TEXT ===== */
+header p{
+    margin-top:12px;
+    color:#cbd5e1;
+    font-size:16px;
+}
+
+/* ===== WRAPPER ===== */
+.wrapper{
+    width:100%;
+    max-width:1400px;
+    margin:auto;
+    padding:25px;
+}
+
+/* ===== FILTER ===== */
+.filters{
+    display:flex;
+    flex-wrap:wrap;
+    gap:10px;
+    margin-bottom:25px;
+}
+
+/* ===== FILTERKNAPP ===== */
+.filters button{
+    background:#111827;
+    color:#ffffff;
+    border:1px solid #374151;
+    padding:12px 18px;
+    border-radius:10px;
+    cursor:pointer;
+    font-weight:bold;
+    transition:0.2s;
+}
+
+/* ===== HOVER ===== */
+.filters button:hover{
+    background:#eab308;
+    color:#000000;
+}
+
+/* ===== SÖKFÄLT ===== */
+.search-box{
+    margin-bottom:25px;
+}
+
+/* ===== INPUT ===== */
+.search-box input{
+    width:100%;
+    padding:15px;
+    border-radius:12px;
+    border:1px solid #374151;
+    background:#111827;
+    color:#ffffff;
+    font-size:16px;
+}
+
+/* ===== GRID ===== */
+.grid{
+    display:grid;
+    grid-template-columns:repeat(auto-fit,minmax(300px,1fr));
+    gap:20px;
+}
+
+/* ===== KORT ===== */
+ .receiver-card{
+    background:#111827;
+    display:flex;
+    flex-direction:column;
+    border:1px solid #1f2937;
+    border-radius:18px;
+    padding:22px;
+    transition:0.2s;
+}
+
+/* ===== HOVER ===== */
+.receiver-card:hover{
+    transform:translateY(-4px);
+    border-color:#eab308;
+}
+
+/* ===== RUBRIK ===== */
+.receiver-card h2{
+    margin-top:0;
+    color:#eab308;
+}
+
+/* ===== TEXT ===== */
+.receiver-card p{
+    color:#cbd5e1;
+    line-height:1.6;
+}
+
+/* ===== INFO ===== */
+.info{
+    margin-top:15px;
+    margin-bottom:15px;
+}
+.receiver-card .actions{
+    margin-top:auto;
+}
+
+/* ===== INFO RAD ===== */
+.info div{
+    margin-bottom:8px;
+}
+
+/* ===== STATUS ===== */
+.status{
+    display:inline-block;
+    padding:6px 12px;
+    border-radius:999px;
+    font-size:12px;
+    font-weight:bold;
+    margin-top:10px;
+}
+
+/* ===== ONLINE ===== */
+.online{
+    background:#14532d;
+    color:#86efac;
+}
+
+/* ===== LIMITED ===== */
+.limited{
+    background:#78350f;
+    color:#fde68a;
+}
+
+/* ===== OFFLINE ===== */
+.offline{
+    background:#7f1d1d;
+    color:#fecaca;
+}
+
+/* ===== KNAPPAR ===== */
+.actions{
+    display:flex;
+    gap:10px;
+    margin-top:20px;
+}
+
+/* ===== KNAPP ===== */
+.actions button{
+    flex:1;
+    height:42px;
+    padding:0 12px;
+    border:none;
+    border-radius:10px;
+    cursor:pointer;
+    font-weight:bold;
+    font-size:13px;
+    display:flex;
+    align-items:center;
+    justify-content:center;
+    white-space:nowrap;
+    transition:0.2s;
+}
+
+/* ===== ÖPPNA ===== */
+.open-btn{
+    background:#eab308;
+    color:#000000;
+}
+
+/* ===== FAVORIT ===== */
+.favorite-btn{
+    background:#1f2937;
+    color:#ffffff;
+}
+
+/* ===== HOVER ===== */
+.actions button:hover{
+    opacity:0.9;
+}
+
+.receiver-card.uber{
+    height:100%;
+}
+@media(min-width:769px){
+    .receiver-card.uber{
+        min-height:330px;
+    }
+}
+
+/* ===== FOOTER ===== */
+footer{
+    text-align:center;
+    padding:30px 20px;
+    color:#64748b;
+    border-top:1px solid #1f2937;
+    margin-top:40px;
+}
+
+/* ===== MOBIL ===== */
+@media(max-width:768px){
+
+    header h1{
+        font-size:30px;
+    }
+
+    .receiver-card{
+        display:block;
+        min-height:0;
+        height:auto;
+    }
+
+    .receiver-card .actions{
+        margin-top:20px;
+    }
+
+    .receiver-card.uber{
+        min-height:0;
+        height:auto;
+    }
+
+}
+
+</style>
+
+</head>
+
+<body>
+
+<!-- ===== HEADER ===== -->
+<header>
+
+<h1>Receiver Hub</h1>
+
+<p>
+Central mottagarhub för WebSDR, KiwiSDR, OpenWebRX och framtida DX-OS nätverk.
+</p>
+
+</header>
+
+<!-- ===== WRAPPER ===== -->
+<div class="wrapper">
+
+<!-- ===== FILTERKNAPPAR ===== -->
+<div class="filters">
+
+<button onclick="filterReceivers('all')">Alla</button>
+
+<button onclick="filterReceivers('lw')">LW / NDB</button>
+<button onclick="filterReceivers('mw')">MW</button>
+<button onclick="filterReceivers('hf')">SW / HF</button>
+<button onclick="filterReceivers('fm')">FM</button>
+<button onclick="filterReceivers('amateur')">Amatörradio</button>
+<button onclick="filterReceivers('utility')">Utility / digitalt</button>
+<button onclick="filterReceivers('vhf')">VHF</button>
+<button onclick="filterReceivers('air-simple')">✈ Air – Enkel</button>
+<button onclick="filterReceivers('airband')">✈ Air – Avancerad SDR</button>
+<button onclick="filterReceivers('sat-simple')">🛰 Satellit – Enkel (börja här)</button>
+<button onclick="filterReceivers('satellite')">🛰 Satellit – Avancerad</button>
+<button onclick="openReceiverCategory('uhf-easy','http://sdr.websdrmaasbree.nl:8908/')">📡 UHF – Enkel</button>
+<button onclick="openReceiverCategory('uhf-advanced','http://vhfsdr.gb0snb.com:8074/')">📡 UHF – Avancerad SDR</button>
+<button onclick="openReceiverCategory('uber','https://n2epe.tunnel.ubersdr.org/')">📻 UberSDR</button>
+
+</div>
+
+<!-- ===== SÖKFÄLT ===== -->
+<div class="search-box">
+
+<input
+type="text"
+id="searchInput"
+placeholder="Sök mottagare, land eller typ..."
+onkeyup="searchReceivers()"
+>
+
+</div>
+
+<!-- ===== GRID ===== -->
+<div class="grid" id="receiverGrid">
+
+<!-- ===== TWENTE ===== -->
+<div class="receiver-card lw mw hf amateur utility">
+
+<h2>Twente WebSDR – Enschede</h2>
+
+<p>
+Klassisk WebSDR för HF, kortvåg, mellanvåg och amatörradio.
+</p>
+
+<div class="info">
+
+<div><strong>Land:</strong> Nederländerna</div>
+
+<div><strong>Band:</strong> HF / MW / SW</div>
+
+<div><strong>Typ:</strong> WebSDR</div>
+
+</div>
+
+<div class="status online">
+ONLINE
+</div>
+
+<div class="actions">
+
+<button
+class="open-btn"
+onclick="window.open('http://websdr.ewi.utwente.nl:8901/m.html','_blank')"
+>
+Öppna
+</button>
+
+<button
+class="favorite-btn"
+onclick="alert('Favorit sparad')"
+>
+★ Favorit
+</button>
+
+</div>
+
+</div>
+
+<!-- ===== KIWI ===== -->
+<div class="receiver-card lw mw hf amateur utility">
+
+<h2>KiwiSDR – SK6WW Karlsborg</h2>
+
+<p>
+Lake Wettern DX Group. Riktig KiwiSDR för VLF, LW, MW, kortvåg, amatörradio och utility.
+</p>
+
+<div class="info">
+
+<div><strong>Land:</strong> Sverige – Karlsborg</div>
+
+<div><strong>Band:</strong> 0–30 MHz</div>
+
+<div><strong>Typ:</strong> KiwiSDR</div>
+
+</div>
+
+<div class="status online">
+PUBLIK
+</div>
+
+<div class="actions">
+
+<button
+class="open-btn"
+onclick="window.open('http://sk5sm-at-sk6ww.proxy.kiwisdr.com:8073/','_blank')"
+>
+Öppna
+</button>
+
+<button
+class="favorite-btn"
+onclick="alert('Favorit sparad')"
+>
+★ Favorit
+</button>
+
+</div>
+
+</div>
+
+<!-- ===== VERIFIERADE MOTTAGARE ===== -->
+<div class="receiver-card lw mw hf amateur utility">
+<h2>KiwiSDR – SM5AJV Heby</h2>
+<p>Svensk KiwiSDR i Heby, nära Kungsberget-regionen. Bra för långvåg, NDB, mellanvåg, kortvåg, amatörradio och utility.</p>
+<div class="info"><div><strong>Land:</strong> Sverige – Heby</div><div><strong>Band:</strong> 0–30 MHz</div><div><strong>Typ:</strong> KiwiSDR</div></div>
+<div class="status online">PUBLIK</div>
+<div class="actions"><button class="open-btn" onclick="window.open('http://websdr.qrq.se/','_blank')">Öppna</button><button class="favorite-btn" onclick="alert('Favorit sparad')">★ Favorit</button></div>
+</div>
+
+<div class="receiver-card lw mw hf amateur utility">
+<h2>KiwiSDR – Kotka</h2>
+<p>Eagle 3 i Finland. 0–30 MHz och användbar för nordisk DX, MW, SW, amatörradio och utility.</p>
+<div class="info"><div><strong>Land:</strong> Finland – Kotka</div><div><strong>Band:</strong> 0–30 MHz</div><div><strong>Typ:</strong> KiwiSDR 2</div></div>
+<div class="status online">PUBLIK</div>
+<div class="actions"><button class="open-btn" onclick="window.open('http://eagle3.psokotka.com:8076/','_blank')">Öppna</button><button class="favorite-btn" onclick="alert('Favorit sparad')">★ Favorit</button></div>
+</div>
+
+<div class="receiver-card lw mw hf amateur utility">
+<h2>KiwiSDR – Esbjerg</h2>
+<p>Dansk 0–30 MHz-mottagare, bra geografiskt komplement för nordisk och europeisk DX.</p>
+<div class="info"><div><strong>Land:</strong> Danmark – Esbjerg</div><div><strong>Band:</strong> 0–30 MHz</div><div><strong>Typ:</strong> KiwiSDR 2</div></div>
+<div class="status online">PUBLIK</div>
+<div class="actions"><button class="open-btn" onclick="window.open('http://21086.proxy.kiwisdr.com/','_blank')">Öppna</button><button class="favorite-btn" onclick="alert('Favorit sparad')">★ Favorit</button></div>
+</div>
+
+<div class="receiver-card lw mw hf amateur utility">
+<h2>KiwiSDR – DO6LSM Borgwedel</h2>
+<p>Publik KiwiSDR i Borgwedel i norra Tyskland. Bra för långvåg, NDB, mellanvåg, kortvåg, amatörradio och utility.</p>
+<div class="info"><div><strong>Land:</strong> Tyskland – Borgwedel</div><div><strong>Band:</strong> 0–30 MHz</div><div><strong>Typ:</strong> KiwiSDR</div></div>
+<div class="status online">PUBLIK</div>
+<div class="actions"><button class="open-btn" onclick="window.open('http://21150.proxy.kiwisdr.com:8073/','_blank')">Öppna</button><button class="favorite-btn" onclick="alert('Favorit sparad')">★ Favorit</button></div>
+</div>
+
+<div class="receiver-card hf amateur utility">
+<h2>KFS WebSDR – Kalifornien</h2>
+<p>Riktig WebSDR med flera HF-band och antenner riktade mot olika delar av världen.</p>
+<div class="info"><div><strong>Land:</strong> USA – Kalifornien</div><div><strong>Band:</strong> HF / amatörradio / utility</div><div><strong>Typ:</strong> WebSDR + KiwiSDR</div></div>
+<div class="status online">PUBLIK</div>
+<div class="actions"><button class="open-btn" onclick="window.open('https://www.kfsdr.org/home','_blank')">Öppna</button><button class="favorite-btn" onclick="alert('Favorit sparad')">★ Favorit</button></div>
+</div>
+
+<!-- ===== OPENWEBRX ===== -->
+<div class="receiver-card vhf">
+
+<h2>OpenWebRX Germany</h2>
+
+<p>
+OpenWebRX-mottagare med VHF/UHF och amatörradioband.
+</p>
+
+<div class="info">
+
+<div><strong>Land:</strong> Tyskland</div>
+
+<div><strong>Band:</strong> VHF / UHF</div>
+
+<div><strong>Typ:</strong> OpenWebRX</div>
+
+</div>
+
+<div class="status online">
+ONLINE
+</div>
+
+<div class="actions">
+
+<button
+class="open-btn"
+onclick="window.open('https://www.receiverbook.de/map','_blank')"
+>
+Öppna
+</button>
+
+<button
+class="favorite-btn"
+onclick="alert('Favorit sparad')"
+>
+★ Favorit
+</button>
+
+</div>
+
+</div>
+
+<!-- ===== FM ===== -->
+<!-- ===== FM-DX DIREKTMOTTAGARE ===== -->
+<div class="receiver-card fm vhf">
+<h2>FM-DX – Nieuwegein</h2>
+<p>TEF6686-baserad fjärrmottagare med RDS och direkt webbstyrning.</p>
+<div class="info"><div><strong>Land:</strong> Nederländerna – Nieuwegein</div><div><strong>Band:</strong> 84–108 MHz</div><div><strong>Typ:</strong> FM-DX Webserver / TEF668x</div></div>
+<div class="status online">PUBLIK</div>
+<div class="actions"><button class="open-btn" onclick="window.open('https://tef-tuner.pd2pw.nl/','_blank')">Öppna</button><button class="favorite-btn" onclick="alert('Favorit sparad')">★ Favorit</button></div>
+</div>
+
+<div class="receiver-card fm vhf" data-search="jn37to dk2go fm dx fmdx tef6687 64 108">
+<h2>FM-DX – JN37TO</h2>
+<p>Aktiv FM-DX Webserver med TEF6687, Raspberry Pi 4B, Körner 9.2-antenn och verktyg för VHF-propagation, RDS och spektrum.</p>
+<div class="info"><div><strong>Locator:</strong> JN37TO</div><div><strong>Band:</strong> 64–108 MHz</div><div><strong>Typ:</strong> FM-DX Webserver / TEF6687</div></div>
+<div class="status online">PUBLIK</div>
+<div class="actions"><button class="open-btn" onclick="window.open('https://jn37to.fmtuner.org/','_blank')">Öppna</button><button class="favorite-btn" onclick="alert('Favorit sparad')">★ Favorit</button></div>
+</div>
+
+<div class="receiver-card fm vhf">
+<h2>FM-DX – Radotín / Prag</h2>
+<p>Headless TEF Lite med 4-elements Yagi och direkt webbstyrning.</p>
+<div class="info"><div><strong>Land:</strong> Tjeckien – Prag/Radotín</div><div><strong>Band:</strong> 87,8–108 MHz</div><div><strong>Typ:</strong> FM-DX Webserver / TEF668x</div></div>
+<div class="status online">PUBLIK</div>
+<div class="actions"><button class="open-btn" onclick="window.open('https://tef.tuxik.cz/','_blank')">Öppna</button><button class="favorite-btn" onclick="alert('Favorit sparad')">★ Favorit</button></div>
+</div>
+
+<div class="receiver-card fm vhf">
+<h2>FM-DX – Vasse</h2>
+<p>TEF-mottagare med Raspberry Pi, RDS, realtidslogg och DX-karta.</p>
+<div class="info"><div><strong>Land:</strong> Nederländerna – Vasse</div><div><strong>Band:</strong> FM</div><div><strong>Typ:</strong> FM-DX Webserver / TEF668x</div></div>
+<div class="status online">PUBLIK</div>
+<div class="actions"><button class="open-btn" onclick="window.open('https://fm.dxvasse.nl/','_blank')">Öppna</button><button class="favorite-btn" onclick="alert('Favorit sparad')">★ Favorit</button></div>
+</div>
+
+<div class="receiver-card fm vhf">
+<h2>FM-DX – Tremelo</h2>
+<p>Belgisk FM-DX-mottagare med Körner-antenn, RDS och stationsverktyg.</p>
+<div class="info"><div><strong>Land:</strong> Belgien – Tremelo</div><div><strong>Band:</strong> 87,5–108 MHz</div><div><strong>Typ:</strong> FM-DX Webserver / TEF668x</div></div>
+<div class="status online">PUBLIK</div>
+<div class="actions"><button class="open-btn" onclick="window.open('https://belfmdx.fmtuner.org/','_blank')">Öppna</button><button class="favorite-btn" onclick="alert('Favorit sparad')">★ Favorit</button></div>
+</div>
+
+<div class="receiver-card fm vhf">
+<h2>FM-DX – Riccione</h2>
+<p>Italiensk TEF668x med 5-elements Yagi och avancerade FM-DX-verktyg.</p>
+<div class="info"><div><strong>Land:</strong> Italien – Riccione</div><div><strong>Band:</strong> FM</div><div><strong>Typ:</strong> FM-DX Webserver / TEF668x</div></div>
+<div class="status online">PUBLIK</div>
+<div class="actions"><button class="open-btn" onclick="window.open('https://riccione.fmtuner.org/','_blank')">Öppna</button><button class="favorite-btn" onclick="alert('Favorit sparad')">★ Favorit</button></div>
+</div>
+
+<div class="receiver-card fm vhf">
+<h2>FM-DX – Surhuisterveen</h2>
+<p>TEF6686 i Friesland med RDS, Radiotext och direkt frekvensstyrning.</p>
+<div class="info"><div><strong>Land:</strong> Nederländerna – Friesland</div><div><strong>Band:</strong> FM</div><div><strong>Typ:</strong> FM-DX Webserver / TEF6686</div></div>
+<div class="status online">PUBLIK</div>
+<div class="actions"><button class="open-btn" onclick="window.open('https://surhuisterveen.kleinepiraatfrl.nl/','_blank')">Öppna</button><button class="favorite-btn" onclick="alert('Favorit sparad')">★ Favorit</button></div>
+</div>
+
+<div class="receiver-card fm vhf">
+<h2>FM-DX – serverkarta</h2>
+<p>FMDX.orgs levande karta över publika FM-DX Webserver-mottagare. Bra när du vill hitta fler mottagare nära ett visst område.</p>
+<div class="info"><div><strong>Område:</strong> Världen</div><div><strong>Band:</strong> FM</div><div><strong>Typ:</strong> FM-DX Webserver-karta</div></div>
+<div class="status online">KATALOG</div>
+<div class="actions"><button class="open-btn" onclick="window.open('https://servers.fmdx.org/','_blank')">Öppna karta</button><button class="favorite-btn" onclick="alert('Favorit sparad')">★ Favorit</button></div>
+</div>
+
+<!-- ===== AIRBAND ENKEL ===== -->
+<div class="receiver-card air-simple">
+<h2>🟢 Enkel – LiveATC</h2>
+<p>Välj flygplats och lyssna. Ingen inställning av SDR, filter eller waterfall behövs. Bra första steg för nybörjare.</p>
+<div class="info"><div><strong>Område:</strong> Världen</div><div><strong>Innehåll:</strong> Tower / Approach / Departure / Ground</div><div><strong>Nivå:</strong> Enkel – börja här</div></div>
+<div class="status online">KLICK & LYSSNA</div>
+<div class="actions"><button class="open-btn" onclick="window.open('https://www.liveatc.net/feedindex.php','_blank')">Välj flygplats</button><button class="favorite-btn" onclick="alert('Favorit sparad')">★ Favorit</button></div>
+</div>
+
+<div class="receiver-card air-simple">
+<h2>🟢 Enkel – ListenATC</h2>
+<p>Enkel feed-browser för riktig pilot- och flygledarradio. Sök flygplats eller region och tryck på en feed.</p>
+<div class="info"><div><strong>Område:</strong> Internationellt</div><div><strong>Innehåll:</strong> Live ATC-feeds</div><div><strong>Nivå:</strong> Enkel</div></div>
+<div class="status online">KLICK & LYSSNA</div>
+<div class="actions"><button class="open-btn" onclick="window.open('https://listenatc.com/','_blank')">Öppna</button><button class="favorite-btn" onclick="alert('Favorit sparad')">★ Favorit</button></div>
+</div>
+
+<div class="receiver-card air-simple">
+<h2>🟢 Enkel – GlobalTuners ATC</h2>
+<p>Lista över fjärrstyrda mottagare som kan användas för flygradio. Välj ATC och en ledig mottagare.</p>
+<div class="info"><div><strong>Område:</strong> Världen</div><div><strong>Band:</strong> ATC / Airband</div><div><strong>Nivå:</strong> Enkel till mellan</div></div>
+<div class="status online">MOTTAGARLISTA</div>
+<div class="actions"><button class="open-btn" onclick="window.open('https://r.globaltuners.com/receiver/list.php','_blank')">Öppna ATC-lista</button><button class="favorite-btn" onclick="alert('Favorit sparad')">★ Favorit</button></div>
+</div>
+
+<div class="receiver-card air-simple">
+<h2>🗺️ Enkel – LiveATC täckningskarta</h2>
+<p>Karta för att hitta andra flygplatser och lyssningsområden. Välj ett område och gå vidare till tillgänglig feed.</p>
+<div class="info"><div><strong>Område:</strong> Världen</div><div><strong>Typ:</strong> ATC-karta</div><div><strong>Nivå:</strong> Enkel</div></div>
+<div class="status online">KARTA</div>
+<div class="actions"><button class="open-btn" onclick="window.open('https://www.liveatc.net/map/','_blank')">Öppna karta</button><button class="favorite-btn" onclick="alert('Favorit sparad')">★ Favorit</button></div>
+</div>
+
+<!-- ===== AIRBAND ===== -->
+<div class="receiver-card airband vhf utility">
+<h2>🔵 Avancerad – SDRPT3</h2>
+<p>Publik WebSDR särskilt märkt för Airband. Används för att lyssna på VHF-flygtrafik direkt i webbläsaren.</p>
+<div class="info"><div><strong>Land:</strong> Portugal</div><div><strong>Band:</strong> VHF Airband</div><div><strong>Typ:</strong> OpenWebRX / WebSDR Airband</div></div>
+<div class="status online">PUBLIK</div>
+<div class="actions"><button class="open-btn" onclick="window.open('https://www.receiverbook.de/?type=openwebrx','_blank')">Öppna via Receiverbook</button><button class="favorite-btn" onclick="alert('Favorit sparad')">★ Favorit</button></div>
+</div>
+
+<div class="receiver-card airband vhf utility">
+<h2>🔵 Avancerad – Chester</h2>
+<p>OpenWebRX+ i Chester med täckning upp till 1750 MHz och särskilt stöd för Airband.</p>
+<div class="info"><div><strong>Land:</strong> Storbritannien – Chester</div><div><strong>Band:</strong> VHF Airband / VHF / UHF</div><div><strong>Typ:</strong> OpenWebRX+</div></div>
+<div class="status limited">KAN VARA TILLFÄLLIGT NERE</div>
+<div class="actions"><button class="open-btn" onclick="window.open('https://openwebrx.soundsofatc.com/','_blank')">Öppna</button><button class="favorite-btn" onclick="alert('Favorit sparad')">★ Favorit</button></div>
+</div>
+
+<div class="receiver-card airband vhf utility">
+<h2>🗺️ Avancerad – Receiverbook-karta/katalog</h2>
+<p>Receiverbook listar publika OpenWebRX-mottagare, inklusive särskilda Airband-servrar. Använd kartan/katalogen för att hitta fler avancerade SDR-mottagare nära ett flygfält eller område.</p>
+<div class="info"><div><strong>Område:</strong> Världen</div><div><strong>Band:</strong> VHF Airband</div><div><strong>Typ:</strong> OpenWebRX-katalog</div></div>
+<div class="status online">KATALOG</div>
+<div class="actions"><button class="open-btn" onclick="window.open('https://www.receiverbook.de/?type=openwebrx','_blank')">Öppna katalog</button><button class="favorite-btn" onclick="alert('Favorit sparad')">★ Favorit</button></div>
+</div>
+
+<div class="receiver-card airband vhf utility">
+<h2>🔵 Avancerad – Hradec Králové</h2>
+<p>Dedikerad webbstyrd SDR för VHF-flygradio. Waterfall, AM och snabbval av märkta flygfrekvenser.</p>
+<div class="info"><div><strong>Land:</strong> Tjeckien – Hradec Králové</div><div><strong>Band:</strong> VHF Airband</div><div><strong>Typ:</strong> WebSDR Airband</div></div>
+<div class="status online">PUBLIK</div>
+<div class="actions"><button class="open-btn" onclick="window.open('https://sdr.hkfree.org/','_blank')">Öppna</button><button class="favorite-btn" onclick="alert('Favorit sparad')">★ Favorit</button></div>
+</div>
+
+<div class="receiver-card airband vhf utility">
+<h2>🔵 Avancerad – OH6AH/OH6M</h2>
+<p>Finsk OpenWebRX med särskild Aviation-profil för Airband samt ADS-B.</p>
+<div class="info"><div><strong>Land:</strong> Finland</div><div><strong>Band:</strong> Airband 120–125 MHz / ADS-B 1090 MHz</div><div><strong>Typ:</strong> OpenWebRX</div></div>
+<div class="status online">PUBLIK</div>
+<div class="actions"><button class="open-btn" onclick="window.open('https://oh6ah.fi/openwebrx/','_blank')">Öppna</button><button class="favorite-btn" onclick="alert('Favorit sparad')">★ Favorit</button></div>
+</div>
+
+<div class="receiver-card airband vhf utility">
+<h2>🔵 Avancerad – Jodrell Bank-området</h2>
+<p>Aktiv brittisk WebSDR med separata mottagare som täcker Airband tillsammans med flera VHF-band.</p>
+<div class="info"><div><strong>Land:</strong> Storbritannien – Cheshire</div><div><strong>Band:</strong> VHF Airband</div><div><strong>Typ:</strong> WebSDR</div></div>
+<div class="status online">PUBLIK</div>
+<div class="actions"><button class="open-btn" onclick="window.open('https://www.g0xbu.co.uk/websdr','_blank')">Öppna</button><button class="favorite-btn" onclick="alert('Favorit sparad')">★ Favorit</button></div>
+</div>
+
+<div class="receiver-card airband vhf utility">
+<h2>🔵 Avancerad – Ambientscape</h2>
+<p>OpenWebRX+ med särskild Airband/Marine-profil och möjlighet att lyssna på flygkommunikation direkt i webbläsaren.</p>
+<div class="info"><div><strong>Land:</strong> Storbritannien</div><div><strong>Band:</strong> Airband 134,978–137,019 MHz</div><div><strong>Typ:</strong> OpenWebRX+</div></div>
+<div class="status online">PUBLIK</div>
+<div class="actions"><button class="open-btn" onclick="window.open('https://www.ambientscape.com/websdr','_blank')">Öppna</button><button class="favorite-btn" onclick="alert('Favorit sparad')">★ Favorit</button></div>
+</div>
+
+<!-- ===== SATELLIT ENKEL ===== -->
+<div class="receiver-card sat-simple">
+<h2>🟢 Enkel – SatNOGS observationer</h2>
+<p>Lyssna på redan mottagna satellitpass från markstationer runt hela världen. Bra för att börja utan att själv ställa in en SDR.</p>
+<div class="info"><div><strong>Område:</strong> Världen</div><div><strong>Satelliter:</strong> NOAA / CubeSat / amatörsatelliter m.fl.</div><div><strong>Nivå:</strong> Enkel – börja här</div></div>
+<div class="status online">LYSSNA & UTFORSKA</div>
+<div class="actions"><button class="open-btn" onclick="window.open('https://network.satnogs.org/observations/','_blank')">Öppna observationer</button><button class="favorite-btn" onclick="alert('Favorit sparad')">★ Favorit</button></div>
+</div>
+
+<div class="receiver-card sat-simple">
+<h2>🟢 Enkel – SM0TGU Sverige</h2>
+<p>Svensk SatNOGS-markstation i Sollentuna för VHF/UHF-satelliter. Visar mottagna pass, frekvenser och resultat.</p>
+<div class="info"><div><strong>Land:</strong> Sverige – Sollentuna</div><div><strong>Band:</strong> VHF / UHF</div><div><strong>Nivå:</strong> Enkel</div></div>
+<div class="status online">SATNOGS</div>
+<div class="actions"><button class="open-btn" onclick="window.open('https://network.satnogs.org/stations/858/','_blank')">Öppna station</button><button class="favorite-btn" onclick="alert('Favorit sparad')">★ Favorit</button></div>
+</div>
+
+<div class="receiver-card sat-simple">
+<h2>🟢 Enkel – QO-100 information & WebSDR</h2>
+<p>AMSAT-SM:s svenska sida om QO-100 med länkar till webbmottagare. Bra introduktion till att lyssna på en geostationär amatörradiosatellit.</p>
+<div class="info"><div><strong>Språk:</strong> Svenska</div><div><strong>Satellit:</strong> QO-100</div><div><strong>Nivå:</strong> Enkel</div></div>
+<div class="status online">BÖRJA HÄR</div>
+<div class="actions"><button class="open-btn" onclick="window.open('https://www.amsat.se/2018/10/27/qo-100/','_blank')">Öppna</button><button class="favorite-btn" onclick="alert('Favorit sparad')">★ Favorit</button></div>
+</div>
+
+<div class="receiver-card sat-simple">
+<h2>🗺️ Enkel – SatNOGS stationskarta</h2>
+<p>Karta över markstationer i SatNOGS globala nät. Välj en station och se vilka satelliter den tar emot.</p>
+<div class="info"><div><strong>Område:</strong> Världen</div><div><strong>Typ:</strong> Satellit-markstationskarta</div><div><strong>Nivå:</strong> Enkel</div></div>
+<div class="status online">KARTA</div>
+<div class="actions"><button class="open-btn" onclick="window.open('https://network.satnogs.org/stations/','_blank')">Öppna karta</button><button class="favorite-btn" onclick="alert('Favorit sparad')">★ Favorit</button></div>
+</div>
+
+<!-- ===== SATELLIT AVANCERAD ===== -->
+<div class="receiver-card satellite amateur utility">
+<h2>🔵 Avancerad – Goonhilly QO-100 WebSDR</h2>
+<p>BATC/Goonhilly WebSDR för QO-100. Waterfall och direkt lyssning på satellitens smalbandstransponder.</p>
+<div class="info"><div><strong>Land:</strong> Storbritannien – Goonhilly</div><div><strong>Satellit:</strong> QO-100</div><div><strong>Typ:</strong> WebSDR</div></div>
+<div class="status online">PUBLIK</div>
+<div class="actions"><button class="open-btn" onclick="window.open('https://eshail.batc.org.uk/nb/','_blank')">Öppna</button><button class="favorite-btn" onclick="alert('Favorit sparad')">★ Favorit</button></div>
+</div>
+<div class="receiver-card satellite vhf uhf utility">
+<h2>🔵 Avancerad – SatNOGS SM0TGU</h2>
+<p>Svensk VHF/UHF-markstation med RTL-SDR. Använd observationerna för att analysera verkliga satellitsignaler och pass.</p>
+<div class="info"><div><strong>Land:</strong> Sverige – Sollentuna</div><div><strong>Band:</strong> VHF / UHF</div><div><strong>Typ:</strong> SatNOGS / RTL-SDR</div></div>
+<div class="status online">PUBLIK</div>
+<div class="actions"><button class="open-btn" onclick="window.open('https://network.satnogs.org/stations/858/','_blank')">Öppna</button><button class="favorite-btn" onclick="alert('Favorit sparad')">★ Favorit</button></div>
+</div>
+
+<div class="receiver-card satellite vhf uhf utility">
+<h2>🔵 Avancerad – CGBSAT-UHF</h2>
+<p>Mycket aktiv SatNOGS UHF-markstation i Nederländerna med tiotusentals satellitobservationer.</p>
+<div class="info"><div><strong>Land:</strong> Nederländerna</div><div><strong>Band:</strong> UHF</div><div><strong>Typ:</strong> SatNOGS / RTL-SDR</div></div>
+<div class="status online">PUBLIK</div>
+<div class="actions"><button class="open-btn" onclick="window.open('https://network.satnogs.org/stations/40/','_blank')">Öppna</button><button class="favorite-btn" onclick="alert('Favorit sparad')">★ Favorit</button></div>
+</div>
+
+<div class="receiver-card satellite utility">
+<h2>🔵 Avancerad – QO-100 DATV</h2>
+<p>AMSAT-DL:s vägledning till QO-100 wideband/DATV och realtidsspektrum för digital satellit-TV.</p>
+<div class="info"><div><strong>Satellit:</strong> QO-100</div><div><strong>Mode:</strong> DVB-S2 / DATV</div><div><strong>Nivå:</strong> Avancerad</div></div>
+<div class="status online">SPEKTRUM</div>
+<div class="actions"><button class="open-btn" onclick="window.open('https://amsat-dl.org/en/qo-100-datv-reception/','_blank')">Öppna</button><button class="favorite-btn" onclick="alert('Favorit sparad')">★ Favorit</button></div>
+</div>
+
+<div class="receiver-card satellite vhf uhf utility">
+<h2>🗺️ Avancerad – SatNOGS nätverk</h2>
+<p>Global karta och katalog över satellitmarkstationer. Filtrera stationer och undersök antenner, frekvenser, framtida pass och observationer.</p>
+<div class="info"><div><strong>Område:</strong> Världen</div><div><strong>Band:</strong> VHF / UHF / L / S m.fl.</div><div><strong>Typ:</strong> Markstationsnät</div></div>
+<div class="status online">KARTA / KATALOG</div>
+<div class="actions"><button class="open-btn" onclick="window.open('https://network.satnogs.org/stations/','_blank')">Öppna nätverket</button><button class="favorite-btn" onclick="alert('Favorit sparad')">★ Favorit</button></div>
+</div>
+
+<!-- ===== UBER SDR ===== -->
+<div class="receiver-card uber hf amateur utility">
+<h2>📻 UberSDR – WA3YMH</h2>
+<p>Publik UberSDR för HF- och amatörradiolyssning. Egen mottagartyp i Receiver Hub och inte en UHF- eller satellitmottagare.</p>
+<div class="info"><div><strong>Mottagare:</strong> WA3YMH</div><div><strong>Band:</strong> HF + 6 m beroende på installation</div><div><strong>Typ:</strong> UberSDR</div></div>
+<div class="status online">PUBLIK</div>
+<div class="actions"><button class="open-btn" onclick="window.open('https://wa3ymh.tunnel.ubersdr.org/','_blank')">Öppna</button><button class="favorite-btn" onclick="alert('Favorit sparad')">★ Favorit</button></div>
+</div>
+
+<div class="receiver-card uber hf amateur utility">
+<h2>📻 UberSDR – NY4Q</h2>
+<p>Publik UberSDR för HF- och amatörradiolyssning med UberSDR:s gemensamma webbgränssnitt.</p>
+<div class="info"><div><strong>Mottagare:</strong> NY4Q</div><div><strong>Band:</strong> HF + 6 m beroende på installation</div><div><strong>Typ:</strong> UberSDR</div></div>
+<div class="status online">PUBLIK</div>
+<div class="actions"><button class="open-btn" onclick="window.open('https://ny4q.tunnel.ubersdr.org/','_blank')">Öppna</button><button class="favorite-btn" onclick="alert('Favorit sparad')">★ Favorit</button></div>
+</div>
+
+
+<div class="receiver-card uber hf amateur utility">
+<h2>📻 UberSDR – KB5AVY</h2>
+<p>Publik UberSDR för HF- och amatörradiolyssning. Den visas endast under UberSDR och andra relevanta HF-filter.</p>
+<div class="info"><div><strong>Mottagare:</strong> KB5AVY</div><div><strong>Band:</strong> HF + 6 m beroende på installation</div><div><strong>Typ:</strong> UberSDR</div></div>
+<div class="status online">PUBLIK</div>
+<div class="actions"><button class="open-btn" onclick="window.open('https://kb5avy.tunnel.ubersdr.org/','_blank')">Öppna</button><button class="favorite-btn" onclick="alert('Favorit sparad')">★ Favorit</button></div>
+</div>
+
+<div class="receiver-card uber hf amateur utility">
+<h2>📻 UberSDR – N2EPE</h2>
+<p>Publik UberSDR för HF- och amatörradiolyssning med direkt åtkomst till mottagarens UberSDR-sida.</p>
+<div class="info"><div><strong>Mottagare:</strong> N2EPE</div><div><strong>Band:</strong> HF + 6 m beroende på installation</div><div><strong>Typ:</strong> UberSDR</div></div>
+<div class="status online">PUBLIK</div>
+<div class="actions"><button class="open-btn" onclick="window.open('https://n2epe.tunnel.ubersdr.org/','_blank')">Öppna</button><button class="favorite-btn" onclick="alert('Favorit sparad')">★ Favorit</button></div>
+</div>
+
+<div class="receiver-card uber hf amateur utility">
+<h2>📻 UberSDR – OE3GBB-1</h2>
+<p>Publik UberSDR för HF- och amatörradiolyssning. Separat från UHF-lägena och satellitdelen.</p>
+<div class="info"><div><strong>Mottagare:</strong> OE3GBB-1</div><div><strong>Band:</strong> HF + 6 m beroende på installation</div><div><strong>Typ:</strong> UberSDR</div></div>
+<div class="status online">PUBLIK</div>
+<div class="actions"><button class="open-btn" onclick="window.open('https://oe3gbb-1.tunnel.ubersdr.org/','_blank')">Öppna</button><button class="favorite-btn" onclick="alert('Favorit sparad')">★ Favorit</button></div>
+</div>
+
+<div class="receiver-card uber hf amateur utility">
+<h2>🗺️ UberSDR – karta & katalog</h2>
+<p>Officiell katalog över publika UberSDR. Filtrera på land, frekvensområde, lediga platser, SNR och funktioner.</p>
+<div class="info"><div><strong>Område:</strong> Världen</div><div><strong>Band:</strong> HF + 6 m beroende på mottagare</div><div><strong>Typ:</strong> UberSDR Instance Directory</div></div><div class="status online">KARTA / KATALOG</div>
+<div class="actions"><button class="open-btn" onclick="window.open('https://instances.ubersdr.org/','_blank')">Öppna katalog</button><button class="favorite-btn" onclick="alert('Favorit sparad')">★ Favorit</button></div>
+</div>
+
+<div class="receiver-card uber hf amateur utility">
+<h2>🔎 UberSDR – Signal Finder</h2>
+<p>Skriv in en frekvens och låt UberSDR hitta mottagare som hör den bäst just nu.</p>
+<div class="info"><div><strong>Område:</strong> Världen</div><div><strong>Funktion:</strong> Sök bästa mottagare efter frekvens/SNR</div><div><strong>Typ:</strong> UberSDR</div></div><div class="status online">SÖKVERKTYG</div>
+<div class="actions"><button class="open-btn" onclick="window.open('https://instances.ubersdr.org/signalfinder.html','_blank')">Hitta mottagare</button><button class="favorite-btn" onclick="alert('Favorit sparad')">★ Favorit</button></div>
+</div>
+
+<!-- ===== UHF – TVÅ NIVÅER ===== -->
+
+<div class="receiver-card uhf-easy">
+<h2>🟢 Enkel – WebSDR Maasbree 70 cm</h2>
+<p>70 cm-mottagare i Nederländerna. Bra start för vanlig FM-trafik på UHF; bandet är uppdelat i 430–435 och 436–440 MHz.</p>
+<div class="info"><div><strong>Land:</strong> Nederländerna – Maasbree</div><div><strong>Band:</strong> 430–440 MHz</div><div><strong>Nivå:</strong> Enkel</div></div>
+<div class="status online">PUBLIK</div>
+<div class="actions"><button class="open-btn" onclick="window.open('https://websdr-maasbree.jouwweb.nl/','_blank')">Öppna</button><button class="favorite-btn" onclick="alert('Favorit sparad')">★ Favorit</button></div>
+</div>
+
+<div class="receiver-card uhf-easy">
+<h2>🟢 Enkel – Goonhilly 70 cm</h2>
+<p>Klassisk WebSDR från Goonhilly med 70 cm. Lämplig när du vill börja lyssna direkt utan OpenWebRX.</p>
+<div class="info"><div><strong>Land:</strong> Storbritannien – Cornwall</div><div><strong>Band:</strong> 70 cm / UHF</div><div><strong>Nivå:</strong> Enkel</div></div>
+<div class="status online">PUBLIK</div>
+<div class="actions"><button class="open-btn" onclick="window.open('https://eshail.batc.org.uk/','_blank')">Öppna</button><button class="favorite-btn" onclick="alert('Favorit sparad')">★ Favorit</button></div>
+</div>
+
+<div class="receiver-card uhf-easy">
+<h2>🗺️ Enkel – UHF/WebSDR-katalog</h2>
+<p>Receiverbook-katalog för att hitta fler publika mottagare när du vill prova en annan plats.</p>
+<div class="info"><div><strong>Område:</strong> Världen</div><div><strong>Band:</strong> VHF / UHF</div><div><strong>Typ:</strong> Mottagarkatalog</div></div>
+<div class="status online">PUBLIK</div>
+<div class="actions"><button class="open-btn" onclick="window.open('https://www.receiverbook.de/','_blank')">Öppna</button><button class="favorite-btn" onclick="alert('Favorit sparad')">★ Favorit</button></div>
+</div>
+
+<div class="receiver-card uhf-advanced">
+<h2>🔵 Avancerad – GB0SNB 70 cm</h2>
+<p>WebSDR vid Kelvedon Hatch med både filtrerad 432–434 MHz och bred 430–440 MHz 70 cm-mottagning.</p>
+<div class="info"><div><strong>Land:</strong> Storbritannien – Essex</div><div><strong>Band:</strong> 430–440 MHz</div><div><strong>Typ:</strong> WebSDR</div></div>
+<div class="status online">PUBLIK</div>
+<div class="actions"><button class="open-btn" onclick="window.open('http://vhfsdr.gb0snb.com:8074/','_blank')">Öppna direkt</button><button class="favorite-btn" onclick="alert('Favorit sparad')">★ Favorit</button></div>
+</div>
+
+<div class="receiver-card uhf-advanced">
+<h2>🔵 Avancerad – Maasbree 70 cm</h2>
+<p>Två SDRPlay RSP1A-system för 430–435 och 436–440 MHz. Den övre delen är särskilt uppbyggd för satellitmottagning.</p>
+<div class="info"><div><strong>Land:</strong> Nederländerna – Maasbree</div><div><strong>Band:</strong> 430–440 MHz</div><div><strong>Typ:</strong> WebSDR / SDRPlay</div></div>
+<div class="status online">PUBLIK</div>
+<div class="actions"><button class="open-btn" onclick="window.open('https://websdr-maasbree.jouwweb.nl/','_blank')">Öppna</button><button class="favorite-btn" onclick="alert('Favorit sparad')">★ Favorit</button></div>
+</div>
+
+<div class="receiver-card uhf-advanced">
+<h2>🗺️ Avancerad – WebSDR-katalog</h2>
+<p>Katalog för att leta efter ytterligare WebSDR-mottagare med 70 cm och andra UHF-band.</p>
+<div class="info"><div><strong>Område:</strong> Världen</div><div><strong>Band:</strong> UHF</div><div><strong>Typ:</strong> Mottagarkatalog</div></div>
+<div class="status online">PUBLIK</div>
+<div class="actions"><button class="open-btn" onclick="window.open('https://www.receiverbook.de/?type=websdr','_blank')">Öppna</button><button class="favorite-btn" onclick="alert('Favorit sparad')">★ Favorit</button></div>
+</div>
+
+</div>
+
+</div>
+
+<!-- ===== FOOTER ===== -->
+<footer>
+
+DX-OS Receiver Hub • SDR • DX • AI • Signal Intelligence
+
+</footer>
+
+<script>
+
+/* ===== DIREKTÖPPNING FÖR UHF / UBERSDR ===== */
+function openReceiverCategory(type,url){
+    filterReceivers(type);
+    const input=document.getElementById("searchInput");
+    if(input) input.value="";
+    window.open(url,"_blank","noopener");
+}
+
+/* ===== FILTER ===== */
+function filterReceivers(type){
+
+    /* ===== HÄMTA KORT ===== */
+    const cards =
+    document.querySelectorAll(".receiver-card");
+
+    /* ===== LOOP ===== */
+    cards.forEach(card => {
+
+        /* ===== VISA ALLA ===== */
+        if(type === "all"){
+            card.style.display = "block";
+        }
+
+        /* ===== FILTER ===== */
+        else{
+
+            /* ===== MATCH ===== */
+            if(card.classList.contains(type)){
+                card.style.display = "block";
+            }
+
+            /* ===== DÖLJ ===== */
+            else{
+                card.style.display = "none";
+            }
+
+        }
+
+    });
+
+}
+
+/* ===== SÖK ===== */
+function searchReceivers(){
+
+    let input = document.getElementById("searchInput").value
+        .toLowerCase()
+        .trim()
+        .replace(/turnholt/g,"turnhout")
+        .replace(/turnhold/g,"turnhout")
+        .replace(/turnhoutt/g,"turnhout");
+
+    const cards = document.querySelectorAll(".receiver-card");
+
+    cards.forEach(card => {
+        const text = (
+            card.innerText + " " +
+            (card.dataset.search || "")
+        ).toLowerCase()
+         .replace(/turnholt/g,"turnhout")
+         .replace(/turnhold/g,"turnhout")
+         .replace(/turnhoutt/g,"turnhout");
+
+        card.style.display = text.includes(input) ? "block" : "none";
+    });
+
+}
+
+</script>
+
+</body>
+</html>
