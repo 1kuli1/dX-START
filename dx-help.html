@@ -17,7 +17,8 @@ h1,h2,h3{color:var(--accent)}h1{font-size:clamp(30px,6vw,46px);margin:8px 0}.lea
 .section{scroll-margin-top:74px;background:var(--panel);border:1px solid var(--line);border-radius:16px;padding:18px;margin:16px 0}.section p,.section li{line-height:1.55;color:#d7dfec}.section ol,.section ul{padding-left:22px}.start{background:#0b1525;border-left:4px solid var(--accent);padding:12px 14px;border-radius:9px;margin:12px 0}.actions{display:flex;gap:8px;flex-wrap:wrap;margin-top:14px}
 details{background:#0b1525;border:1px solid #263955;border-radius:10px;padding:10px 12px;margin-top:10px}summary{cursor:pointer;font-weight:800;color:#fff}
 .term{display:grid;grid-template-columns:130px 1fr;gap:8px;padding:5px 0;border-bottom:1px solid #263955}.term:last-child{border-bottom:0}.term b{color:var(--accent)}
-@media(max-width:650px){.wrap{padding:13px}.top{justify-content:stretch}.top a{flex:1;text-align:center;font-size:13px;padding:9px 7px}.section{padding:14px}.term{grid-template-columns:1fr;gap:2px}.quick{grid-template-columns:1fr}}
+.levels{display:grid;grid-template-columns:repeat(3,minmax(0,1fr));gap:10px;margin:14px 0}.level{background:#0b1525;border:1px solid #31425f;border-radius:12px;padding:13px}.level h3{margin:0 0 7px;font-size:17px}.level p,.level li{font-size:14px}.level ol,.level ul{margin:6px 0;padding-left:20px}.begin{border-top:4px solid #22c55e}.continue{border-top:4px solid #eab308}.advanced{border-top:4px solid #60a5fa}.callout{background:#17243a;border:1px solid #405577;border-radius:10px;padding:11px 13px;margin:10px 0}.mistake{color:#fde68a;font-weight:800}
+@media(max-width:800px){.levels{grid-template-columns:1fr}}@media(max-width:650px){.wrap{padding:13px}.top{justify-content:stretch}.top a{flex:1;text-align:center;font-size:13px;padding:9px 7px}.section{padding:14px}.term{grid-template-columns:1fr;gap:2px}.quick{grid-template-columns:1fr}}
 </style>
 </head>
 <body>
@@ -67,15 +68,32 @@ details{background:#0b1525;border:1px solid #263955;border-radius:10px;padding:1
 </section>
 
 <section class="section" id="receiverhub">
-<h2>🎧 Receiver Hub</h2>
-<p>Receiver Hub är din gemensamma dörr till mottagarna. Välj först <b>band eller typ</b>. Då öppnas en ny flik med bara sådant som hör till valet.</p>
-<ol>
-<li>Tryck exempelvis <b>MW</b>, <b>FM</b> eller <b>Air – Enkel</b>.</li>
-<li>Jämför plats, band och mottagartyp.</li>
-<li>Tryck <b>Öppna</b> på den mottagare du vill prova.</li>
-<li>Använd den lilla <b>?</b>-knappen på mottagarkortet om du behöver hjälp med just den mottagartypen.</li>
-<li>På varje bandflik finns <b>← Tillbaka till Receiver Hub</b> högst upp.</li>
-</ol>
+<h2>🎧 Receiver Hub – vad gör jag här?</h2>
+<p>Receiver Hub är ingången till alla mottagare. Målet är inte att förstå alla kort – bara att snabbt hitta <b>rätt band, rätt plats och en fungerande mottagare</b>.</p>
+<div class="levels">
+<div class="level begin"><h3>🟢 Börja här</h3><ol>
+<li>Tryck på ett band, t.ex. <b>MW</b>, <b>FM</b> eller <b>SW / HF</b>.</li>
+<li>Bandet öppnas i en <b>ny flik</b>. Receiver Hub ligger kvar.</li>
+<li>Läs tre saker på kortet: <b>Land/plats</b>, <b>Band</b> och <b>Typ</b>.</li>
+<li>Tryck <b>Öppna</b>.</li>
+<li>Om du inte förstår mottagaren: tryck på den lilla <b>?</b>-knappen på kortet.</li>
+</ol></div>
+<div class="level continue"><h3>🟡 Fortsätt</h3><ul>
+<li>Prova en mottagare i ett annat land för att jämföra signalen.</li>
+<li>Använd <b>Sök</b> om du vet ort, land eller mottagarnamn.</li>
+<li>Tryck <b>★ Favorit</b> på sådant du vill återvända till.</li>
+<li>Om en mottagare är full, offline eller kräver lösenord: välj nästa i samma band.</li>
+</ul></div>
+<div class="level advanced"><h3>🔵 Avancerat</h3><ul>
+<li>Välj mottagare efter geografi och sannolik signalväg.</li>
+<li>Jämför samma frekvens på flera mottagare.</li>
+<li>Använd kataloger och Signal Finder när en direktlänk saknas.</li>
+<li>Notera alltid <b>vilken mottagare</b> du använde – den behövs i loggen och för avstånd/riktning.</li>
+</ul></div>
+</div>
+<div class="callout"><b>Du är klar här när:</b> du har öppnat en mottagare och vet vilken frekvens eller vilket område du ska undersöka.</div>
+<details><summary>Jag ser många kort – vilket ska jag välja?</summary><p>Börja med ett kort märkt Enkel eller en mottagare nära det område du vill höra. För MW/SW är KiwiSDR eller WebSDR bra start. För FM är FM-DX Webserver enklast.</p></details>
+<details><summary>Öppna-knappen fungerar inte</summary><p>Publika mottagare kan gå ner utan förvarning. Gå tillbaka till bandfliken och prova nästa kort. Meddela oss om länken fortsätter vara död så kan den bytas ut.</p></details>
 <div class="actions"><a class="btn main" href="receiver-hub.html">Öppna Receiver Hub</a></div>
 </section>
 
@@ -91,17 +109,34 @@ details{background:#0b1525;border:1px solid #263955;border-radius:10px;padding:1
 </section>
 
 <section class="section" id="kiwi">
-<h2>🥝 KiwiSDR</h2>
-<div class="start"><b>Snabbstart:</b> skriv in frekvens → välj mode → justera filter → lyssna.</div>
-<ol>
-<li>Klicka på frekvensfältet och skriv exempelvis <b>999</b> för 999 kHz.</li>
-<li>Välj <b>AM</b> för vanlig MW/SW-rundradio. För amatörradio används ofta USB eller LSB.</li>
-<li>Klicka på en signal i waterfall för att flytta mottagningen dit.</li>
-<li>Justera filtrets kanter om grannstationer stör.</li>
-<li>Höj eller sänk volymen – undvik att kompensera dålig mottagning med extrem volym.</li>
-</ol>
-<details><summary>Om det inte hörs något</summary><p>Kontrollera att mottagaren inte är full, att frekvensen ligger inom 0–30 MHz, att mode är rätt och att ljudet inte är blockerat av webbläsaren.</p></details>
-<div class="actions"><a class="btn" href="receiver-hub.html?band=hf">Till HF-mottagare</a><a class="btn" href="receiver-hub.html?band=mw">Till MW-mottagare</a></div>
+<h2>🥝 KiwiSDR – från tom skärm till lyssning</h2>
+<div class="start"><b>Målet:</b> få in en känd frekvens, höra signalen tydligt och förstå de fyra viktigaste reglagen: frekvens, mode, filter och waterfall.</div>
+<div class="levels">
+<div class="level begin"><h3>🟢 Börja här</h3><ol>
+<li>Leta upp <b>frekvensvisningen</b> och skriv frekvensen du vill lyssna på.</li>
+<li>För vanlig rundradio på MW/SW: välj <b>AM</b>.</li>
+<li>För amatörradio: prova <b>LSB</b> på lägre HF-band och <b>USB</b> på högre band när det passar aktiviteten.</li>
+<li>Klicka på ett tydligt streck i <b>waterfall</b> för att flytta till signalen.</li>
+<li>Justera <b>volymen</b> till bekväm nivå.</li>
+</ol></div>
+<div class="level continue"><h3>🟡 Fortsätt</h3><ul>
+<li><b>Filter/passband:</b> dra kanterna så att du behåller tal/musik men minskar störningar bredvid.</li>
+<li><b>Zoom:</b> zooma in waterfall när flera stationer ligger nära varandra.</li>
+<li><b>AGC:</b> låt normalt AGC vara aktivt; ändra först när starka signaler pumpar ljudet.</li>
+<li>Titta på <b>S-meter</b>, men lita också på örat – signalstyrka är inte samma sak som läsbarhet.</li>
+</ul></div>
+<div class="level advanced"><h3>🔵 Avancerat</h3><ul>
+<li>Jämför samma station på flera KiwiSDR för att förstå utbredningen.</li>
+<li>Använd smalare filter vid trängsel och bredare filter när ljudkvalitet är viktigare.</li>
+<li>Prova KiwiSDR:s <b>Extensions</b> när du behöver specialfunktioner; vilka som finns varierar mellan mottagare.</li>
+<li>Spara mottagarplatsen i loggen – inte bara ordet ”KiwiSDR”.</li>
+</ul></div>
+</div>
+<p class="mistake">Vanligaste felet: rätt frekvens men fel mode.</p>
+<details><summary>Jag hör bara brus</summary><p>Kontrollera frekvens, mode och mottagarens täckning. Prova en stark känd station. Om även den är tyst kan mottagaren vara full/offline eller ljudet blockerat.</p></details>
+<details><summary>Två stationer hörs samtidigt</summary><p>Gör filtret smalare eller flytta passbandet något bort från störningen. På MW kan grannkanaler ligga mycket nära.</p></details>
+<details><summary>Waterfall rör sig men jag hör inget</summary><p>Kontrollera webbläsarens ljud, volymreglaget och att ingen mute-funktion är aktiv. Tryck en gång på sidan om webbläsaren kräver användarinteraktion innan ljud får spelas.</p></details>
+<div class="actions"><a class="btn" href="receiver-hub.html?band=hf">HF-mottagare</a><a class="btn" href="receiver-hub.html?band=mw">MW-mottagare</a></div>
 </section>
 
 <section class="section" id="websdr">
@@ -116,15 +151,33 @@ details{background:#0b1525;border:1px solid #263955;border-radius:10px;padding:1
 </section>
 
 <section class="section" id="fmdx">
-<h2>📻 FM-DX Webserver / TEF</h2>
-<div class="start"><b>Snabbstart:</b> skriv FM-frekvens → vänta på RDS → läs PI/PS/radiotext när signalen räcker.</div>
-<ol>
-<li>Välj frekvens inom FM-bandet, exempelvis <b>97,4 MHz</b>.</li>
-<li>Titta på signalstyrka och RDS-information.</li>
-<li><b>PS</b> är stationsnamnet som visas av RDS. <b>PI</b> är stationens identitetskod och är mycket värdefull för säker identifiering.</li>
-<li>Vid svag DX: vänta kvar en stund. RDS kan dyka upp kort när signalen toppar.</li>
-<li>Anteckna frekvens, RDS/PI, tid och mottagare innan signalen försvinner.</li>
-</ol>
+<h2>📻 FM-DX Webserver / TEF – så läser du sidan</h2>
+<div class="start"><b>Målet:</b> ställ in en FM-frekvens, bedöm signalen och fånga RDS-uppgifter som kan identifiera stationen.</div>
+<div class="levels">
+<div class="level begin"><h3>🟢 Börja här</h3><ol>
+<li>Skriv eller välj en frekvens, t.ex. <b>97,4 MHz</b>.</li>
+<li>Lyssna först: finns tal, musik eller bara brus?</li>
+<li>Titta efter <b>PS</b> – RDS-namnet som visas när signalen räcker.</li>
+<li>Titta efter <b>PI</b> – en kod som är mycket starkare bevis än bara ett visat namn.</li>
+<li>Anteckna <b>frekvens + UTC + mottagare</b> direkt när något intressant dyker upp.</li>
+</ol></div>
+<div class="level continue"><h3>🟡 Fortsätt</h3><ul>
+<li>Följ signalstyrkan medan du väntar på RDS.</li>
+<li>Läs <b>RadioText</b> om den visas; där kan station/program bekräftas.</li>
+<li>Vid svag DX: stanna kvar på frekvensen. En kort signalpeak kan räcka för PI-kod.</li>
+<li>Jämför PI/PS med FMList/FMscan innan du kallar stationen bekräftad.</li>
+</ul></div>
+<div class="level advanced"><h3>🔵 Avancerat</h3><ul>
+<li>Studera spektrum och närliggande kanaler för att se interferens.</li>
+<li>Jämför signalen på flera geografiskt skilda FM-DX-servrar.</li>
+<li>Notera tropo/Es-indikationer och riktning när flera stationer från samma område dyker upp.</li>
+<li>För svaga stationer: samla flera oberoende ledtrådar – PI, språk, reklam, lokal ort och radiotext.</li>
+</ul></div>
+</div>
+<div class="callout"><b>PS =</b> visat stationsnamn. <b>PI =</b> stationskod. <b>RadioText =</b> löpande text/programinformation. PI är särskilt värdefullt vid säker identifiering.</div>
+<details><summary>Jag får ljud men ingen RDS</summary><p>Det är normalt vid svag eller störd signal. Vänta en stund, prova exakt frekvens och jämför signalstyrkan. RDS kräver bättre signalkvalitet än vad som behövs för att höra ljud.</p></details>
+<details><summary>RDS-namnet blinkar eller verkar fel</summary><p>Logga inte stationen som säker enbart på ett kort PS-fragment. Försök få PI-kod eller ytterligare innehåll som bekräftelse.</p></details>
+<div class="actions"><a class="btn main" href="receiver-hub.html?band=fm">Öppna FM-mottagare</a></div>
 </section>
 
 <section class="section" id="openwebrx">
@@ -169,11 +222,35 @@ details{background:#0b1525;border:1px solid #263955;border-radius:10px;padding:1
 </section>
 
 <section class="section" id="log">
-<h2>📝 Ny logg</h2>
-<p>Logga det du faktiskt hörde – inte bara vad du tror borde ligga på frekvensen.</p>
-<ul>
-<li>Frekvens och UTC.</li><li>Mode.</li><li>Mottagare/SDR.</li><li>Signalrapport (SINPO/SIO).</li><li>Språk, stations-ID eller innehåll.</li><li>Plats och eventuell kommentar.</li>
-</ul>
+<h2>📝 Ny logg – vad ska jag fylla i?</h2>
+<p>Grundregeln är enkel: <b>logga det du faktiskt hörde</b>. Om identifieringen inte är säker, skriv det som preliminärt i stället för att gissa.</p>
+<div class="levels">
+<div class="level begin"><h3>🟢 Börja här – minsta användbara logg</h3><ol>
+<li>Tryck <b>Använd aktuell UTC</b> så fylls datum och UTC.</li>
+<li>Fyll i <b>Frekvens</b>.</li>
+<li>Välj <b>Band / typ</b>.</li>
+<li>Fyll i <b>Mottagare</b> och framför allt <b>Mottagarplats</b>.</li>
+<li>Fyll i <b>Station</b> om du vet den; annars skriv ledtrådar i ID/innehåll.</li>
+<li>Tryck <b>Spara logg</b>.</li>
+</ol></div>
+<div class="level continue"><h3>🟡 Fortsätt – gör loggen användbar senare</h3><ul>
+<li><b>Land</b> och <b>Sändarort/plats</b> om känt.</li>
+<li><b>Språk</b> och <b>Programtyp</b>.</li>
+<li><b>SINPO</b> för signalens kvalitet.</li>
+<li><b>ID-ord / identifiering:</b> exakt vad som fick dig att tro på stationen.</li>
+<li><b>Kort innehåll/transkript:</b> namn, reklam, nyheter, jingel eller citat som går att kontrollera.</li>
+</ul></div>
+<div class="level advanced"><h3>🔵 Avancerat – verifiering och rapport</h3><ul>
+<li>Sätt <b>Verifiering = Bekräftad</b> först när ledtrådarna verkligen räcker.</li>
+<li>För amatörradio: fyll <b>Mode, Motstation, Signal/S-meter, Operatör</b>.</li>
+<li>Följ upp <b>Rapportstatus, Kontaktväg och Svar/QSL</b>.</li>
+<li>Extra fält ändras efter vald signaltyp – använd dem när de tillför identifieringsvärde.</li>
+</ul></div>
+</div>
+<div class="callout"><b>Viktigast av allt:</b> mottagarplatsen. Avstånd och riktning ska räknas från den SDR du faktiskt använde, inte från där du själv sitter.</div>
+<p class="mistake">Vanligaste felet: man fyller i stationen men glömmer skriva vad som faktiskt bekräftade den.</p>
+<details><summary>Jag vet inte stationen ännu</summary><p>Logga ändå frekvens, UTC, mottagare, språk/innehåll och dina ledtrådar. Låt identifieringen vara preliminär och komplettera senare.</p></details>
+<details><summary>Vad betyder SINPO?</summary><p>S = signalstyrka, I = störningar från andra stationer, N = brus, P = utbredningsvariation/fading och O = helhetsintryck. 5 är bäst och 1 sämst.</p></details>
 <div class="actions"><a class="btn main" href="./?tool=log">Öppna Ny logg</a></div>
 </section>
 
@@ -219,9 +296,32 @@ details{background:#0b1525;border:1px solid #263955;border-radius:10px;padding:1
 </section>
 
 <section class="section" id="profile">
-<h2>✅ Stationsfakta</h2>
-<p>Stationsfakta används efter att du har en kandidat och vill kontrollera om den passar det du hör.</p>
-<ol><li>Kontrollera frekvens, språk och sändningstid.</li><li>Jämför ort/sändarplats med signalens rimliga riktning.</li><li>Kontrollera stationens historia, teknik och officiella webbplats.</li><li>Sätt inte ”bekräftad” om de avgörande ledtrådarna saknas.</li></ol>
+<h2>✅ Stationsfakta – från kandidat till säker identifiering</h2>
+<p>Stationsfakta är kontrollstationen efter lyssningen. Här ska du avgöra om stationen du tror att du hört verkligen passar ihop med <b>frekvens, tid, språk, sändarplats och innehåll</b>.</p>
+<div class="levels">
+<div class="level begin"><h3>🟢 Börja här</h3><ol>
+<li>Öppna först en loggrad i <b>Loggbok</b>. Då laddas stationskortet.</li>
+<li>Läs <b>Land, Sändarort/plats och Frekvenser du loggat</b>.</li>
+<li>Jämför med det du faktiskt hörde.</li>
+<li>Kontrollera <b>antal egna loggningar</b> och datum – har samma station dykt upp tidigare?</li>
+</ol></div>
+<div class="level continue"><h3>🟡 Fortsätt</h3><ul>
+<li>Tryck <b>Hämta stationshistorik</b> för bakgrund om stationen.</li>
+<li>Tryck <b>Hämta ortens historik</b> för sändarplats/geografi.</li>
+<li>Använd <b>Sök officiell hemsida</b> för aktuell program- eller stationsinformation.</li>
+<li>Jämför alla egna mottagningar längst ned på stationskortet.</li>
+</ul></div>
+<div class="level advanced"><h3>🔵 Avancerat – bekräfta på riktigt</h3><ul>
+<li>Kontrollera teknik när den finns: effekt, antenn, sändarplats och täckningsområde.</li>
+<li>Jämför avstånd/riktning från den <b>mottagare som användes</b>.</li>
+<li>För amatörer: följ <b>Lyssnarrapport, Kontaktväg och Svar/QSL</b>.</li>
+<li>Kräv flera samstämmiga ledtrådar när frekvensen delas av flera stationer.</li>
+</ul></div>
+</div>
+<div class="callout"><b>Tre nivåer:</b> <b>Bekräftad</b> = tydliga bevis. <b>Trolig</b> = mycket passar men något saknas. <b>Osäker</b> = för få ledtrådar. Hellre trolig än en falsk bekräftelse.</div>
+<p class="mistake">Vanligaste felet: att frekvensen ensam får avgöra stationen.</p>
+<details><summary>Vad räknas som stark bekräftelse?</summary><p>Ett tydligt stations-ID, unik PI-kod, lokal reklam/ort, officiellt programinnehåll eller flera oberoende ledtrådar som alla pekar på samma station.</p></details>
+<details><summary>Varför behövs ortens historia?</summary><p>Den hjälper till att förstå sändarplatsens geografi och sammanhang och gör loggen mer komplett. Den ska hållas separat från stationens egen historia.</p></details>
 <div class="actions"><a class="btn main" href="./?tool=profile">Öppna Stationsfakta</a></div>
 </section>
 
