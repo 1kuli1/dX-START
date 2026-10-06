@@ -325,22 +325,22 @@ DX Centralens mottagarlista för WebSDR, KiwiSDR, OpenWebRX, FM-DX, flygradio, s
 <!-- ===== FILTERKNAPPAR ===== -->
 <div class="filters">
 
-<button onclick="filterReceivers('all')">Alla</button>
+<button onclick="showAllReceivers()">Alla</button>
 
-<button onclick="filterReceivers('lw')">LW / NDB</button>
-<button onclick="filterReceivers('mw')">MW</button>
-<button onclick="filterReceivers('hf')">SW / HF</button>
-<button onclick="filterReceivers('fm')">FM</button>
-<button onclick="filterReceivers('amateur')">Amatörradio</button>
-<button onclick="filterReceivers('utility')">Utility / digitalt</button>
-<button onclick="filterReceivers('vhf')">VHF</button>
-<button onclick="filterReceivers('air-simple')">✈ Air – Enkel</button>
-<button onclick="filterReceivers('airband')">✈ Air – Avancerad SDR</button>
-<button onclick="filterReceivers('sat-simple')">🛰 Satellit – Enkel (börja här)</button>
-<button onclick="filterReceivers('satellite')">🛰 Satellit – Avancerad</button>
-<button onclick="openReceiverCategory('uhf-easy','http://sdr.websdrmaasbree.nl:8908/')">📡 UHF – Enkel</button>
-<button onclick="openReceiverCategory('uhf-advanced','http://vhfsdr.gb0snb.com:8074/')">📡 UHF – Avancerad SDR</button>
-<button onclick="openReceiverCategory('uber','https://n2epe.tunnel.ubersdr.org/')">📻 UberSDR</button>
+<button onclick="openBandTab('lw')">LW / NDB ↗</button>
+<button onclick="openBandTab('mw')">MW ↗</button>
+<button onclick="openBandTab('hf')">SW / HF ↗</button>
+<button onclick="openBandTab('fm')">FM ↗</button>
+<button onclick="openBandTab('amateur')">Amatörradio ↗</button>
+<button onclick="openBandTab('utility')">Utility / digitalt ↗</button>
+<button onclick="openBandTab('vhf')">VHF ↗</button>
+<button onclick="openBandTab('air-simple')">✈ Air – Enkel ↗</button>
+<button onclick="openBandTab('airband')">✈ Air – Avancerad SDR ↗</button>
+<button onclick="openBandTab('sat-simple')">🛰 Satellit – Enkel ↗</button>
+<button onclick="openBandTab('satellite')">🛰 Satellit – Avancerad ↗</button>
+<button onclick="openBandTab('uhf-easy')">📡 UHF – Enkel ↗</button>
+<button onclick="openBandTab('uhf-advanced')">📡 UHF – Avancerad SDR ↗</button>
+<button onclick="openBandTab('uber')">📻 UberSDR ↗</button>
 
 </div>
 
@@ -887,13 +887,40 @@ function goBackReceiverHub(){
     }
 }
 
-/* ===== DIREKTÖPPNING FÖR UHF / UBERSDR ===== */
-function openReceiverCategory(type,url){
-    filterReceivers(type);
+/* ===== BAND I NY FLIK ===== */
+function openBandTab(type){
+    const url = new URL(location.href);
+    url.searchParams.set("band", type);
+    window.open(url.toString(), "_blank", "noopener");
+}
+
+function showAllReceivers(){
+    const url = new URL(location.href);
+    url.searchParams.delete("band");
+    history.replaceState(null, "", url.toString());
+    filterReceivers("all");
     const input=document.getElementById("searchInput");
     if(input) input.value="";
-    window.open(url,"_blank","noopener");
 }
+
+/* ===== ÖPPNA VALT BAND FRÅN URL ===== */
+function applyBandFromUrl(){
+    const band = new URLSearchParams(location.search).get("band");
+    if(band){
+        filterReceivers(band);
+        const titles = {
+            "lw":"LW / NDB","mw":"MW","hf":"SW / HF","fm":"FM",
+            "amateur":"Amatörradio","utility":"Utility / digitalt","vhf":"VHF",
+            "air-simple":"Air – Enkel","airband":"Air – Avancerad SDR",
+            "sat-simple":"Satellit – Enkel","satellite":"Satellit – Avancerad",
+            "uhf-easy":"UHF – Enkel","uhf-advanced":"UHF – Avancerad SDR",
+            "uber":"UberSDR"
+        };
+        const h1=document.querySelector("header h1");
+        if(h1 && titles[band]) h1.textContent="Receiver Hub – "+titles[band];
+    }
+}
+window.addEventListener("DOMContentLoaded", applyBandFromUrl);
 
 /* ===== FILTER ===== */
 function filterReceivers(type){
