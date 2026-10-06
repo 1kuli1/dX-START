@@ -14,10 +14,20 @@
 *{
     box-sizing:border-box;
 }
+html{
+    width:100%;
+    max-width:100%;
+    overflow-x:hidden;
+    -webkit-text-size-adjust:100%;
+    text-size-adjust:100%;
+}
 
 /* ===== BODY ===== */
 body{
     margin:0;
+    width:100%;
+    max-width:100%;
+    overflow-x:hidden;
     font-family:Arial,sans-serif;
     background:#05070b;
     color:#ffffff;
@@ -138,12 +148,18 @@ header p{
 /* ===== GRID ===== */
 .grid{
     display:grid;
-    grid-template-columns:repeat(auto-fit,minmax(300px,1fr));
+    width:100%;
+    min-width:0;
+    grid-template-columns:repeat(auto-fit,minmax(min(280px,100%),1fr));
     gap:20px;
 }
 
 /* ===== KORT ===== */
  .receiver-card{
+    width:100%;
+    min-width:0;
+    max-width:100%;
+    overflow:hidden;
     background:#111827;
     display:flex;
     flex-direction:column;
@@ -163,10 +179,12 @@ header p{
 .receiver-card h2{
     margin-top:0;
     color:#eab308;
+    overflow-wrap:anywhere;
 }
 
 /* ===== TEXT ===== */
 .receiver-card p{
+    overflow-wrap:anywhere;
     color:#cbd5e1;
     line-height:1.4;
     margin:8px 0;
@@ -376,26 +394,123 @@ footer{
 
 /* ===== MOBIL ===== */
 @media(max-width:768px){
-
+    .back-row{
+        padding:8px 10px;
+    }
+    .back-btn{
+        width:auto;
+        max-width:calc(100vw - 20px);
+        margin-left:auto;
+        padding:9px 11px;
+        font-size:14px;
+        line-height:1.2;
+        white-space:normal;
+        overflow-wrap:anywhere;
+    }
+    header{
+        width:100%;
+        max-width:100%;
+        padding:20px 12px;
+        overflow:hidden;
+    }
     header h1{
-        font-size:30px;
+        max-width:100%;
+        font-size:28px;
+        line-height:1.15;
+        overflow-wrap:anywhere;
     }
-
+    header p{
+        font-size:14px;
+        line-height:1.35;
+    }
+    .hub-guide{
+        width:100%;
+        max-width:100%;
+        padding:0 12px;
+        margin-top:12px;
+        font-size:14px;
+    }
+    .wrapper{
+        width:100%;
+        max-width:100%;
+        padding:12px;
+        overflow:hidden;
+    }
+    .filters{
+        gap:7px;
+        margin-bottom:14px;
+    }
+    .filters button{
+        max-width:100%;
+        padding:10px 12px;
+        font-size:14px;
+        white-space:normal;
+    }
+    .search-box{
+        margin-bottom:14px;
+    }
+    .grid{
+        width:100%;
+        min-width:0;
+        grid-template-columns:minmax(0,1fr);
+        gap:12px;
+    }
     .receiver-card{
-        display:block;
-        min-height:0;
+        display:flex;
+        width:100%;
+        min-width:0;
+        max-width:100%;
         height:auto;
+        padding:14px;
+        border-radius:14px;
+        overflow:hidden;
     }
-
-    .receiver-card .actions{
-        margin-top:20px;
+    .receiver-card h2{
+        max-width:100%;
+        font-size:21px;
+        line-height:1.2;
+        margin:0 0 6px;
+        overflow-wrap:anywhere;
     }
-
+    .receiver-card p{
+        max-width:100%;
+        font-size:15px;
+        line-height:1.35;
+        margin:5px 0;
+        overflow-wrap:anywhere;
+    }
+    .info{
+        max-width:100%;
+        margin:6px 0;
+        font-size:14px;
+        overflow-wrap:anywhere;
+    }
+    .status{
+        align-self:flex-start;
+        margin-top:5px;
+        padding:4px 9px;
+    }
+    .receiver-card .actions,
+    .actions{
+        width:100%;
+        min-width:0;
+        margin-top:8px;
+        display:grid;
+        grid-template-columns:minmax(0,1fr) minmax(0,1fr);
+        gap:7px;
+    }
+    .actions button{
+        width:100%;
+        min-width:0;
+        height:40px;
+        padding:0 8px;
+        font-size:13px;
+        white-space:normal;
+    }
     .receiver-card.uber{
         min-height:0;
         height:auto;
     }
-
 }
 
 </style>
