@@ -18,7 +18,7 @@ h1,h2,h3,h4,h5,h6{color:#eab308}
 .sub{color:var(--muted);margin-top:6px}
 .clock{background:var(--panel);border:1px solid var(--line);border-radius:14px;padding:12px 16px;font-size:18px}
 .dx-central-nav{
-  position:sticky;top:0;z-index:9999;display:flex;justify-content:flex-end;
+  position:sticky;top:0;z-index:9999;display:flex;justify-content:flex-end;gap:8px;flex-wrap:wrap;
   padding:10px 0;background:linear-gradient(180deg,#06101d 80%,rgba(6,16,29,0));
 }
 .dx-central-nav a{
@@ -239,7 +239,15 @@ html[data-dx-tool] header,html[data-dx-tool] .tabs{display:none !important;}
 </head>
 <body>
 <div class="wrap">
-<div class="dx-central-nav"><a href="https://1kuli1.github.io/dx-system/">← DX CENTRALEN</a></div>
+<div class="dx-central-nav"><a id="dxHelpLink" href="https://1kuli1.github.io/dX-START/dx-help.html#start">❓ HJÄLP</a><a href="https://1kuli1.github.io/dx-system/">← DX CENTRALEN</a></div>
+<script>
+(function(){
+  const map={receivers:"receiverhub",log:"log",book:"book",sync:"sync",map:"map",cw:"cw",digital:"digital",audio:"audio",profile:"profile",special:"special"};
+  const tool=new URLSearchParams(location.search).get("tool");
+  const a=document.getElementById("dxHelpLink");
+  if(a) a.href="https://1kuli1.github.io/dX-START/dx-help.html#"+(map[tool]||"start");
+})();
+</script>
 <header>
   <div>
     <h1>📻 DX Start 7.29 Online</h1>
