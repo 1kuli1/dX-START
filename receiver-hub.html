@@ -41,6 +41,8 @@ body{
     width:100%;
     display:flex;
     justify-content:flex-end;
+    gap:8px;
+    flex-wrap:wrap;
     background:#05070b;
     padding:10px 14px;
     box-shadow:0 2px 10px rgba(0,0,0,.45);
@@ -62,6 +64,40 @@ body{
 }
 .back-btn:hover{
     background:#facc15;
+}
+.help-btn{
+    display:block;
+    width:max-content;
+    max-width:100%;
+    background:#17243a;
+    color:#ffffff;
+    border:1px solid #405577;
+    border-radius:10px;
+    padding:13px 16px;
+    font-weight:900;
+    font-size:18px;
+    text-align:center;
+    text-decoration:none;
+}
+.help-btn:hover{border-color:#eab308}
+.receiver-card{position:relative}
+.receiver-card h2{padding-right:38px}
+.receiver-help{
+    position:absolute;
+    top:10px;
+    right:10px;
+    width:30px;
+    height:30px;
+    border-radius:50%;
+    display:flex;
+    align-items:center;
+    justify-content:center;
+    text-decoration:none;
+    background:#eab308;
+    color:#000;
+    border:2px solid #000;
+    font-weight:900;
+    z-index:3;
 }
 
 /* ===== HEADER ===== */
@@ -520,6 +556,7 @@ footer{
 <body>
 
 <div class="back-row">
+<a class="help-btn" id="receiverHelpBtn" href="https://1kuli1.github.io/dX-START/dx-help.html#receiverhub">❓ HJÄLP</a>
 <a class="back-btn" id="receiverBackBtn" href="https://1kuli1.github.io/dx-system/" style="text-decoration:none">← TILLBAKA TILL DX CENTRALEN</a>
 </div>
 
@@ -1124,6 +1161,7 @@ function showAllReceivers(){
 function applyBandFromUrl(){
     const band = new URLSearchParams(location.search).get("band");
     const backBtn = document.getElementById("receiverBackBtn");
+    const helpBtn = document.getElementById("receiverHelpBtn");
 
     document.body.classList.toggle("band-view", !!band);
 
@@ -1146,14 +1184,47 @@ function applyBandFromUrl(){
             backBtn.textContent="← TILLBAKA TILL RECEIVER HUB";
             backBtn.href="https://1kuli1.github.io/dX-START/receiver-hub.html";
         }
+        if(helpBtn){
+            const hm={"fm":"fmdx","air-simple":"airband","airband":"airband","sat-simple":"satellite","satellite":"satellite","uber":"uber"};
+            helpBtn.href="https://1kuli1.github.io/dX-START/dx-help.html#"+(hm[band]||"receiverhub");
+        }
     }else{
         if(backBtn){
             backBtn.textContent="← TILLBAKA TILL DX CENTRALEN";
             backBtn.href="https://1kuli1.github.io/dx-system/";
         }
+        if(helpBtn){
+            helpBtn.href="https://1kuli1.github.io/dX-START/dx-help.html#receiverhub";
+        }
     }
 }
 window.addEventListener("DOMContentLoaded", applyBandFromUrl);
+
+function addReceiverHelpButtons(){
+    const base="https://1kuli1.github.io/dX-START/dx-help.html#";
+    document.querySelectorAll(".receiver-card").forEach(card=>{
+        if(card.querySelector(".receiver-help")) return;
+        const t=card.innerText.toLowerCase();
+        let section="receiverhub";
+        if(t.includes("kiwisdr")) section="kiwi";
+        else if(t.includes("uber")) section="uber";
+        else if(t.includes("fm-dx") || t.includes("tef668")) section="fmdx";
+        else if(t.includes("openwebrx")) section="openwebrx";
+        else if(t.includes("websdr")) section="websdr";
+        else if(t.includes("satnogs") || t.includes("satellit") || t.includes("qo-100")) section="satellite";
+        else if(t.includes("airband") || t.includes("atc") || t.includes("flyg")) section="airband";
+        const a=document.createElement("a");
+        a.className="receiver-help";
+        a.href=base+section;
+        a.target="_blank";
+        a.rel="noopener";
+        a.textContent="?";
+        a.title="Hjälp för denna mottagartyp";
+        a.setAttribute("aria-label","Hjälp för denna mottagartyp");
+        card.appendChild(a);
+    });
+}
+window.addEventListener("DOMContentLoaded", addReceiverHelpButtons);
 
 /* ===== FILTER ===== */
 function filterReceivers(type){
