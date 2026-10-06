@@ -1,0 +1,250 @@
+<!doctype html>
+<html lang="sv">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width,initial-scale=1">
+<meta name="theme-color" content="#07111f">
+<title>DX-hjälp – DX Centralen</title>
+<style>
+:root{--bg:#07111f;--panel:#101b2d;--panel2:#16243a;--line:#2d405e;--text:#f4f7fb;--muted:#b5c0d2;--accent:#eab308}
+*{box-sizing:border-box}html{scroll-behavior:smooth}body{margin:0;background:linear-gradient(180deg,#06101d,#0b1525);color:var(--text);font:16px system-ui,-apple-system,Segoe UI,Roboto,Arial,sans-serif}
+.top{position:sticky;top:0;z-index:9999;background:#07111f;border-bottom:1px solid var(--line);padding:9px 12px;display:flex;gap:8px;justify-content:flex-end;flex-wrap:wrap}
+.top a,.btn{display:inline-block;text-decoration:none;border:1px solid #405577;border-radius:9px;padding:10px 12px;font-weight:800;color:#fff;background:#17243a}
+.top a.main,.btn.main{background:var(--accent);color:#111;border-color:var(--accent)}
+.wrap{max-width:1050px;margin:auto;padding:20px}
+h1,h2,h3{color:var(--accent)}h1{font-size:clamp(30px,6vw,46px);margin:8px 0}.lead{color:var(--muted);font-size:18px;line-height:1.55}
+.quick{display:grid;grid-template-columns:repeat(auto-fit,minmax(220px,1fr));gap:10px;margin:20px 0}.quick a{display:block;text-decoration:none;color:#fff;background:var(--panel);border:1px solid var(--line);border-radius:13px;padding:14px;font-weight:800}.quick a span{display:block;color:var(--muted);font-size:13px;font-weight:500;margin-top:5px;line-height:1.35}
+.section{scroll-margin-top:74px;background:var(--panel);border:1px solid var(--line);border-radius:16px;padding:18px;margin:16px 0}.section p,.section li{line-height:1.55;color:#d7dfec}.section ol,.section ul{padding-left:22px}.start{background:#0b1525;border-left:4px solid var(--accent);padding:12px 14px;border-radius:9px;margin:12px 0}.actions{display:flex;gap:8px;flex-wrap:wrap;margin-top:14px}
+details{background:#0b1525;border:1px solid #263955;border-radius:10px;padding:10px 12px;margin-top:10px}summary{cursor:pointer;font-weight:800;color:#fff}
+.term{display:grid;grid-template-columns:130px 1fr;gap:8px;padding:5px 0;border-bottom:1px solid #263955}.term:last-child{border-bottom:0}.term b{color:var(--accent)}
+@media(max-width:650px){.wrap{padding:13px}.top{justify-content:stretch}.top a{flex:1;text-align:center;font-size:13px;padding:9px 7px}.section{padding:14px}.term{grid-template-columns:1fr;gap:2px}.quick{grid-template-columns:1fr}}
+</style>
+</head>
+<body>
+<nav class="top">
+<a href="https://1kuli1.github.io/dx-system/">← DX Centralen</a>
+<a href="https://1kuli1.github.io/dX-START/receiver-hub.html">🎧 Receiver Hub</a>
+<a class="main" href="https://1kuli1.github.io/dX-START/">📻 DX Start</a>
+</nav>
+<main class="wrap">
+<h1>❓ DX-hjälp</h1>
+<p class="lead">Hjälpen är till för frågan <b>”Hur gör jag just nu?”</b>. Börja med det du har framför dig. Du behöver inte läsa allt.</p>
+
+<div class="quick">
+<a href="#start">🚦 Börja här<span>Hela arbetsgången från mottagare till logg.</span></a>
+<a href="#receiverhub">🎧 Receiver Hub<span>Välj band, mottagare och rätt typ.</span></a>
+<a href="#begrepp">🎛 Viktiga ord<span>Waterfall, mode, filter, AGC, S-meter och SNR.</span></a>
+<a href="#kiwi">🥝 KiwiSDR<span>Frekvens, mode, filter och waterfall.</span></a>
+<a href="#websdr">🌐 WebSDR<span>Så kommer du igång på klassiska WebSDR.</span></a>
+<a href="#fmdx">📻 FM-DX Webserver<span>FM, RDS, signalstyrka och frekvens.</span></a>
+<a href="#openwebrx">📡 OpenWebRX<span>Profiler, frekvens och demodulation.</span></a>
+<a href="#uber">🟣 UberSDR<span>Välj mottagare och arbeta i UberSDR.</span></a>
+<a href="#airband">✈ Flygradio<span>Enkel lyssning och avancerad SDR.</span></a>
+<a href="#satellite">🛰 Satellit<span>SatNOGS och satellit-WebSDR.</span></a>
+<a href="#log">📝 Ny logg<span>Vad som ska fyllas i och när.</span></a>
+<a href="#book">📒 Loggbok<span>Hitta, kontrollera och följ upp poster.</span></a>
+<a href="#sync">☁️ Synk<span>Vad synkningen gör och när den behövs.</span></a>
+<a href="#map">🗺 DX-karta<span>Se stationer, mottagare och avstånd.</span></a>
+<a href="#cw">·− CW<span>Lyssna på och analysera Morse.</span></a>
+<a href="#digital">📡 FT8 / FT4<span>Digitala signaler och rätt frekvens.</span></a>
+<a href="#audio">🎙 Ljud<span>Spela in, lyssna om och spara bevis.</span></a>
+<a href="#profile">✅ Stationsfakta<span>Identifiera och dokumentera stationen.</span></a>
+<a href="#special">🔎 Special-DX<span>NDB, utility, flyg, maritimt och annat.</span></a>
+<a href="#academy">🎓 DX Academy<span>Lärande och kurser – inte akut hjälp.</span></a>
+</div>
+
+<section class="section" id="start">
+<h2>🚦 Börja här</h2>
+<div class="start"><b>Enkel arbetsgång:</b> 1. Välj vad du vill lyssna på → 2. öppna en mottagare → 3. hitta signalen → 4. identifiera → 5. logga.</div>
+<ol>
+<li>Gå till <b>Receiver Hub</b> och välj band: MW, SW/HF, FM, VHF, flygradio, satellit osv.</li>
+<li>Öppna en mottagare som ligger geografiskt bra till för det du vill höra.</li>
+<li>Ställ in <b>frekvens</b> och rätt <b>mode</b>. Vanlig rundradio på MW/SW använder oftast AM.</li>
+<li>Lyssna efter stations-ID, språk, orter, reklam, jinglar, nyheter eller andra ledtrådar.</li>
+<li>Använd <b>Stationsfakta</b> eller DX-experten när du behöver hjälp med identifieringen.</li>
+<li>När du är nöjd: öppna <b>Ny logg</b> och spara fyndet.</li>
+</ol>
+</section>
+
+<section class="section" id="receiverhub">
+<h2>🎧 Receiver Hub</h2>
+<p>Receiver Hub är din gemensamma dörr till mottagarna. Välj först <b>band eller typ</b>. Då öppnas en ny flik med bara sådant som hör till valet.</p>
+<ol>
+<li>Tryck exempelvis <b>MW</b>, <b>FM</b> eller <b>Air – Enkel</b>.</li>
+<li>Jämför plats, band och mottagartyp.</li>
+<li>Tryck <b>Öppna</b> på den mottagare du vill prova.</li>
+<li>Använd den lilla <b>?</b>-knappen på mottagarkortet om du behöver hjälp med just den mottagartypen.</li>
+<li>På varje bandflik finns <b>← Tillbaka till Receiver Hub</b> högst upp.</li>
+</ol>
+<div class="actions"><a class="btn main" href="receiver-hub.html">Öppna Receiver Hub</a></div>
+</section>
+
+<section class="section" id="begrepp">
+<h2>🎛 Viktiga ord på SDR-sidor</h2>
+<div class="term"><b>Frekvens</b><span>Var på bandet du lyssnar, t.ex. 999 kHz eller 7.100 MHz.</span></div>
+<div class="term"><b>Mode</b><span>Hur signalen ska demoduleras: AM, FM, USB, LSB, CW osv.</span></div>
+<div class="term"><b>Waterfall</b><span>”Vattenfallet” visar signaler över tid. Ljusa/starka streck är oftast signaler.</span></div>
+<div class="term"><b>Filter</b><span>Hur bred del av signalen du lyssnar på. Smalare filter kan minska störningar.</span></div>
+<div class="term"><b>AGC</b><span>Automatisk förstärkning. Hjälper mottagaren hantera starka och svaga signaler.</span></div>
+<div class="term"><b>S-meter</b><span>Visar ungefärlig signalstyrka, ofta S1–S9 och dB över S9.</span></div>
+<div class="term"><b>SNR</b><span>Signal-to-noise ratio. Högre värde betyder tydligare signal jämfört med bruset.</span></div>
+</section>
+
+<section class="section" id="kiwi">
+<h2>🥝 KiwiSDR</h2>
+<div class="start"><b>Snabbstart:</b> skriv in frekvens → välj mode → justera filter → lyssna.</div>
+<ol>
+<li>Klicka på frekvensfältet och skriv exempelvis <b>999</b> för 999 kHz.</li>
+<li>Välj <b>AM</b> för vanlig MW/SW-rundradio. För amatörradio används ofta USB eller LSB.</li>
+<li>Klicka på en signal i waterfall för att flytta mottagningen dit.</li>
+<li>Justera filtrets kanter om grannstationer stör.</li>
+<li>Höj eller sänk volymen – undvik att kompensera dålig mottagning med extrem volym.</li>
+</ol>
+<details><summary>Om det inte hörs något</summary><p>Kontrollera att mottagaren inte är full, att frekvensen ligger inom 0–30 MHz, att mode är rätt och att ljudet inte är blockerat av webbläsaren.</p></details>
+<div class="actions"><a class="btn" href="receiver-hub.html?band=hf">Till HF-mottagare</a><a class="btn" href="receiver-hub.html?band=mw">Till MW-mottagare</a></div>
+</section>
+
+<section class="section" id="websdr">
+<h2>🌐 WebSDR</h2>
+<ol>
+<li>Välj frekvens genom att skriva den eller klicka i spektrum/waterfall.</li>
+<li>Välj AM för rundradio och rätt SSB-mode för amatörtrafik.</li>
+<li>Anpassa passband/filter så att stationen hörs tydligt.</li>
+<li>På vissa WebSDR finns flera band eller antenner – kontrollera att rätt band är valt.</li>
+</ol>
+<details><summary>Skillnaden mot KiwiSDR</summary><p>WebSDR och KiwiSDR löser samma grundproblem men gränssnitt och funktioner ser olika ut. Du behöver framför allt hitta frekvens, mode, filter och volym.</p></details>
+</section>
+
+<section class="section" id="fmdx">
+<h2>📻 FM-DX Webserver / TEF</h2>
+<div class="start"><b>Snabbstart:</b> skriv FM-frekvens → vänta på RDS → läs PI/PS/radiotext när signalen räcker.</div>
+<ol>
+<li>Välj frekvens inom FM-bandet, exempelvis <b>97,4 MHz</b>.</li>
+<li>Titta på signalstyrka och RDS-information.</li>
+<li><b>PS</b> är stationsnamnet som visas av RDS. <b>PI</b> är stationens identitetskod och är mycket värdefull för säker identifiering.</li>
+<li>Vid svag DX: vänta kvar en stund. RDS kan dyka upp kort när signalen toppar.</li>
+<li>Anteckna frekvens, RDS/PI, tid och mottagare innan signalen försvinner.</li>
+</ol>
+</section>
+
+<section class="section" id="openwebrx">
+<h2>📡 OpenWebRX</h2>
+<ol>
+<li>Kontrollera vald <b>profil/band</b>. Många OpenWebRX har flera mottagare eller frekvensområden.</li>
+<li>Klicka på signalen i waterfall eller skriv frekvens.</li>
+<li>Välj rätt demodulation: AM, NFM, USB, LSB osv.</li>
+<li>Finjustera filter och squelch vid VHF/UHF om sådana reglage finns.</li>
+</ol>
+</section>
+
+<section class="section" id="uber">
+<h2>🟣 UberSDR</h2>
+<ol>
+<li>Välj en UberSDR som faktiskt är online. En tunneladress kan ibland försvinna även om mottagaren tidigare fungerat.</li>
+<li>Ställ in frekvens och mode precis som i annan webbaserad SDR.</li>
+<li>Om en direktinstans är nere kan du använda <b>UberSDR-katalogen</b> eller <b>Signal Finder</b> för att hitta en annan.</li>
+<li>För DX är Signal Finder särskilt användbar när du redan vet vilken frekvens du vill undersöka.</li>
+</ol>
+</section>
+
+<section class="section" id="airband">
+<h2>✈ Flygradio</h2>
+<p><b>Enkel:</b> välj en färdig feed och lyssna. <b>Avancerad:</b> öppna en SDR och ställ in VHF Airband med AM.</p>
+<ol>
+<li>Börja gärna med en färdig feed om målet är att höra pilot/flygledning.</li>
+<li>På SDR används normalt <b>AM</b> inom civilt VHF-flygband.</li>
+<li>Approach, Tower, Ground och Departure har olika uppgifter och frekvenser.</li>
+<li>Använd flygspårning som komplement om du vill identifiera flygplanet du hör.</li>
+</ol>
+</section>
+
+<section class="section" id="satellite">
+<h2>🛰 Satellit</h2>
+<ol>
+<li>För nybörjare: börja med redan inspelade eller pågående <b>SatNOGS-observationer</b>.</li>
+<li>Kontrollera satellitnamn, frekvens och passets tid.</li>
+<li>För QO-100 kan en WebSDR användas ungefär som en vanlig HF-SDR.</li>
+<li>För rörliga LEO-satelliter förändras frekvensen något under passet på grund av Doppler.</li>
+</ol>
+</section>
+
+<section class="section" id="log">
+<h2>📝 Ny logg</h2>
+<p>Logga det du faktiskt hörde – inte bara vad du tror borde ligga på frekvensen.</p>
+<ul>
+<li>Frekvens och UTC.</li><li>Mode.</li><li>Mottagare/SDR.</li><li>Signalrapport (SINPO/SIO).</li><li>Språk, stations-ID eller innehåll.</li><li>Plats och eventuell kommentar.</li>
+</ul>
+<div class="actions"><a class="btn main" href="./?tool=log">Öppna Ny logg</a></div>
+</section>
+
+<section class="section" id="book">
+<h2>📒 Loggbok</h2>
+<p>Använd loggboken för att se tidigare fynd, kontrollera om du redan hört stationen och följa upp rapporter/QSL.</p>
+<ol><li>Sök eller sortera på frekvens, station, land eller datum.</li><li>Öppna posten för detaljer och historik.</li><li>Kontrollera status: bekräftad, trolig eller osäker.</li></ol>
+<div class="actions"><a class="btn main" href="./?tool=book">Öppna Loggbok</a></div>
+</section>
+
+<section class="section" id="sync">
+<h2>☁️ Synk</h2>
+<p>Synk används när du vill att loggar och arbetsdata ska följa med mellan enheter eller säkerhetskopieras.</p>
+<div class="start">Synkronisering ersätter inte sunt versionsarbete: kontrollera alltid vilken fil eller bok som är den aktuella huvudversionen.</div>
+<div class="actions"><a class="btn main" href="./?tool=sync">Öppna Synk</a></div>
+</section>
+
+<section class="section" id="map">
+<h2>🗺 DX-karta</h2>
+<ol><li>Välj vilka poster som ska visas.</li><li>Mottagaren är utgångspunkten.</li><li>Stationens/sändarens position ger avstånd och riktning.</li><li>Klicka på markörer för detaljer.</li></ol>
+<div class="actions"><a class="btn main" href="./?tool=map">Öppna DX-karta</a></div>
+</section>
+
+<section class="section" id="cw">
+<h2>·− CW</h2>
+<p>CW är Morse. Först behöver du få en ren ton och rätt filter – därefter kan du läsa eller använda verktygen som stöd.</p>
+<ol><li>Välj en CW-signal på SDR:n.</li><li>Gör filtret tillräckligt smalt för att minska grannsignaler.</li><li>Justera ton/frekvens tills signalen är tydlig.</li><li>Använd CW-verktyget för träning eller avkodningsstöd.</li></ol>
+<div class="actions"><a class="btn main" href="./?tool=cw">Öppna CW</a></div>
+</section>
+
+<section class="section" id="digital">
+<h2>📡 FT8 / FT4</h2>
+<p>FT8 och FT4 är korta digitala amatörradiosändningar som ligger på kända aktivitetsfrekvenser.</p>
+<ol><li>Välj rätt amatörband.</li><li>Gå till bandets FT8/FT4-frekvens.</li><li>Använd vanligtvis USB.</li><li>Waterfall visar många smala digitala signaler samtidigt.</li></ol>
+<div class="actions"><a class="btn main" href="./?tool=digital">Öppna FT8 / FT4</a></div>
+</section>
+
+<section class="section" id="audio">
+<h2>🎙 Ljud</h2>
+<p>Ljudinspelning är mycket värdefull när du inte hinner identifiera en station live.</p>
+<ol><li>Spela in några minuter runt stations-ID, nyheter eller heltimme.</li><li>Skriv ned frekvens, UTC och mottagare samtidigt.</li><li>Lyssna om med hörlurar och jämför ledtrådar.</li><li>Spara filen tillsammans med loggposten när den är viktig.</li></ol>
+<div class="actions"><a class="btn main" href="./?tool=audio">Öppna Ljud</a></div>
+</section>
+
+<section class="section" id="profile">
+<h2>✅ Stationsfakta</h2>
+<p>Stationsfakta används efter att du har en kandidat och vill kontrollera om den passar det du hör.</p>
+<ol><li>Kontrollera frekvens, språk och sändningstid.</li><li>Jämför ort/sändarplats med signalens rimliga riktning.</li><li>Kontrollera stationens historia, teknik och officiella webbplats.</li><li>Sätt inte ”bekräftad” om de avgörande ledtrådarna saknas.</li></ol>
+<div class="actions"><a class="btn main" href="./?tool=profile">Öppna Stationsfakta</a></div>
+</section>
+
+<section class="section" id="special">
+<h2>🔎 Special-DX</h2>
+<p>Här samlas sådant som inte är vanlig rundradio: NDB, utility, maritim trafik, flyg, signalspaning och andra specialområden.</p>
+<div class="start">Börja med att veta <b>vilken sorts signal</b> du letar efter. Special-DX blir mycket lättare när mode och typ är kända.</div>
+<div class="actions"><a class="btn main" href="./?tool=special">Öppna Special-DX</a></div>
+</section>
+
+<section class="section" id="academy">
+<h2>🎓 DX Academy</h2>
+<p>DX Academy är utbildningen. Använd den när du vill förstå <b>varför</b> saker fungerar och träna systematiskt. DX-hjälpen är däremot till för att lösa det du gör just nu.</p>
+<div class="actions"><a class="btn main" href="https://1kuli1.github.io/DX-Academy/">Öppna DX Academy</a></div>
+</section>
+
+<section class="section" id="problem">
+<h2>🛠 Vanliga problem</h2>
+<details><summary>Sidan öppnas men ingen signal hörs</summary><p>Kontrollera ljudbehörighet, volym, mode, filter och att mottagaren verkligen täcker frekvensen.</p></details>
+<details><summary>Mottagaren kräver lösenord</summary><p>Gå tillbaka till Receiver Hub och välj en annan publik mottagare. Vi försöker hålla listan fri från lösenordsskyddade alternativ.</p></details>
+<details><summary>En tunnel eller SDR är nere</summary><p>Publika SDR-mottagare drivs av andra och kan försvinna tillfälligt. Prova en annan i samma kategori.</p></details>
+<details><summary>Mobilen visar sidan konstigt eller för brett</summary><p>Ladda om sidan. Receiver Hub är mobilanpassad, men en gammal cachad version kan ibland ligga kvar en kort stund efter en GitHub-uppdatering.</p></details>
+</section>
+</main>
+</body>
+</html>
