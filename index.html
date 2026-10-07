@@ -342,7 +342,7 @@ html[data-dx-tool] header,html[data-dx-tool] .tabs{display:none !important;}
 <section id="sync" class="hidden">
   <div class="kicker">Google Drive</div>
   <h2>☁️ Gemensam loggbok</h2>
-  <div class="small">Synkmodul: 7.29b</div>
+  <div class="small">Synkmodul: 7.29c</div>
   <div class="notice">
     <b>Status:</b> <span id="dxSyncStatus" role="status" aria-live="polite">Inte synkad ännu</span><br>
     <span class="small">DX Start sparar alltid lokalt först. När internet finns slås den lokala loggboken ihop med Drive-loggen så att dina enheter kan dela samma poster.</span>
@@ -815,6 +815,57 @@ function dxMergeLogs(a,b){
   return [...map.values()].sort((x,y)=>String(y.saved||y._updatedAt||'').localeCompare(String(x.saved||x._updatedAt||'')));
 }
 
+const DX_RECOVERY_SEED_URL='./dx-recovery-seed-2026-10-07.json';
+function dxRecoveryNorm(v){return String(v||'').trim().toLowerCase().replace(/\s+/g,' ')}
+function dxRecoveryFreq(v){return dxRecoveryNorm(v).replace(/\s*(khz|mhz)$/,'').replace(',', '.').replace(/\.0+$/,'')}
+function dxRecoveryKey(l){
+  return [
+    dxRecoveryNorm(l?.date),
+    dxRecoveryNorm(l?.time).replace(/^ca\s+/,''),
+    dxRecoveryFreq(l?.freq),
+    dxRecoveryNorm(l?.station),
+    dxRecoveryNorm(l?.rx)
+  ].join('|');
+}
+function dxNeedsMasterRecovery(remote){
+  if(!Array.isArray(remote) || remote.length!==1) return false;
+  const l=remote[0]||{};
+  return dxRecoveryFreq(l.freq)==='225' &&
+         dxRecoveryNorm(l.station).includes('polski') &&
+         String(l.date||'')==='2026-09-24';
+}
+async function dxFetchMasterRecoverySeed(){
+  const r=await fetch(DX_RECOVERY_SEED_URL+'?v=20261007',{cache:'no-store'});
+  if(!r.ok) throw new Error('Återställningsfilen kunde inte läsas (HTTP '+r.status+')');
+  const j=await r.json();
+  const logs=Array.isArray(j)?j:j.logs;
+  if(!Array.isArray(logs) || logs.length!==48) throw new Error('Återställningsfilen har oväntat innehåll');
+  return logs.map(dxNormalizeLog);
+}
+function dxMergeRecoverySeed(base,seed){
+  const out=(base||[]).map(dxNormalizeLog);
+  const byKey=new Map();
+  out.forEach((x,i)=>{const k=dxRecoveryKey(x); if(k!=='||||') byKey.set(k,i);});
+  for(const incoming0 of (seed||[])){
+    const incoming=dxNormalizeLog(incoming0);
+    const k=dxRecoveryKey(incoming);
+    const i=byKey.get(k);
+    if(i===undefined){
+      byKey.set(k,out.length);
+      out.push(incoming);
+      continue;
+    }
+    const existing=out[i];
+    const merged={...existing};
+    for(const [key,value] of Object.entries(incoming)){
+      const empty=merged[key]===undefined || merged[key]===null || String(merged[key]).trim()==='';
+      if(empty && value!==undefined && value!==null && String(value).trim()!=='') merged[key]=value;
+    }
+    out[i]=dxNormalizeLog(merged);
+  }
+  return out.sort((x,y)=>String(y.saved||y._updatedAt||'').localeCompare(String(x.saved||x._updatedAt||'')));
+}
+
 function dxSyncStatus(msg,ok){
   const el=document.getElementById('dxSyncStatus');
   if(el){el.textContent=msg;el.style.color=ok===true?'#86efac':ok===false?'#fca5a5':'#fde68a';}
@@ -880,7 +931,12 @@ async function dxCloudSync(showMessage=false){
   try{
     const local=getLogs().map(dxNormalizeLog);
     const remote=await dxFetchRemote();
-    const merged=dxMergeLogs(local,remote);
+    let merged=dxMergeLogs(local,remote);
+    if(dxNeedsMasterRecovery(remote)){
+      dxSyncStatus('Återställer huvudloggböckerna…',null);
+      const seed=await dxFetchMasterRecoverySeed();
+      merged=dxMergeRecoverySeed(merged,seed);
+    }
     localStorage.setItem('dxLogs',JSON.stringify(merged));
     await dxPostRemote(merged);
     const when=new Date().toLocaleString('sv-SE');
@@ -900,7 +956,11 @@ async function dxCloudPullOnly(){
   dxSyncBusy=true; dxSyncButtonsBusy(true); dxSyncStatus('Hämtar från Drive… kontaktar Google');
   try{
     const remote=await dxFetchRemote();
-    const merged=dxMergeLogs(getLogs(),remote);
+    let merged=dxMergeLogs(getLogs(),remote);
+    if(dxNeedsMasterRecovery(remote)){
+      const seed=await dxFetchMasterRecoverySeed();
+      merged=dxMergeRecoverySeed(merged,seed);
+    }
     localStorage.setItem('dxLogs',JSON.stringify(merged));
     const when=new Date().toLocaleString('sv-SE');
     localStorage.setItem('dxSyncLast',when);
