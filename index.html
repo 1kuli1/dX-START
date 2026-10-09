@@ -837,25 +837,41 @@ function dxHash(s){
   return (h>>>0).toString(36);
 }
 
-function dxNormalizeLog(l){
-  const x={...l};
-  if(!x._id){
-    const sig=[x.date,x.time,x.freq,x.station,x.rx,x.mode,x.saved,x.content].map(v=>v||'').join('|');
-    x._id='legacy-'+dxHash(sig);
-  }
-  if(!x._updatedAt) x._updatedAt=x._deletedAt||x.saved||new Date(0).toISOString();
-  if(x._deletedAt && String(x._deletedAt)>String(x._updatedAt)) x._updatedAt=x._deletedAt;
-  return x;
+// Alla inlästa fält som visas i gränssnittet görs till strängar. Detta skyddar
+// bl.a. CSV/JSON-import med tal och null utan att radera användarens originalfil.
+const DX_TEXT_FIELDS=['date','time','freq','frequencyUnit','band','mode','rx','rxplace','station','country','place','lang','sinpo','signal','operator','ptype','website','verifyStatus','idwords','content','notes','saved','reportStatus','contact','reply','counterstation','txHistory','placeHistory','signalHistory','source','source1','source2','recording','audioDrive','rds','pi','ps','rt','pty','erp','propagation','distanceKm','bearing','extra1','extra2','extra3'];
+function dxSafeText(v){
+ if(v===null||v===undefined)return '';
+ if(typeof v==='string'||typeof v==='number'||typeof v==='boolean')return String(v);
+ return '';
 }
-
+function dxLegacySignature(x){
+ const norm=v=>dxSafeText(v).trim().toLowerCase().replace(/\s+/g,' ');
+ let freq=norm(x.freq).replace(',','.').replace(/\s*(mhz|khz)$/,'');
+ if(/^\d+(?:\.\d+)?$/.test(freq))freq=String(Number(freq));
+ // Spara skilda lyssningar var för sig när tid, mottagare eller anteckning skiljer sig.
+ return [norm(x.date),norm(x.time),freq,norm(x.frequencyUnit||x.band),norm(x.station),norm(x.rx),norm(x.mode),norm(x.content),norm(x.notes)].join('|');
+}
+function dxNormalizeLog(l){
+ if(!l||typeof l!=='object'||Array.isArray(l))throw Error('Felaktig loggpost');
+ const x={...l};
+ for(const key of DX_TEXT_FIELDS)if(Object.hasOwn(x,key))x[key]=dxSafeText(x[key]);
+ for(const key of ['_id','_updatedAt','_deletedAt'])if(Object.hasOwn(x,key))x[key]=dxSafeText(x[key]);
+ if(!x._id)x._id='legacy-v2-'+dxHash(dxLegacySignature(x));
+ if(!x._updatedAt)x._updatedAt=x._deletedAt||x.saved||new Date(0).toISOString();
+ if(x._deletedAt && String(x._deletedAt)>String(x._updatedAt))x._updatedAt=x._deletedAt;
+ return x;
+}
 function dxMergeLogs(a,b){
-  const map=new Map();
-  [...(a||[]),...(b||[])].map(dxNormalizeLog).forEach(x=>{
-    const prev=map.get(x._id);
-    const v=String(x._updatedAt||x.saved||''),p=String(prev?._updatedAt||prev?.saved||'');
-    if(!prev || v>p || (v===p && !!x._deletedAt && !prev._deletedAt)) map.set(x._id,x);
-  });
-  return [...map.values()].sort((x,y)=>String(y.saved||y._updatedAt||'').localeCompare(String(x.saved||x._updatedAt||'')));
+ const map=new Map();
+ for(const original of [...(a||[]),...(b||[])]){
+  const x=dxNormalizeLog(original),isLegacy=/^legacy(?:-v2)?-/.test(x._id);
+  const key=isLegacy?'legacy-observation:'+dxLegacySignature(x):'id:'+x._id;
+  const prev=map.get(key);
+  const v=String(x._updatedAt||x.saved||''),p=String(prev?._updatedAt||prev?.saved||'');
+  if(!prev || v>p || (v===p && !!x._deletedAt && !prev._deletedAt))map.set(key,x);
+ }
+ return [...map.values()].sort((x,y)=>String(y.saved||y._updatedAt||'').localeCompare(String(x.saved||x._updatedAt||'')));
 }
 
 const DX_RECOVERY_SEED_URL='./dx-recovery-seed-2026-10-07.json';
@@ -1059,7 +1075,7 @@ function clearForm(){
   document.getElementById('verifyStatus').value='Preliminär';
   document.getElementById('reply').value='Inväntar svar';
 }
-function esc(s){return (s||'').replace(/[&<>"']/g,m=>({'&':'&amp;','<':'&lt;','>':'&gt;','"':'&quot;',"'":'&#39;'}[m]))}
+function esc(s){return String(s??'').replace(/[&<>"']/g,m=>({'&':'&amp;','<':'&lt;','>':'&gt;','"':'&quot;',"'":'&#39;'}[m]))}
 function linkifyText(s){
   const safe=esc(String(s||''));
   return safe.replace(/(https?:\/\/[^\s|<]+)/g,'<a target="_blank" style="color:#eab308" href="$1" rel="noopener noreferrer">$1</a>')
