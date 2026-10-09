@@ -411,7 +411,7 @@ html[data-dx-tool] header,html[data-dx-tool] .tabs{display:none !important;}
       <div><label for="time">UTC</label><input id="time" type="time"></div>
       <div><label for="freq">Frekvens</label><input id="freq" inputmode="decimal" placeholder="t.ex. 9740 eller 96,6" aria-describedby="freqHelp"><span class="small" id="freqHelp">Ange frekvensen och välj kHz eller MHz.</span></div>
       <div><label for="frequencyUnit">Frekvensenhet</label><select id="frequencyUnit"><option value="kHz">kHz</option><option value="MHz">MHz</option></select></div>
-      <div><label>Band / typ</label>
+      <div><label for="band">Band / typ</label>
         <select id="band" onchange="updateExtraFields()">
           <option>SW</option><option>MW</option><option>LW</option><option>FM</option>
           <option>Flyg</option><option>Maritim</option><option>Satellit</option><option>NDB</option>
@@ -1031,6 +1031,10 @@ function renderLogs(){
   const q=(document.getElementById('search')?.value||'').toLowerCase();
   const fb=document.getElementById('filterBand')?.value||'';
   const logs=getLogs();
+  if(dxLogStorageWarning){
+    document.getElementById('rows').innerHTML='<tr><td colspan="8" role="alert">'+esc(dxLogStorageWarning)+'</td></tr>';
+    return;
+  }
   let out='';
   logs.forEach((l,i)=>{
     const hay=Object.values(l).join(' ').toLowerCase();
