@@ -511,7 +511,7 @@ html[data-dx-tool] header,html[data-dx-tool] .tabs{display:none !important;}
       <label class="btn" style="display:inline-block">Importera JSON<input type="file" accept=".json" onchange="importJSON(event)" style="display:none"></label>
     </div>
     <div class="notice"><b>Version 7.15 Online:</b> denna fil ersätter äldre dx_start_7_excel.html. Excel-importen stöder både USB/SSB-loggen och den stora DX-kontrollboken.</div>
-    <div class="notice"><b>Excelkoppling:</b> välj en .xlsx-fil. DX Start läser igenkända loggblad direkt, hoppar över dubletter och sparar dem lokalt i webbläsaren. Originalfilen ändras aldrig.</div>
+    <div class="notice"><b>Excelkoppling:</b> exportera din Google Sheets-loggbok som Excel (.xlsx) och importera här. Både DX- och FM-huvudloggböckerna stöds. Befintliga poster bevaras och kompletteras utan att skrivas över. Originalfilen ändras aldrig.</div>
     <div id="excelStatus" class="small" role="status" aria-live="polite" style="margin-top:10px">Ingen Excel-fil importerad i denna session.</div>
     <div class="tablewrap" style="margin-top:14px">
       <table>
@@ -1221,49 +1221,97 @@ function firstVal(row, map, names){
   for(const n of names){const i=map.get(normHeader(n)); if(i!==undefined && row[i]!==undefined && String(row[i]).trim()!=='') return String(row[i]).trim()}
   return '';
 }
-function mapExcelRows(rows, sheetName){
-  let hi=-1, headers=[];
+
+function excelTimeToHHMM(v){
+  const s=String(v??'').trim().replace(',','.');
+  if(/^\d+(?:\.\d+)?$/.test(s)){
+    const n=Number(s);
+    if(n>=0&&n<1){const m=Math.round(n*1440)%1440;return String(Math.floor(m/60)).padStart(2,'0')+':'+String(m%60).padStart(2,'0');}
+  }
+  return String(v??'').trim();
+}
+function dxCanonicalKey(l){
+  const t=v=>String(v??'').trim().toLowerCase().replace(/\s+/g,' ');
+  const unit=t(l.frequencyUnit)||(t(l.band)==='fm'?'mhz':(/mhz/i.test(l.freq)?'mhz':'khz'));
+  let freq=t(l.freq).replace(',','.');
+  const n=parseFloat(freq);
+  if(Number.isFinite(n))freq=String(Number(n.toFixed(4)));
+  return [t(l.date),t(l.time),unit,freq,t(l.station),t(l.rx)].join('|');
+}
+function mapExcelRows(rows,sheetName){
+  let hi=-1,headers=[];
   for(let i=0;i<Math.min(rows.length,12);i++){
     const nn=rows[i].map(normHeader);
-    if(nn.some(x=>x==='datum'||x==='date'||x.startsWith('datum ')) && nn.some(x=>x.includes('frekvens')||x==='freq'||x.includes('frequency')) && nn.some(x=>x.includes('station')||x.includes('anropssignal')||x.includes('callsign'))){hi=i;headers=rows[i];break}
+    if(nn.some(x=>x==='datum'||x==='date'||x.startsWith('datum '))&&nn.some(x=>x.includes('frekvens')||x==='freq'||x.includes('frequency'))&&nn.some(x=>x.includes('station')||x.includes('anropssignal')||x.includes('callsign'))){hi=i;headers=rows[i];break}
   }
-  if(hi<0) return [];
-  const hm=new Map(); headers.forEach((h,i)=>{if(String(h||'').trim())hm.set(normHeader(h),i)});
-  const mapped=[];
+  if(hi<0)return [];
+  const hm=new Map();headers.forEach((h,i)=>{if(String(h||'').trim())hm.set(normHeader(h),i)});
+  const col=(row,...names)=>firstVal(row,hm,names);
+  const unit=headers.some(h=>/frekvens mhz|frequency mhz/i.test(normHeader(h)))||/fm loggbok/i.test(sheetName)?'MHz':'kHz';
+  const out=[];
   for(const row of rows.slice(hi+1)){
-    const station=firstVal(row,hm,['Hörd station','Station','Anropssignal','Callsign','Trolig station/signal','Station / signal']);
-    const freq=firstVal(row,hm,['Frekvens kHz','Frekvens','Frequency','Freq']);
-    if(!station && !freq) continue;
-    let date=firstVal(row,hm,['Datum','Date']);
-    if(/^\d+(\.\d+)?$/.test(date) && Number(date)>20000) date=excelSerialToDate(date);
-    let rx=firstVal(row,hm,['Mottagare/SDR','Mottagare','Receiver','SDR']);
-    const rxplace=firstVal(row,hm,['SDR-plats','Mottagarplats','Plats mottagare','Receiver place','RX-plats']);
-    if(rxplace && !rx.toLowerCase().includes(rxplace.toLowerCase())) rx=[rx,rxplace].filter(Boolean).join(' – ');
+    const station=col(row,'Hörd station','Station','Anropssignal','Callsign','Trolig station/signal','Trolig station','Station / signal');
+    const freq=col(row,'Frekvens kHz','Frekvens MHz','Frekvens','Frequency','Freq');
+    if(!station&&!freq)continue;
+    let date=col(row,'Datum','Date');
+    if(/^\d+(?:\.\d+)?$/.test(date)&&Number(date)>20000)date=excelSerialToDate(date);
     const item={
-      date,time:firstVal(row,hm,['UTC','Tid (UTC)','Tid','Time']),freq,
-      band:firstVal(row,hm,['Band','Band / typ'])||(/amatör|usb|ssb/i.test(sheetName)?'Amatörradio':''),
-      mode:firstVal(row,hm,['Mode','Modulation']),rx,rxplace,station,
-      counterstation:firstVal(row,hm,['Motstation']),country:firstVal(row,hm,['Land/DXCC','Land','Country']),
-      place:firstVal(row,hm,['Ort','Stad','Sändarort / plats','Sändarort','Stationsplats för karta','Sändarposition för karta','Plats']),lang:firstVal(row,hm,['Språk','Language']),
-      signal:firstVal(row,hm,['Signal/S-meter','Signal','Signalstyrka']),sinpo:firstVal(row,hm,['SINPO/SIO','SINPO','SIO']),
-      reportExchange:firstVal(row,hm,['Rapport/Exchange','Exchange']),operator:firstVal(row,hm,['Operatör/namn','Operatör','Namn']),
-      ptype:firstVal(row,hm,['Programtyp','Program']),website:firstVal(row,hm,['Stationswebb','Hemsida','Website']),
-      verifyStatus:firstVal(row,hm,['Verifiering','Verifieringsstatus','Status','Identifiering','Kartstatus']),locator:firstVal(row,hm,['Locator','Grid','Maidenhead','Stationslocator','Station locator']),
-      idwords:firstVal(row,hm,['Identifiering','ID-ord / identifiering']),content:firstVal(row,hm,['Kort innehåll','Programinnehåll','Innehåll']),
-      notes:firstVal(row,hm,['Anteckningar','Kommentar','Notering']),source:firstVal(row,hm,['Källa/SDR-länk','Källa']),
-      link:firstVal(row,hm,['Länk']),reportStatus:firstVal(row,hm,['Rapportstatus'])||'Ej skapad',
-      contact:firstVal(row,hm,['Kontaktväg','Kontakt / QSL']),reply:firstVal(row,hm,['Svar/QSL-bekräftelse','Svar / QSL'])||'Inväntar svar',
-      mapCategory:firstVal(row,hm,['Kartkategori']),mapStatus:firstVal(row,hm,['Kartstatus']),
-      rxLocator:firstVal(row,hm,['Mottagar-locator']),rxLat:firstVal(row,hm,['Mottagar lat']),rxLon:firstVal(row,hm,['Mottagar lon']),
-      stationMapPlace:firstVal(row,hm,['Stationsplats för karta','Sändarposition för karta']),stationLat:firstVal(row,hm,['Station lat','Sändar lat']),stationLon:firstVal(row,hm,['Station lon','Sändar lon']),
-      distanceKm:firstVal(row,hm,['Avstånd km']),bearing:firstVal(row,hm,['Riktning °','Riktning']),positionSource:firstVal(row,hm,['Positionskälla']),
-      importedSheet:sheetName,saved:new Date().toISOString()
+      date,time:excelTimeToHHMM(col(row,'UTC','Tid (UTC)','Tid','Time')),
+      freq,frequencyUnit:unit,station,
+      band:col(row,'Kategori','Band','Band / typ')||(unit==='MHz'?'FM':(/amatör|usb|ssb/i.test(sheetName)?'Amatörradio':'')),
+      mode:col(row,'Mode','Modulation'),
+      rx:col(row,'Mottagare/SDR','Mottagare','Receiver','SDR'),
+      rxplace:col(row,'Plats mottagare','SDR-plats','Mottagarplats','Receiver place','RX-plats'),
+      country:col(row,'Land/DXCC','Land','Country'),
+      place:col(row,'Sändarort','Sändarort / plats','Ort','Stad','Stationsplats för karta','Sändarposition för karta','Plats'),
+      lang:col(row,'Språk','Language'),
+      signal:col(row,'Signal/S-meter','Signal','Signalstyrka'),
+      sinpo:col(row,'SINPO/SIO','SINPO','SIO'),
+      reportExchange:col(row,'Rapport/Exchange','Exchange'),
+      operator:col(row,'Operatör/ägare','Operatör/namn','Operatör','Namn'),
+      ptype:col(row,'Programtyp','Program'),
+      website:col(row,'Stationens hemsida','Stationswebb','Hemsida','Website'),
+      verifyStatus:col(row,'Verifiering','Verifieringsstatus','Status','Identifiering','Kartstatus'),
+      locator:col(row,'Locator','Grid','Maidenhead','Stationslocator','Station locator'),
+      idwords:col(row,'ID-ord / transkript','Stations-ID / jingel','ID-ord / identifiering','Identifiering'),
+      content:col(row,'Kort innehåll','Programinnehåll','Innehåll'),
+      notes:col(row,'Anteckningar','Kommentar','Notering'),
+      source:col(row,'Källa/SDR-länk','Källa'),
+      link:col(row,'Länk'),
+      reportStatus:col(row,'Rapportstatus')||'Ej skapad',
+      contact:col(row,'Kontaktväg','Kontakt / QSL'),
+      reply:col(row,'Svar/QSL-bekräftelse','Svar / QSL')||'Inväntar svar',
+      mapCategory:col(row,'Kartkategori'),
+      mapStatus:col(row,'Kartstatus'),
+      rxLocator:col(row,'Mottagar-locator'),
+      rxLat:col(row,'Mottagar lat'),
+      rxLon:col(row,'Mottagar lon'),
+      stationMapPlace:col(row,'Stationsplats för karta','Sändarposition för karta'),
+      stationLat:col(row,'Station lat','Sändar lat'),
+      stationLon:col(row,'Station lon','Sändar lon'),
+      distanceKm:col(row,'Avstånd km'),bearing:col(row,'Azimut °','Riktning °','Riktning'),
+      positionSource:col(row,'Positionskälla'),
+      txHistory:col(row,'Sändarens historia'),placeHistory:col(row,'Ortens historia'),
+      signalHistory:col(row,'Historik / historien bakom signalen'),
+      securityPercent:col(row,'Säkerhet %'),
+      source1:col(row,'Källa 1'),source2:col(row,'Källa 2'),
+      recording:col(row,'Inspelning/fil'),audioDrive:col(row,'Ljudfil Drive'),
+      rds:col(row,'RDS'),pi:col(row,'PI'),ps:col(row,'PS'),rt:col(row,'RT'),pty:col(row,'PTY'),
+      propagation:col(row,'Propagation'),erp:col(row,'ERP kW'),
+      antenna:col(row,'Antenn'),stereo:col(row,'Stereo'),
+      counterstation:col(row,'Motstation'),
+      importedSheet:sheetName,
+      sourceBook:unit==='MHz'?'FM_DX_MASTER_LOGGBOK':'DX_MASTER_LOGGBOK',
+      saved:'1970-01-01T00:00:00.000Z',
+      _updatedAt:'1970-01-01T00:00:00.000Z'
     };
-    mapped.push(item);
+    item._id='xlsx-'+dxHash(dxCanonicalKey(item));
+    out.push(item);
   }
-  return mapped;
+  return out;
 }
-function logKey(l){return [l.date,l.time,l.freq,l.station,l.rx].map(x=>String(x||'').trim().toLowerCase()).join('|')}
+function logKey(l){return dxCanonicalKey(l)}
+
 async function importExcel(ev){
   const f=ev.target.files[0]; if(!f)return;
   const status=document.getElementById('excelStatus'); status.textContent='Läser '+f.name+'…';
@@ -1290,12 +1338,32 @@ async function importExcel(ev){
       if(got.length){imported.push(...got);used.push(name+' ('+got.length+')')}
     }
     if(!imported.length) throw new Error('Inget kompatibelt loggblad hittades. Jag sökte i: '+scanned.join(', ')+'. Kontrollera att bladet har Datum, Frekvens och någon stationskolumn.');
-    const logs=getLogs(), seen=new Set(logs.map(logKey)); let added=0, skipped=0;
-    for(const x of imported){const k=logKey(x); if(seen.has(k)){skipped++;continue} logs.push(x);seen.add(k);added++}
-    logs.sort((a,b)=>((b.date||'')+(b.time||'')).localeCompare((a.date||'')+(a.time||'')));
-    setLogs(logs); renderLogs();
-    status.textContent=`${f.name}: ${added} nya loggar importerade, ${skipped} dubletter hoppades över. Blad: ${used.join(', ')}`;
-    alert(`Excel-import klar. ${added} nya loggar lades till.`);
+    const existing=getLogRecords(),byKey=new Map();
+    existing.forEach((l,i)=>{if(l.station&&l.freq&&l.date)byKey.set(logKey(l),i);});
+    let added=0,skipped=0,enriched=0,blocked=0;
+    for(const incoming of imported){
+      const k=logKey(incoming),i=byKey.get(k);
+      if(i!==undefined){
+        const prev=existing[i];
+        if(prev._deletedAt){blocked++;continue;}
+        let changed=false;
+        for(const [field,value] of Object.entries(incoming)){
+          if(field.startsWith('_')||['saved','date','time','freq','station','rx','band'].includes(field))continue;
+          if(value!==undefined&&value!==null&&String(value).trim()!==''&&
+            (prev[field]===undefined||prev[field]===null||String(prev[field]).trim()==='')){
+            prev[field]=value;changed=true;
+          }
+        }
+        if(changed)enriched++;else skipped++;
+      }else{
+        existing.push(incoming);
+        if(incoming.station&&incoming.freq&&incoming.date)byKey.set(k,existing.length-1);
+        added++;
+      }
+    }
+    setLogs(existing);renderLogs();
+    status.textContent=`${f.name}: ${added} nya, ${enriched} kompletterade, ${skipped} redan befintliga, ${blocked} tidigare raderade. Blad: ${used.join(', ')}`;
+    alert(`Excel-import: ${added} nya loggar, ${enriched} kompletterade. ${blocked} raderade poster återställdes inte.`);
   }catch(e){status.textContent='Import misslyckades: '+e.message; alert('Excel-filen kunde inte importeras. '+e.message)}
   finally{ev.target.value=''}
 }
