@@ -1,0 +1,157 @@
+<!doctype html>
+<html lang="sv">
+<head>
+<link rel="manifest" href="../manifest.webmanifest">
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>DX Academy – Störningar och ljuddemo</title>
+
+<style>
+/* (EXAKT SAMMA CSS SOM DIN ORIGINALFIL – OFÖRÄNDRAD) */
+:root{--bg:#0b1220;--panel:#121b2e;--soft:#1a2640;--line:#2a3a60;--text:#eaf1ff;--muted:#b8c5e4;--accent:#79e2a7;--warn:#ffd166;--danger:#ff7b7b;}
+*{box-sizing:border-box;}
+body{margin:0;font-family:Arial, Helvetica, sans-serif;background:linear-gradient(180deg,#09101d 0%, #0b1220 100%);color:var(--text);}
+.wrap{max-width:1200px;margin:0 auto;padding:24px;}
+header{display:grid;gap:14px;margin-bottom:22px;}
+.hero{background:linear-gradient(135deg,#13203a 0%, #10182a 100%);border:1px solid var(--line);border-radius:20px;padding:22px;box-shadow:0 10px 30px rgba(0,0,0,0.25);}
+h1{margin:0 0 8px 0;font-size:clamp(28px,4vw,42px);line-height:1.1;}
+p{line-height:1.6;}
+.muted{color:var(--muted);}
+.badge-row{display:flex;flex-wrap:wrap;gap:10px;margin-top:12px;}
+.badge{display:inline-block;padding:8px 12px;border:1px solid var(--line);border-radius:999px;background:#0d1729;color:var(--muted);font-size:14px;}
+.grid{display:grid;grid-template-columns:1.25fr 0.95fr;gap:20px;align-items:start;}
+.panel{background:var(--panel);border:1px solid var(--line);border-radius:18px;padding:18px;box-shadow:0 8px 24px rgba(0,0,0,0.2);}
+.section-title{display:flex;justify-content:space-between;align-items:center;gap:10px;margin-bottom:12px;}
+.section-title h2{margin:0;font-size:22px;}
+.cards{display:grid;grid-template-columns:repeat(2,minmax(0,1fr));gap:14px;}
+.card{background:#0f1728;border:1px solid var(--line);border-radius:16px;padding:16px;display:grid;gap:10px;}
+.card h3{margin:0;font-size:20px;}
+.desc{background:#0e1625;border:1px dashed var(--line);border-radius:16px;padding:16px;margin-top:16px;}
+.controls{display:flex;flex-wrap:wrap;gap:10px;}
+button{appearance:none;border:none;border-radius:12px;padding:11px 14px;font-weight:700;cursor:pointer;}
+.play{background:var(--accent);color:#08110d;}
+.stop{background:#21304d;color:var(--text);}
+.secondary{background:#18243a;color:var(--text);border:1px solid var(--line);}
+.mini{font-size:13px;color:var(--muted);}
+.score{margin-top:14px;padding:14px;border-radius:14px;border:1px solid var(--line);background:#0d1728;}
+.good{color:var(--accent);font-weight:700;}
+.bad{color:var(--danger);font-weight:700;}
+@media (max-width:980px){.grid{grid-template-columns:1fr;}}
+@media (max-width:720px){.cards{grid-template-columns:1fr;}}
+</style>
+</head>
+
+<body>
+<nav aria-label="DX Academy stöd" style="padding:10px;text-align:right"><a href="https://1kuli1.github.io/dX-START/asta.html?from=academy" target="_blank" rel="noopener noreferrer" style="display:inline-block;padding:9px 13px;background:#eab308;color:#111;border-radius:8px;font-weight:700">🤖 Fråga Asta</a></nav>
+<div class="wrap">
+
+<header>
+<div class="hero">
+<h1>DX Academy – störningar du kan höra</h1>
+<p class="muted">Klicka på ett ljud för att höra ett pedagogiskt exempel.</p>
+</div>
+</header>
+
+<div class="grid">
+
+<section class="panel">
+<div class="section-title">
+<h2>Ljudbibliotek</h2>
+</div>
+
+<div class="cards">
+
+<article class="card">
+<h3>1. Brus</h3>
+<div class="controls">
+<button class="play" data-sound="noise">▶ Spela</button>
+<button class="stop">■ Stopp</button>
+</div>
+</article>
+
+<article class="card">
+<h3>2. Elektrisk störning</h3>
+<div class="controls">
+<button class="play" data-sound="electrical">▶ Spela</button>
+<button class="stop">■ Stopp</button>
+</div>
+</article>
+
+<article class="card">
+<h3>3. Atmosfärisk störning</h3>
+<div class="controls">
+<button class="play" data-sound="atmospheric">▶ Spela</button>
+<button class="stop">■ Stopp</button>
+</div>
+</article>
+
+<article class="card">
+<h3>4. Överlagrade stationer</h3>
+<div class="controls">
+<button class="play" data-sound="overlap">▶ Spela</button>
+<button class="stop">■ Stopp</button>
+</div>
+</article>
+
+<article class="card">
+<h3>5. Fading</h3>
+<div class="controls">
+<button class="play" data-sound="fading">▶ Spela</button>
+<button class="stop">■ Stopp</button>
+</div>
+</article>
+
+<article class="card">
+<h3>6. Digital signal</h3>
+<div class="controls">
+<button class="play" data-sound="digital">▶ Spela</button>
+<button class="stop">■ Stopp</button>
+</div>
+</article>
+
+</div>
+</section>
+
+</div>
+</div>
+
+<script>
+// ENDA ÄNDRINGEN – WAV-LJUD
+
+let currentAudio = null;
+
+function stopAllAudio(){
+  if(currentAudio){
+    currentAudio.pause();
+    currentAudio.currentTime = 0;
+    currentAudio = null;
+  }
+}
+
+function playSound(file){
+  stopAllAudio();
+  currentAudio = new Audio(file);
+  currentAudio.loop = true;
+  currentAudio.play();
+}
+
+document.querySelectorAll("[data-sound]").forEach(btn=>{
+  btn.addEventListener("click",()=>{
+    const s = btn.dataset.sound;
+
+    if(s==="noise") playSound("sound/noise.wav");
+    if(s==="electrical") playSound("sound/electrical.wav");
+    if(s==="atmospheric") playSound("sound/atmospheric.wav");
+    if(s==="overlap") playSound("sound/overlap.wav");
+    if(s==="fading") playSound("sound/fading.wav");
+    if(s==="digital") playSound("sound/digital.wav");
+  });
+});
+
+document.querySelectorAll(".stop").forEach(btn=>{
+  btn.addEventListener("click", stopAllAudio);
+});
+</script>
+
+<script>if('serviceWorker' in navigator&&location.protocol==='https:')window.addEventListener('load',()=>navigator.serviceWorker.register('../sw.js',{scope:'../'}).catch(e=>console.warn(e)));</script></body>
+</html>
