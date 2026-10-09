@@ -108,3 +108,39 @@ De två äldre Receiver Hub-sidorna i **DX-OS** dirigeras till den enda uppdater
 5. Prova otillåten åtkomst med annat konto och synkning mellan två enheter **innan** klientens spärr tas bort.
 
 Referens: [Google – Apps Script Web Apps](https://developers.google.com/apps-script/guides/web) samt [Apps Script manifest och åtkomstlägen](https://developers.google.com/apps-script/manifest/web-app-api-executable).
+
+---
+
+## Etapp 3 – förberedelse av intern PWA-testversion (9 oktober 2026)
+
+**Status:** Koden uppdaterad, intern funktionskontroll utförd, användartest ej genomfört.
+
+### Skydd för loggar
+- `index.html`: Vid korrupt `dxLogs`-JSON blockeras nya skrivningar så att den skadade originalsträngen inte skrivs över. Om `localStorage` avvisar en skrivning (till exempel fullt minne) bekräftas inte loggposten som sparad.
+- Skyddet gäller ny logg, radering, JSON-import och Excel-import. Skriptet hanterar raderingsmarkeringar och kräver tydlig bekräftelse vid JSON-import som kan markera poster raderade.
+- JSON-exportens nedladdningslänk hålls tillgänglig längre, vilket förbättrar stabiliteten på mobila webbläsare.
+- Mobilvyn gömmer inte längre två loggtabellkolumner. De finns kvar i en sidledsrullningsbar tabell.
+- Fyra verifieringsnivåer: Preliminär, Osäker, Trolig, Bekräftad.
+- 31 fältetiketter kopplades till rätt kontroller. Loggrader kan aktiveras med Enter eller mellanslag.
+- **Varning:** Detta ersätter inte användarens egna JSON-säkerhetskopior. Webbläsardata kan fortfarande rensas av användaren, operativsystemet eller webbläsaren.
+
+### PDF-guider
+- `guider.html`: PDF öppnas utan riskabel omdirigering i aktuell flik när ett `noopener`-fönster saknar returhandtag.
+- Alla 29 guider har nu en separat **Ladda ned PDF**-knapp.
+
+### PWA (DX Start-projektet)
+- Nya filer: `manifest.webmanifest`, `sw.js`, `icon-192.png`, `icon-512.png`, `icon.svg`.
+- Manifestet har korrekta installationsfält, PNG-ikoner med verifierade verkliga mått (192×192 och 512×512) samt `scope` och `start_url` som gäller `/dX-START/`.
+- Service worker registreras från `index.html`, `receiver-hub.html`, `guider.html`, `asta.html`, `dx-help.html`.
+- Service worker cachar enbart egna statiska programsidor och tillhörande installationsfiler. Inte användarloggar, tredjeparts-SDR eller internetradioströmmar.
+- Webbuppdateringar prioriteras före offlinekopian och ett fullt cacheutrymme ska inte göra nätanslutet läge oanvändbart.
+- **Begränsning:** Installerad PWA omfattar i nuläget **DX Start-projektet**, inte automatiskt sidor under `/dx-system/` eller `/DX-Academy/`. De behöver integreras i samma appområde om den slutliga produkten ska vara en enda PWA.
+- **Begränsning:** Dessa ändringar gör ännu inte en självständig APK eller Windows-installationsfil. PWA-installationen ska provas i riktiga Chrome/Edge.
+- Automatisk Google Drive-synk förblir blockerad. Publik pilot kan senare använda personlig lokal loggbok och frivillig manuell JSON-backup utan inloggning.
+
+### Tester
+En samlad kontroll gav **33/33 godkända statiska och isolerade funktionstester** av HTML/JS, PWA-konfiguration, PDF-nedladdningar, sparning, radering, äldre JSON, skydd mot skadad lagring och fullt lagringsutrymme. Separat verifierades PNG-header och dimensionerna för båda ikonerna.
+
+**Ej testat:** fysisk Samsung A52/Tab S9, Windows-installation, webbläsarens verkliga service worker/offline-drift, publicerad GitHub Pages-körning, riktiga externa SDR-mottagare samt tillgänglighet med skärmläsare.
+
+**Testplan:** [BETA-TESTPLAN-2026-10-09.md](BETA-TESTPLAN-2026-10-09.md). Teststart sker först efter att intern acceptanskontroll är genomförd. Försäljning eller fristående distribution planeras först efter pilotperioden.
