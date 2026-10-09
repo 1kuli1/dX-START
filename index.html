@@ -399,9 +399,9 @@ html[data-dx-tool] header,html[data-dx-tool] .tabs{display:none !important;}
   <div class="notice"><b>SWL-läge:</b> DX Start hjälper dig att lyssna och logga. Ingen sändning startas härifrån. Välj mode och band, öppna SDR-mottagaren och använd FT8TW för avkodningen.</div>
   <div class="card" style="margin-top:14px">
     <div class="grid">
-      <div><label>Digitalmode</label><select id="digitalMode" onchange="dxDigitalRenderBands()"><option>FT8</option><option>FT4</option></select></div>
-      <div><label>Mottagare</label><select id="digitalRx"><option value="https://r.heppen.be/">Heppen SDR</option><option value="http://rx.linkfanel.net/">SDR-karta</option><option value="http://websdr.ewi.utwente.nl:8901/">Twente WebSDR</option></select></div>
-      <div><label>Vald frekvens</label><input id="digitalFreq" readonly value="7.074 MHz"></div>
+      <div><label for="digitalMode">Digitalmode</label><select id="digitalMode" onchange="dxDigitalRenderBands()"><option>FT8</option><option>FT4</option></select></div>
+      <div><label for="digitalRx">Mottagare</label><select id="digitalRx"><option value="https://r.heppen.be/">Heppen SDR</option><option value="http://rx.linkfanel.net/">SDR-karta</option><option value="http://websdr.ewi.utwente.nl:8901/">Twente WebSDR</option></select></div>
+      <div><label for="digitalFreq">Vald frekvens</label><input id="digitalFreq" readonly value="7.074 MHz"></div>
       <div><label>Inställning</label><input readonly value="USB · mottagning"></div>
     </div>
     <div id="digitalBandGrid" class="digital-band-grid"></div>
@@ -449,9 +449,9 @@ html[data-dx-tool] header,html[data-dx-tool] .tabs{display:none !important;}
   <h2>Logga en station</h2>
   <div class="card">
     <div class="grid">
-      <div><label>Datum</label><input id="date" type="date"></div>
-      <div><label>UTC</label><input id="time" type="time"></div>
-      <div><label>Frekvens</label><input id="freq" placeholder="t.ex. 9740 kHz"></div>
+      <div><label for="date">Datum</label><input id="date" type="date"></div>
+      <div><label for="time">UTC</label><input id="time" type="time"></div>
+      <div><label for="freq">Frekvens</label><input id="freq" placeholder="t.ex. 9740 kHz"></div>
       <div><label>Band / typ</label>
         <select id="band" onchange="updateExtraFields()">
           <option>SW</option><option>MW</option><option>LW</option><option>FM</option>
@@ -459,21 +459,21 @@ html[data-dx-tool] header,html[data-dx-tool] .tabs{display:none !important;}
           <option>Utility</option><option>Numbers</option><option>Piratradio</option><option>NOAA</option><option>DAB</option><option>Meteor scatter</option><option>Aurora</option><option>Amatörradio</option><option>Övrigt</option>
         </select>
       </div>
-      <div><label>Mottagare</label><input id="rx" placeholder="t.ex. KiwiSDR, WebSDR"></div>
-      <div><label>Mottagarplats</label><input id="rxplace" placeholder="t.ex. Heppen, Julussdalen, Tjörn"></div>
-      <div><label>Station</label><input id="station" placeholder="Stationsnamn"></div>
-      <div><label>Land</label><input id="country" placeholder="Land"></div>
-      <div><label>Sändarort / plats</label><input id="place" placeholder="Ort eller sändarplats"></div>
-      <div><label>Språk</label><input id="lang" placeholder="Språk"></div>
-      <div><label>SINPO</label><input id="sinpo" maxlength="5" placeholder="t.ex. 55445"></div>
-      <div><label>Programtyp</label><input id="ptype" placeholder="Nyheter, musik, intervju..."></div>
-      <div><label>Hemsida</label><input id="website" placeholder="https://..."></div>
-      <div><label>Verifiering</label><select id="verifyStatus"><option>Preliminär</option><option>Osäker</option><option>Trolig</option><option>Bekräftad</option></select></div>
+      <div><label for="rx">Mottagare</label><input id="rx" placeholder="t.ex. KiwiSDR, WebSDR"></div>
+      <div><label for="rxplace">Mottagarplats</label><input id="rxplace" placeholder="t.ex. Heppen, Julussdalen, Tjörn"></div>
+      <div><label for="station">Station</label><input id="station" placeholder="Stationsnamn"></div>
+      <div><label for="country">Land</label><input id="country" placeholder="Land"></div>
+      <div><label for="place">Sändarort / plats</label><input id="place" placeholder="Ort eller sändarplats"></div>
+      <div><label for="lang">Språk</label><input id="lang" placeholder="Språk"></div>
+      <div><label for="sinpo">SINPO</label><input id="sinpo" maxlength="5" placeholder="t.ex. 55445"></div>
+      <div><label for="ptype">Programtyp</label><input id="ptype" placeholder="Nyheter, musik, intervju..."></div>
+      <div><label for="website">Hemsida</label><input id="website" placeholder="https://..."></div>
+      <div><label for="verifyStatus">Verifiering</label><select id="verifyStatus"><option>Preliminär</option><option>Osäker</option><option>Trolig</option><option>Bekräftad</option></select></div>
     </div>
     <div class="grid" style="margin-top:12px">
-      <div><label>ID-ord / identifiering</label><textarea id="idwords" placeholder="Vad hördes som bekräftar stationen?"></textarea></div>
-      <div><label>Kort innehåll / transkript</label><textarea id="content" placeholder="Kort sammanfattning eller transkript"></textarea></div>
-      <div><label>Anteckningar</label><textarea id="notes" placeholder="Övriga observationer"></textarea></div>
+      <div><label for="idwords">ID-ord / identifiering</label><textarea id="idwords" placeholder="Vad hördes som bekräftar stationen?"></textarea></div>
+      <div><label for="content">Kort innehåll / transkript</label><textarea id="content" placeholder="Kort sammanfattning eller transkript"></textarea></div>
+      <div><label for="notes">Anteckningar</label><textarea id="notes" placeholder="Övriga observationer"></textarea></div>
     </div>
     <div class="context-fields">
       <div class="kicker">Extra fält för vald signaltyp</div>
@@ -486,13 +486,13 @@ html[data-dx-tool] header,html[data-dx-tool] .tabs{display:none !important;}
     <div class="context-fields">
       <div class="kicker">Amatörradio / lyssnarrapport</div>
       <div class="grid">
-        <div><label>Mode</label><input id="mode" placeholder="USB, LSB, CW, FT8..."></div>
-        <div><label>Motstation</label><input id="counterstation" placeholder="Callsign om känt"></div>
-        <div><label>Signal / S-meter</label><input id="signal" placeholder="t.ex. 59 / S9+10 dB"></div>
-        <div><label>Operatör / namn</label><input id="operator" placeholder="Namn om känt"></div>
-        <div><label>Rapportstatus</label><select id="reportStatus"><option>Ej skapad</option><option>Klar – ej bekräftat skickad</option><option>Skickad</option></select></div>
-        <div><label>Kontaktväg</label><input id="contact" placeholder="E-post, QRZ, LoTW, Direct..."></div>
-        <div><label>Svar / QSL</label><select id="reply"><option>Inväntar svar</option><option>Svar mottaget</option><option>QSL mottaget</option><option>Inget svar</option></select></div>
+        <div><label for="mode">Mode</label><input id="mode" placeholder="USB, LSB, CW, FT8..."></div>
+        <div><label for="counterstation">Motstation</label><input id="counterstation" placeholder="Callsign om känt"></div>
+        <div><label for="signal">Signal / S-meter</label><input id="signal" placeholder="t.ex. 59 / S9+10 dB"></div>
+        <div><label for="operator">Operatör / namn</label><input id="operator" placeholder="Namn om känt"></div>
+        <div><label for="reportStatus">Rapportstatus</label><select id="reportStatus"><option>Ej skapad</option><option>Klar – ej bekräftat skickad</option><option>Skickad</option></select></div>
+        <div><label for="contact">Kontaktväg</label><input id="contact" placeholder="E-post, QRZ, LoTW, Direct..."></div>
+        <div><label for="reply">Svar / QSL</label><select id="reply"><option>Inväntar svar</option><option>Svar mottaget</option><option>QSL mottaget</option><option>Inget svar</option></select></div>
       </div>
     </div>
     <div class="actions">
@@ -508,8 +508,8 @@ html[data-dx-tool] header,html[data-dx-tool] .tabs{display:none !important;}
   <h2>Loggbok</h2>
   <div class="card">
     <div class="grid">
-      <div><label>Sök i loggboken</label><input id="search" oninput="renderLogs()" placeholder="station, land, frekvens, mottagare..."></div>
-      <div><label>Filter band / typ</label><select id="filterBand" onchange="renderLogs()"><option value="">Alla</option><option>SW</option><option>MW</option><option>LW</option><option>FM</option><option>Flyg</option><option>Maritim</option><option>Satellit</option><option>NDB</option><option>Utility</option><option>Numbers</option><option>Piratradio</option><option>NOAA</option><option>DAB</option><option>Meteor scatter</option><option>Aurora</option><option>Amatörradio</option><option>Övrigt</option></select></div>
+      <div><label for="search">Sök i loggboken</label><input id="search" oninput="renderLogs()" placeholder="station, land, frekvens, mottagare..."></div>
+      <div><label for="filterBand">Filter band / typ</label><select id="filterBand" onchange="renderLogs()"><option value="">Alla</option><option>SW</option><option>MW</option><option>LW</option><option>FM</option><option>Flyg</option><option>Maritim</option><option>Satellit</option><option>NDB</option><option>Utility</option><option>Numbers</option><option>Piratradio</option><option>NOAA</option><option>DAB</option><option>Meteor scatter</option><option>Aurora</option><option>Amatörradio</option><option>Övrigt</option></select></div>
     </div>
     <div class="actions">
       <label class="btn accent" style="display:inline-block">Importera Excel (.xlsx)<input type="file" accept=".xlsx,.xlsm" onchange="importExcel(event)" style="display:none"></label>
@@ -535,9 +535,9 @@ html[data-dx-tool] header,html[data-dx-tool] .tabs{display:none !important;}
   <h2>DX-karta</h2>
   <div class="card">
     <div class="map-toolbar">
-      <div><label>Visa</label><select id="mapType" onchange="renderMap(true)"><option value="all">Amatörer + radiostationer</option><option value="amateur">Endast radioamatörer</option><option value="broadcast">Endast radiostationer</option></select></div>
-      <div><label>Mottagare</label><select id="mapReceiver" onchange="renderMap(true)"><option value="">Alla mottagare</option></select></div>
-      <div><label>Period</label><select id="mapPeriod" onchange="renderMap(true)"><option value="all">Alla datum</option><option value="30">Senaste 30 dagarna</option><option value="365">Senaste året</option></select></div>
+      <div><label for="mapType">Visa</label><select id="mapType" onchange="renderMap(true)"><option value="all">Amatörer + radiostationer</option><option value="amateur">Endast radioamatörer</option><option value="broadcast">Endast radiostationer</option></select></div>
+      <div><label for="mapReceiver">Mottagare</label><select id="mapReceiver" onchange="renderMap(true)"><option value="">Alla mottagare</option></select></div>
+      <div><label for="mapPeriod">Period</label><select id="mapPeriod" onchange="renderMap(true)"><option value="all">Alla datum</option><option value="30">Senaste 30 dagarna</option><option value="365">Senaste året</option></select></div>
       <div><button type="button" class="btn accent" onclick="renderMap(true)">Uppdatera karta</button></div>
     </div>
     <div class="map-legend">
@@ -808,7 +808,7 @@ let dxSyncBusy=false, dxSyncTimer=null;
 let dxLogStorageWarning='';
 function getLogRecords(){
  try{
-  const raw=localStorage.getItem('dxLogs');if(raw===null)return [];
+  const raw=localStorage.getItem('dxLogs');if(raw===null){dxLogStorageWarning='';return [];}
   const a=JSON.parse(raw);
   if(!Array.isArray(a)||!a.every(v=>v&&typeof v==='object'&&!Array.isArray(v)))throw Error('Ogiltigt loggformat');
   dxLogStorageWarning='';return a;
@@ -1065,6 +1065,12 @@ function linkifyText(s){
   return safe.replace(/(https?:\/\/[^\s|<]+)/g,'<a target="_blank" style="color:#eab308" href="$1" rel="noopener noreferrer">$1</a>')
              .replace(/(^|[\s|])([A-Z0-9._%+-]+@[A-Z0-9.-]+\.[A-Z]{2,})/gi,'$1<a style="color:#eab308" href="mailto:$2">$2</a>');
 }
+document.addEventListener('keydown',function(event){
+  const row=event.target.closest?.('tr[data-profile-index]');
+  if(row&&(event.key==='Enter'||event.key===' ')){
+    event.preventDefault();openProfile(Number(row.dataset.profileIndex));
+  }
+});
 function renderLogs(){
   const q=(document.getElementById('search')?.value||'').toLowerCase();
   const fb=document.getElementById('filterBand')?.value||'';
@@ -1075,7 +1081,7 @@ function renderLogs(){
     if(q && !hay.includes(q)) return;
     if(fb && l.band!==fb) return;
     const rq=[l.reportStatus,l.reply].filter(Boolean).join(' • ');
-    out+=`<tr class="clickable" onclick="openProfile(${i})"><td>${esc(l.date)}</td><td>${esc(l.time)}</td><td>${esc(l.freq)}</td><td>${esc(l.station)}</td><td>${esc(l.country)}</td><td>${esc(l.rx)}</td><td>${esc(l.sinpo)}</td><td>${esc(rq)}</td></tr>`;
+    out+=`<tr class="clickable" tabindex="0" data-profile-index="${i}" aria-label="Visa DX-profil för ${esc(l.station||l.freq)}" onclick="openProfile(${i})"><td>${esc(l.date)}</td><td>${esc(l.time)}</td><td>${esc(l.freq)}</td><td>${esc(l.station)}</td><td>${esc(l.country)}</td><td>${esc(l.rx)}</td><td>${esc(l.sinpo)}</td><td>${esc(rq)}</td></tr>`;
   });
   document.getElementById('rows').innerHTML=out||'<tr><td colspan="8">Inga loggar ännu.</td></tr>';
 }
