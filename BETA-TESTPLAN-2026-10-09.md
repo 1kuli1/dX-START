@@ -79,3 +79,38 @@ Prioriteter: **A: dataförlust/säkerhet**, **B: blockerar kärnfunktion**, **C:
 - 33 automatiserade eller simulerade kodkontroller 2026-10-09: **godkända**.
 - Manifestet innehåller 192x192 och 512x512 PNG-ikoner samt rätt start- och scope-värden. Källkoden är sparad i GitHub.
 - De publicerade sidorna kan inte fullständigt verifieras med tillgänglig fjärrkontroll. Installationsupplevelsen har därför **inte** markerats godkänd.
+
+---
+
+## Obligatoriskt användbarhetstest – två typer av användare
+
+**Grundkrav för slutversionen:** Ingen behöver förstå vad SDR, kHz eller SINPO betyder för att genomföra sin första lyssning. Den som redan är DX-are måste kunna arbeta effektivt utan att tvingas igenom en nybörjarguide.
+
+### Nybörjare (utan förkunskaper)
+Testaren får endast länken till DX Centralen. Testledaren observerar och hjälper bara om testaren fastnar.
+- [ ] Förstår direkt skillnaden mellan **Börja här** och **Jag kan redan DX**.
+- [ ] Hittar installationsinstruktioner för sin enhet utan hjälp.
+- [ ] Kan öppna Receiver Hub och en lämplig SDR-mottagare.
+- [ ] Kan få igång ljudet eller förstå varför mottagaren är otillgänglig.
+- [ ] Kan förklara vad en frekvens och en waterfall är med egna ord efter guiden.
+- [ ] Kan spara sin första testlogg utan att uppfinna en stationsidentifiering.
+- [ ] Kan hitta loggen igen och exportera en JSON-säkerhetskopia.
+- [ ] Vet var hjälpen och Asta finns.
+
+**Godkänd nybörjarupplevelse:** användaren slutför lyssna → förstå → logga → säkerhetskopiera utan att behöva personlig instruktion. Dokumentera varje punkt där testaren tvekar; ändra gränssnittet, inte bara instruktionstexten.
+
+### Erfaren DX-are
+Testaren öppnar **Expertvägen** och använder verkliga mottagare eller realistiska testdata.
+- [ ] Kan öppna lämpligt band/mottagare direkt och spara en favorit.
+- [ ] Kan använda CW/FT8, ljud eller kartverktyg när det passar arbetet, utan att navigera genom en kurs.
+- [ ] Kan skapa en fullständig logg med frekvensenhet, UTC, SINPO, säkert/osäkert ID och separata historikfält.
+- [ ] Kan skapa ett SWL-rapportutkast från ett bekräftat QSO utan automatisk utsändning.
+- [ ] Kan importera eller exportera loggposter utan oavsiktlig dublett eller dataförlust.
+- [ ] Kan ange minst **två konkreta funktioner** som skulle spara tid eller ge nytta i egen DX-verksamhet.
+- [ ] Kan ange minst ett viktigaste saknat arbetsflöde eller en begränsning.
+
+**Godkänd expertupplevelse:** de avancerade funktionerna är lätta att hitta och minst två av dem upplevs som praktiskt användbara. Samla både beröm och kritik utan att styra svaren.
+
+**Guide i programmet:** [Kom igång med DX Centralen](kom-igang.html) har separata installation-, nybörjar- och expertavsnitt. Länkar finns på centralens startsida, i loggboken, i Receiver Hub och i DX Academy.
+
+**Teststatus:** dessa användartester är planerade men ännu inte utförda på fysiska enheter.
