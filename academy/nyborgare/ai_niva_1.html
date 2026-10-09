@@ -1,0 +1,137 @@
+<!DOCTYPE html>
+<html lang="sv">
+<head>
+<link rel="manifest" href="../../manifest.webmanifest">
+<meta charset="UTF-8">
+
+
+<style>
+body {
+    font-family: Arial;
+    background: #0b0f1a;
+    color: white;
+    text-align: center;
+    padding: 30px;
+}
+
+.container {
+    background: #111827;
+    padding: 25px;
+    border-radius: 15px;
+    max-width: 500px;
+    margin: 20px auto;
+}
+
+input, select, textarea {
+    padding: 10px;
+    margin: 10px;
+    width: 80%;
+    border-radius: 8px;
+    border: none;
+}
+
+textarea {
+    min-height: 100px;
+}
+
+button {
+    padding: 12px 20px;
+    margin-top: 10px;
+    font-size: 16px;
+    border: none;
+    border-radius: 10px;
+    cursor: pointer;
+    background: #d4a017; /* mörkgul */
+    color: black;
+}
+
+.output {
+    margin-top: 20px;
+    background: black;
+    padding: 15px;
+    border-radius: 10px;
+    text-align: left;
+    font-size: 14px;
+    white-space: pre-wrap;
+}
+<!-- IDENTIFIERA STATION -->
+<div class="container">
+<h2>Identifiera station</h2>
+
+<input id="freq" placeholder="Frekvens (kHz)">
+<input id="utc" placeholder="UTC">
+<input id="lang" placeholder="Språk">
+<textarea id="obs" placeholder="Vad hör du?"></textarea>
+
+<br>
+<button onclick="utcNow()">UTC nu</button>
+<button onclick="stationAI()">Till fri AI</button>
+
+<div id="out1" class="output"></div>
+</div>
+
+<!-- STÖRNING -->
+<div class="container">
+<h2>Störning / signal</h2>
+
+<select id="type">
+<option value="">Välj typ</option>
+<option>Brus</option>
+<option>Fading</option>
+<option>Vissling</option>
+<option>Brum</option>
+<option>Interferens</option>
+</select>
+
+<textarea id="desc" placeholder="Beskrivning"></textarea>
+
+<button onclick="interferenceAI()">Till fri AI</button>
+
+<div id="out2" class="output"></div>
+</div>
+
+<!-- EGEN FRÅGA -->
+<div class="container">
+<h2>Egen fråga</h2>
+
+<textarea id="question" placeholder="Skriv din fråga"></textarea>
+
+<button onclick="questionAI()">Till fri AI</button>
+
+<div id="out3" class="output"></div>
+</div>
+
+<script>
+function utcNow(){
+    let d = new Date();
+    let h = String(d.getUTCHours()).padStart(2,'0');
+    let m = String(d.getUTCMinutes()).padStart(2,'0');
+    document.getElementById("utc").value = h+":"+m+" UTC";
+}
+
+function openAI(text){
+    navigator.clipboard.writeText(text);
+    window.open("https://chat.openai.com","_blank");
+}
+
+function stationAI(){
+    let prompt = `Du är en pedagogisk DX-expert.\n\nFörklara enkelt.\nVar tydlig.\nAnge källa och länk om möjligt.\nSäg till om du är osäker.\n\nIdentifiera station:\nFrekvens: ${freq.value}\nTid: ${utc.value}\nSpråk: ${lang.value}\nObservationer: ${obs.value}`;
+    out1.innerText = prompt;
+    openAI(prompt);
+}
+
+function interferenceAI(){
+    let prompt = `Du är en pedagogisk DX-expert.\n\nFörklara enkelt.\nVar tydlig.\nAnge källa och länk om möjligt.\nSäg till om du är osäker.\n\nFörklara signal:\nTyp: ${type.value}\nBeskrivning: ${desc.value}`;
+    out2.innerText = prompt;
+    openAI(prompt);
+}
+
+function questionAI(){
+    let q = question.value;
+    out3.innerText = q;
+    openAI(q);
+}
+</script>
+
+<script>if('serviceWorker' in navigator&&location.protocol==='https:')window.addEventListener('load',()=>navigator.serviceWorker.register('../../sw.js',{scope:'../../'}).catch(e=>console.warn(e)));</script></body>
+</html>

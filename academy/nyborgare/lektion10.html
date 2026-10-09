@@ -1,0 +1,87 @@
+<!DOCTYPE html>
+<html lang="sv">
+<head>
+<link rel="manifest" href="../../manifest.webmanifest">
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>DX Academy – Lektion 10</title>
+<style>
+body { margin:0; font-family: Arial, sans-serif; background:#0b0f1a; color:white; }
+.header { background:#111821; padding:15px; text-align:center; font-size:20px; font-weight:bold; color:#eab308; }
+.container { max-width:700px; margin:auto; padding:15px; }
+.meeting{display:inline-block;background:#eab308;color:#0b0f1a;padding:6px 10px;border-radius:999px;font-weight:bold;font-size:14px;margin-bottom:12px}.card { background:#111827; padding:20px; border-radius:15px; margin-bottom:15px; min-height:120px; }
+h1 { color:#eab308; font-size:22px; margin:0 0 10px 0; }
+h2 { color:#ffffff; font-size:18px; margin:0 0 10px 0; }
+p { margin:0 0 10px 0; line-height:1.6; }
+ul { margin:0; padding-left:20px; line-height:1.6; }
+button { width:100%; padding:12px; margin-top:10px; border:none; border-radius:10px; background:#eab308; font-weight:bold; cursor:pointer; }
+.back { background:#374151; color:white; }
+.nav { display:flex; gap:10px; margin-top:10px; }
+.nav button { flex:1; }
+.ai-btn {
+    position:fixed;
+    bottom:20px;
+    right:20px;
+    width:60px;
+    height:60px;
+    border-radius:50%;
+    background:#eab308;
+    display:flex;
+    align-items:center;
+    justify-content:center;
+    font-size:28px;
+    cursor:pointer;
+    box-shadow:0 0 15px rgba(0,0,0,0.4);
+}
+@media (max-width:500px) {
+    .container { padding:12px; }
+    .card { padding:16px; }
+    h1 { font-size:20px; }
+    h2 { font-size:17px; }
+    p, ul { font-size:15px; }
+    .ai-btn { width:55px; height:55px; font-size:24px; }
+}
+</style>
+</head>
+<body>
+<nav aria-label="DX Academy stöd" style="padding:10px;text-align:right"><a href="https://1kuli1.github.io/dX-START/asta.html?from=academy" target="_blank" rel="noopener noreferrer" style="display:inline-block;padding:9px 13px;background:#eab308;color:#111;border-radius:8px;font-weight:700">🤖 Fråga Asta</a></nav>
+
+<div class="header">DX Academy – Lektion 10</div>
+
+<div class="container">
+    <div class="card">
+        <div class="meeting">Träff 3 – Gör det själv</div>
+        <h1>Nybörjare – Lektion 10: Ditt första identifieringsförsök</h1>
+<p>Nu använder du flera ledtrådar tillsammans. Frekvens, UTC, språk, programinnehåll, stationsnamn, jinglar och andra kännetecken kan tillsammans peka mot en station.</p><p>En frekvenslista är en hjälp – inte ett bevis. Målet är att kunna förklara varför du tror att identifieringen stämmer.</p>
+    </div>
+
+    <div class="card">
+        <h2>Prova själv</h2>
+        <ul><li>Välj en signal du hör ganska tydligt.</li><li>Notera frekvens, UTC, språk och innehåll.</li><li>Lyssna efter stationsnamn, jingle, ort, program eller andra tydliga ledtrådar.</li><li>Jämför med en oberoende aktuell källa och bedöm resultatet som bekräftat, troligt eller osäkert.</li></ul>
+    </div>
+
+    <div class="card">
+        <h2>Kom ihåg</h2>
+        <p>Du behöver inte lyckas identifiera stationen. En väl dokumenterad <strong>osäker</strong> observation är bättre än en gissning som presenteras som säker.</p><p><strong>Du har nu grunden:</strong> öppna mottagaren → hitta en signal → lyssna → observera → kontrollera → dokumentera.</p>
+    </div>
+
+    <div class="nav">
+        <button class="back" onclick="prevLesson()">⬅ Föregående</button>
+        <button onclick="nextLesson()">Nästa ➡</button>
+    </div>
+</div>
+
+<div class="ai-btn" onclick="openAI()">🤖</div>
+
+<script>
+function prevLesson() {
+    window.location.href="lektion9.html";
+}
+function nextLesson() {
+    alert("Detta är sista lektionen");
+}
+function openAI() { window.open("https://chat.openai.com/", "_blank"); }
+</script>
+
+<script>if('serviceWorker' in navigator&&location.protocol==='https:')window.addEventListener('load',()=>navigator.serviceWorker.register('../../sw.js',{scope:'../../'}).catch(e=>console.warn(e)));</script></body>
+</html>

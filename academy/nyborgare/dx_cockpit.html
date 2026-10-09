@@ -1,0 +1,88 @@
+<!DOCTYPE html>
+<html lang="sv">
+<head>
+<link rel="manifest" href="../../manifest.webmanifest">
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>DX Cockpit</title>
+
+<style>
+body {
+    margin:0;
+    font-family:Arial;
+    background:#0b0f14;
+    color:white;
+}
+
+/* Top bar */
+.header {
+    background:#111821;
+    padding:15px;
+    text-align:center;
+    font-size:22px;
+}
+
+/* Layout */
+.container {
+    display:flex;
+    height:calc(100vh - 60px);
+}
+
+/* Panels */
+.panel {
+    flex:1;
+    border:none;
+}
+
+/* Fallback message */
+.fallback {
+    position:absolute;
+    top:70px;
+    left:20px;
+    background:#111;
+    padding:10px;
+    border-radius:10px;
+}
+button {
+    padding:10px;
+    margin-top:5px;
+    cursor:pointer;
+}
+</style>
+</head>
+
+<body>
+<nav aria-label="DX Academy stöd" style="padding:10px;text-align:right"><a href="https://1kuli1.github.io/dX-START/asta.html?from=academy" target="_blank" rel="noopener noreferrer" style="display:inline-block;padding:9px 13px;background:#eab308;color:#111;border-radius:8px;font-weight:700">🤖 Fråga Asta</a></nav>
+
+<div class="header">
+🚀 DX COCKPIT – Twente + AI
+</div>
+
+<div class="container">
+
+    <!-- Twente -->
+    <iframe id="twente" class="panel" src="https://websdr.ewi.utwente.nl:8901/">
+    </iframe>
+
+    <!-- AI -->
+    <iframe 
+        class="panel"
+        src="ai_niva_1.html">
+    </iframe>
+
+</div>
+
+<div class="fallback">
+⚠️ Om Twente inte visas:
+<br>
+<button onclick="openTwente()">Öppna Twente</button>
+</div>
+
+<script>
+function openTwente() {
+    window.open("http://websdr.ewi.utwente.nl:8901/", "_blank");
+}
+</script>
+
+<script>if('serviceWorker' in navigator&&location.protocol==='https:')window.addEventListener('load',()=>navigator.serviceWorker.register('../../sw.js',{scope:'../../'}).catch(e=>console.warn(e)));</script></body>
+</html>

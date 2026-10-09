@@ -1,0 +1,104 @@
+<!DOCTYPE html>
+<html lang="sv">
+<head>
+<link rel="manifest" href="../manifest.webmanifest">
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>DX Academy – Lektioner</title>
+
+<style>
+body {
+    margin: 0;
+    font-family: Arial, sans-serif;
+    background: #0b0f1a;
+    color: white;
+    text-align: center;
+}
+
+/* Header */
+header {
+    background: #111827;
+    padding: 20px;
+    font-size: 26px;
+    font-weight: bold;
+}
+
+/* Intro */
+.intro {
+    margin: 20px;
+    font-size: 18px;
+    color: #cbd5f5;
+}
+
+/* Container */
+.container {
+    max-width: 600px;
+    margin: auto;
+    padding: 20px;
+}
+
+/* Lektion-knappar */
+.lesson {
+    display: block;
+    margin: 12px 0;
+    padding: 16px;
+    background: #eab308;
+    color: black;
+    text-decoration: none;
+    border-radius: 12px;
+    font-size: 18px;
+    font-weight: bold;
+    transition: 0.2s;
+}
+
+.lesson:hover {
+    background: #facc15;
+    transform: scale(1.03);
+}
+
+/* Tillbaka-knapp */
+.back {
+    margin-top: 30px;
+    display: inline-block;
+    padding: 12px 20px;
+    background: #374151;
+    color: white;
+    border-radius: 10px;
+    text-decoration: none;
+}
+
+.back:hover {
+    background: #4b5563;
+}
+</style>
+
+</head>
+
+<body>
+<nav aria-label="DX Academy stöd" style="padding:10px;text-align:right"><a href="https://1kuli1.github.io/dX-START/asta.html?from=academy" target="_blank" rel="noopener noreferrer" style="display:inline-block;padding:9px 13px;background:#eab308;color:#111;border-radius:8px;font-weight:700">🤖 Fråga Asta</a></nav>
+
+<header>
+📡 DX Academy
+</header>
+
+<div class="intro">
+Välj lektion och börja din resa i DX-världen.
+</div>
+
+<div class="container">
+
+<a class="lesson" href="lektion1.html">Lektion 1 – Vad är DX-ing?</a>
+<a class="lesson" href="lektion2.html">Lektion 2 – Vad är en frekvens?</a>
+<a class="lesson" href="lektion3.html">Lektion 3 – Radio i praktiken</a>
+<a class="lesson" href="lektion4.html">Lektion 4 – Signal & brus</a>
+<a class="lesson" href="lektion5.html">Lektion 5 – Hitta stationer</a>
+<a class="lesson" href="lektion6.html">Lektion 6 – Logga DX</a>
+<a class="lesson" href="lektion7.html">Lektion 7 – Avancerad DX</a>
+<a class="lesson" href="lektion8.html">Lektion 8 – DX i verkligheten</a>
+
+<a class="back" href="academy-start1.html">⬅ Tillbaka</a>
+
+</div>
+
+<script>if('serviceWorker' in navigator&&location.protocol==='https:')window.addEventListener('load',()=>navigator.serviceWorker.register('../sw.js',{scope:'../'}).catch(e=>console.warn(e)));</script></body>
+</html>

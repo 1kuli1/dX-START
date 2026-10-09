@@ -1,0 +1,119 @@
+<!doctype html>
+<html lang="sv">
+<head>
+<link rel="manifest" href="../manifest.webmanifest">
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>DX Academy – Live analys (Demo)</title>
+
+<style>
+body {
+  font-family: Arial, sans-serif;
+  background: #0f172a;
+  color: white;
+  text-align: center;
+  padding: 20px;
+}
+
+h1 { color: #38bdf8; }
+
+button {
+  padding: 15px 25px;
+  margin: 10px;
+  font-size: 16px;
+  border: none;
+  border-radius: 10px;
+  cursor: pointer;
+}
+
+.record { background: red; color: white; }
+.stop { background: gray; color: white; }
+.play { background: #6366f1; color: white; }
+.analyze { background: #22c55e; color: black; }
+
+.box {
+  margin-top: 20px;
+  padding: 15px;
+  background: #1e293b;
+  border-radius: 10px;
+}
+</style>
+</head>
+
+<body>
+<nav aria-label="DX Academy stöd" style="padding:10px;text-align:right"><a href="https://1kuli1.github.io/dX-START/asta.html?from=academy" target="_blank" rel="noopener noreferrer" style="display:inline-block;padding:9px 13px;background:#eab308;color:#111;border-radius:8px;font-weight:700">🤖 Fråga Asta</a></nav>
+
+<h1>🎧 DX Academy – Live analys (Demo)</h1>
+<p>Spela in → lyssna → analysera</p>
+
+<button class="record" onclick="startRecording()">🎤 Spela in</button>
+<button class="stop" onclick="stopRecording()">⏹ Stoppa</button>
+<button class="play" onclick="playAudio()">▶️ Spela upp</button>
+<button class="analyze" onclick="analyzeAudio()">🧠 Analysera</button>
+
+<div class="box">
+  <h3>✍️ Transkribering</h3>
+  <p id="transcript">Ingen text ännu...</p>
+</div>
+
+<div class="box">
+  <h3>🌍 Översättning</h3>
+  <p id="translation">Ingen översättning ännu...</p>
+</div>
+
+<script>
+let mediaRecorder;
+let audioChunks = [];
+let recordedBlob;
+
+async function startRecording() {
+  const stream = await navigator.mediaDevices.getUserMedia({ audio: true });
+
+  mediaRecorder = new MediaRecorder(stream);
+  mediaRecorder.start();
+
+  audioChunks = [];
+
+  mediaRecorder.ondataavailable = event => {
+    audioChunks.push(event.data);
+  };
+
+  document.getElementById("transcript").innerText = "🎧 Spelar in...";
+}
+
+function stopRecording() {
+  mediaRecorder.stop();
+
+  mediaRecorder.onstop = () => {
+    recordedBlob = new Blob(audioChunks, { type: "audio/webm" });
+    document.getElementById("transcript").innerText = "✔️ Inspelning klar";
+  };
+}
+
+function playAudio() {
+  if (!recordedBlob) return;
+
+  const audioURL = URL.createObjectURL(recordedBlob);
+  const audio = new Audio(audioURL);
+  audio.play();
+}
+
+function analyzeAudio() {
+
+  document.getElementById("transcript").innerText = "⏳ Analyserar...";
+
+  // 🔥 DEMO-ANALYS (simulerar AI)
+  setTimeout(() => {
+
+    let fakeText = "This is a demo of radio speech in English.";
+    let fakeTranslation = "Detta är en demo av radiotal på engelska.";
+
+    document.getElementById("transcript").innerText = fakeText;
+    document.getElementById("translation").innerText = fakeTranslation;
+
+  }, 1500);
+}
+</script>
+
+<script>if('serviceWorker' in navigator&&location.protocol==='https:')window.addEventListener('load',()=>navigator.serviceWorker.register('../sw.js',{scope:'../'}).catch(e=>console.warn(e)));</script></body>
+</html>

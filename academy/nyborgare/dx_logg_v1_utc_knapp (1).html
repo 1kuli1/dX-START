@@ -1,0 +1,507 @@
+<!DOCTYPE html>
+<html lang="sv">
+<head>
+<link rel="manifest" href="../../manifest.webmanifest">
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>DX-Logg v1</title>
+    <style>
+        /* Grundstil för hela sidan */
+        body {
+            margin: 0;
+            font-family: Arial, sans-serif;
+            background: #0b0f14;
+            color: #ffffff;
+        }
+
+        /* Sidhuvud */
+        header {
+            background: #111821;
+            padding: 18px;
+            text-align: center;
+            font-size: 28px;
+            font-weight: bold;
+            color: #8fd3ff;
+        }
+
+        /* Yttre wrapper */
+        .wrapper {
+            max-width: 1100px;
+            margin: 0 auto;
+            padding: 20px;
+        }
+
+        /* Rutnät för två kolumner */
+        .grid {
+            display: grid;
+            grid-template-columns: 1fr 1fr;
+            gap: 20px;
+        }
+
+        /* Kort */
+        .card {
+            background: #111827;
+            border-radius: 18px;
+            padding: 20px;
+            box-shadow: 0 0 0 1px rgba(255,255,255,0.05);
+        }
+
+        /* Rubriker i kort */
+        h2 {
+            margin-top: 0;
+            color: #facc15;
+            font-size: 22px;
+        }
+
+        /* Etiketter */
+        label {
+            display: block;
+            margin-top: 12px;
+            margin-bottom: 6px;
+            font-weight: bold;
+            color: #cfe8ff;
+        }
+
+        /* Inputfält, listor och textfält */
+        input,
+        select,
+        textarea {
+            width: 100%;
+            box-sizing: border-box;
+            padding: 12px;
+            border: none;
+            border-radius: 10px;
+            background: #1e293b;
+            color: #ffffff;
+            font-size: 15px;
+        }
+
+        /* Högre textruta */
+        textarea {
+            min-height: 110px;
+            resize: vertical;
+        }
+
+        /* Knappområde */
+        .button-row {
+            display: flex;
+            gap: 10px;
+            flex-wrap: wrap;
+            margin-top: 18px;
+        }
+
+        /* Knappar */
+        button {
+            padding: 12px 16px;
+            border: none;
+            border-radius: 10px;
+            cursor: pointer;
+            font-weight: bold;
+            font-size: 15px;
+        }
+
+        /* Primär knapp */
+        .primary {
+            background: #22c55e;
+            color: #08110b;
+        }
+
+        /* Sekundär knapp */
+        .secondary {
+            background: #38bdf8;
+            color: #06141d;
+        }
+
+        /* Varningsknapp */
+        .danger {
+            background: #ef4444;
+            color: #ffffff;
+        }
+
+        /* Resultatruta */
+        .result-box {
+            background: #0f172a;
+            border-radius: 12px;
+            padding: 14px;
+            margin-top: 14px;
+            line-height: 1.6;
+            white-space: pre-wrap;
+        }
+
+        /* Mindre hjälptext */
+        .hint {
+            color: #93c5fd;
+            font-size: 14px;
+            margin-top: 8px;
+        }
+
+        /* Tabell-liknande loggrad */
+        .log-item {
+            background: #0f172a;
+            border-radius: 12px;
+            padding: 14px;
+            margin-bottom: 12px;
+            border-left: 5px solid #38bdf8;
+        }
+
+        /* Titel i loggrad */
+        .log-title {
+            font-weight: bold;
+            color: #facc15;
+            margin-bottom: 6px;
+        }
+
+        /* Tom-lista text */
+        .empty {
+            color: #9ca3af;
+            font-style: italic;
+        }
+
+        /* Flytande AI-knapp */
+        .ai-button {
+            position: fixed;
+            right: 16px;
+            bottom: 16px;
+            width: 64px;
+            height: 64px;
+            border-radius: 50%;
+            background: #facc15;
+            color: #111827;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            text-decoration: none;
+            font-size: 28px;
+            box-shadow: 0 6px 18px rgba(0, 0, 0, 0.35);
+        }
+
+        /* Mobilanpassning */
+        @media (max-width: 900px) {
+            .grid {
+                grid-template-columns: 1fr;
+            }
+
+            header {
+                font-size: 24px;
+            }
+        }
+    </style>
+</head>
+<body>
+<nav aria-label="DX Academy stöd" style="padding:10px;text-align:right"><a href="https://1kuli1.github.io/dX-START/asta.html?from=academy" target="_blank" rel="noopener noreferrer" style="display:inline-block;padding:9px 13px;background:#eab308;color:#111;border-radius:8px;font-weight:700">🤖 Fråga Asta</a></nav>
+    <header>📻 DX-LOGG v1 – Manuell logg + snabb analys</header>
+
+    <div class="wrapper">
+        <div class="grid">
+            <section class="card">
+                <h2>Ny loggpost</h2>
+
+                <label for="utcKnapp">Tryck för UTC</label>
+                <button id="utcKnapp" onclick="getUTC()" style="background:#facc15; width:25%;">UTC</button>
+
+                <label for="tid">Tid (UTC)</label>
+                <input id="tid" type="text" placeholder="Exempel: 12:57">
+
+                <label for="frekvens">Frekvens (kHz)</label>
+                <input id="frekvens" type="number" placeholder="Exempel: 1332">
+
+                <label for="plats">Mottagare / plats</label>
+                <input id="plats" type="text" placeholder="Exempel: Arvika">
+
+                <label for="signal">Signalstyrka</label>
+                <select id="signal">
+                    <option value="">Välj signal</option>
+                    <option value="S1">S1</option>
+                    <option value="S3">S3</option>
+                    <option value="S5">S5</option>
+                    <option value="S7">S7</option>
+                    <option value="S9">S9</option>
+                    <option value="S9+">S9+</option>
+                </select>
+
+                <label for="innehall">Vad hör du?</label>
+                <textarea id="innehall" placeholder="Exempel: tysk/holländsk schlager, ingen prat mellan låtarna, stabil signal"></textarea>
+
+                <label for="sprak">Språk (gissning)</label>
+                <input id="sprak" type="text" placeholder="Exempel: holländska / tyska / rumänska">
+
+                <label for="prat">Prat mellan låtarna?</label>
+                <select id="prat">
+                    <option value="">Välj</option>
+                    <option value="Nej">Nej</option>
+                    <option value="Lite">Lite</option>
+                    <option value="Ja">Ja</option>
+                </select>
+
+                <label for="fading">Fading</label>
+                <select id="fading">
+                    <option value="">Välj</option>
+                    <option value="Ingen">Ingen</option>
+                    <option value="Liten">Liten</option>
+                    <option value="Tydlig">Tydlig</option>
+                </select>
+
+                <div class="button-row">
+                    <button class="primary" id="analyseraKnapp">Analysera och spara</button>
+                    <button class="secondary" id="exporteraKnapp">Exportera JSON</button>
+                    <button class="danger" id="rensaKnapp">Rensa alla loggar</button>
+                </div>
+
+                <div class="hint">Tips: skriv gärna musikstil, om signalen är stabil och om du hör ID vid hel timme.</div>
+
+                <div class="result-box" id="analysRuta">Analysen visas här efter att du sparat en loggpost.</div>
+            </section>
+
+            <section class="card">
+                <h2>Sparade loggar</h2>
+                <div id="loggLista" class="empty">Inga loggar sparade ännu.</div>
+            </section>
+        </div>
+    </div>
+
+    <a class="ai-button" href="https://chat.openai.com/" target="_blank" title="Öppna ChatGPT">🤖</a>
+
+    <script>
+        // Nyckel för lagring i webbläsaren.
+        const storageKey = "dxLoggV1";
+
+        // Hämtar alla formulärfält från sidan.
+        function hamtaFalt() {
+            return {
+                tid: document.getElementById("tid").value.trim(),
+                frekvens: document.getElementById("frekvens").value.trim(),
+                plats: document.getElementById("plats").value.trim(),
+                signal: document.getElementById("signal").value,
+                innehall: document.getElementById("innehall").value.trim(),
+                sprak: document.getElementById("sprak").value.trim(),
+                prat: document.getElementById("prat").value,
+                fading: document.getElementById("fading").value
+            };
+        }
+
+        // Läser in sparade loggar från localStorage.
+        function lasLoggar() {
+            const sparat = localStorage.getItem(storageKey);
+            return sparat ? JSON.parse(sparat) : [];
+        }
+
+        // Sparar loggar till localStorage.
+        function sparaLoggar(loggar) {
+            localStorage.setItem(storageKey, JSON.stringify(loggar, null, 2));
+        }
+
+        // Avgör om frekvensen ligger nära europeiskt 9 kHz-raster.
+        function justeraFrekvens(frekvens) {
+            const nummer = Number(frekvens);
+
+            if (!nummer) {
+                return { justerad: "okänd", kommentar: "Ingen giltig frekvens angiven." };
+            }
+
+            const rest = nummer % 9;
+
+            if (rest === 0) {
+                return { justerad: nummer, kommentar: "Frekvensen ligger exakt på 9 kHz-raster." };
+            }
+
+            const nedat = nummer - rest;
+            const uppat = nedat + 9;
+            const närmast = Math.abs(nummer - nedat) <= Math.abs(uppat - nummer) ? nedat : uppat;
+
+            return {
+                justerad: närmast,
+                kommentar: "Frekvensen har justerats till närmaste europeiska 9 kHz-kanal."
+            };
+        }
+
+        // Gör en enkel expertbedömning baserat på det användaren skrivit.
+        function analyseraLogg(data) {
+            const justering = justeraFrekvens(data.frekvens);
+            const frekvens = Number(justering.justerad);
+            const text = (data.innehall + " " + data.sprak).toLowerCase();
+            let stationstyp = "Okänd station";
+            let område = "Okänt område";
+            let säkerhet = 50;
+            let kommentar = [];
+
+            if (frekvens === 1332) {
+                kommentar.push("1332 kHz är en verklig europeisk mellanvågskanal.");
+            }
+
+            if (data.signal === "S9" || data.signal === "S9+") {
+                kommentar.push("Stark signal tyder på kraftig sändare eller gynnsam väg.");
+                säkerhet += 10;
+            }
+
+            if (data.fading === "Ingen") {
+                kommentar.push("Stabil signal utan fading talar ofta för närmare station inom Europa.");
+                säkerhet += 10;
+            }
+
+            if (data.prat === "Nej") {
+                kommentar.push("Ingen prat mellan låtarna pekar mot ren musikstation eller privat station.");
+                säkerhet += 10;
+            }
+
+            if (text.includes("holländ") || text.includes("nederl") || text.includes("dutch")) {
+                stationstyp = "Nederländsk privat / fri musikstation";
+                område = "Nederländerna";
+                säkerhet += 20;
+                kommentar.push("Musikstilen pekar tydligt mot Nederländerna.");
+            }
+
+            if (text.includes("schlager") || text.includes("tysk")) {
+                kommentar.push("Schlager och tyskinspirerad musik är vanligt på nederländska MW-musikstationer.");
+                säkerhet += 10;
+            }
+
+            if (frekvens === 1332 && data.fading === "Ingen" && data.prat === "Nej" && (text.includes("holländ") || text.includes("schlager") || text.includes("tysk"))) {
+                stationstyp = "Trolig nederländsk musikstation på mellanvåg";
+                område = "Nederländerna / nära Västeuropa";
+                säkerhet = Math.max(säkerhet, 95);
+                kommentar.push("Kombinationen 1332 kHz + stabil S9 + holländsk/tysk schlager + ingen prat ger mycket stark NL-indikation.");
+            }
+
+            if (text.includes("rumän") && data.fading !== "Ingen") {
+                stationstyp = "Möjlig östeuropeisk public service-station";
+                område = "Rumänien / Östeuropa";
+                säkerhet = Math.max(säkerhet, 70);
+                kommentar.push("Rumänsk möjlighet ökar om signalen samtidigt har fading eller nyhetsmönster.");
+            }
+
+            säkerhet = Math.min(säkerhet, 99);
+
+            return {
+                justeradFrekvens: justering.justerad,
+                frekvensKommentar: justering.kommentar,
+                stationstyp: stationstyp,
+                område: område,
+                säkerhet: säkerhet,
+                kommentar: kommentar.join(" ")
+            };
+        }
+
+        // Ritar alla sparade loggar på sidan.
+        function renderaLoggar() {
+            const loggar = lasLoggar();
+            const lista = document.getElementById("loggLista");
+
+            if (loggar.length === 0) {
+                lista.className = "empty";
+                lista.textContent = "Inga loggar sparade ännu.";
+                return;
+            }
+
+            lista.className = "";
+            lista.innerHTML = "";
+
+            const omvändaLoggar = [...loggar].reverse();
+
+            omvändaLoggar.forEach(function(logg) {
+                const div = document.createElement("div");
+                div.className = "log-item";
+                div.innerHTML = `
+                    <div class="log-title">${logg.tid || "Ingen tid"} • ${logg.analys.justeradFrekvens} kHz • ${logg.plats || "Okänd plats"}</div>
+                    <div><strong>Signal:</strong> ${logg.signal || "-"}</div>
+                    <div><strong>Innehåll:</strong> ${logg.innehall || "-"}</div>
+                    <div><strong>Bedömning:</strong> ${logg.analys.stationstyp}</div>
+                    <div><strong>Område:</strong> ${logg.analys.område}</div>
+                    <div><strong>Säkerhet:</strong> ${logg.analys.säkerhet}%</div>
+                `;
+                lista.appendChild(div);
+            });
+        }
+
+        // Tömmer formuläret efter sparning.
+        function tomFormular() {
+            document.getElementById("tid").value = "";
+            document.getElementById("frekvens").value = "";
+            document.getElementById("plats").value = "";
+            document.getElementById("signal").value = "";
+            document.getElementById("innehall").value = "";
+            document.getElementById("sprak").value = "";
+            document.getElementById("prat").value = "";
+            document.getElementById("fading").value = "";
+        }
+
+        // Sparar en ny logg och visar analysen.
+        function analyseraOchSpara() {
+            const data = hamtaFalt();
+
+            if (!data.frekvens || !data.innehall) {
+                document.getElementById("analysRuta").textContent = "Fyll i minst frekvens och vad du hör innan du sparar.";
+                return;
+            }
+
+            const analys = analyseraLogg(data);
+            const loggar = lasLoggar();
+            const loggpost = {
+                ...data,
+                skapad: new Date().toISOString(),
+                analys: analys
+            };
+
+            loggar.push(loggpost);
+            sparaLoggar(loggar);
+
+            document.getElementById("analysRuta").textContent =
+                "Justerad frekvens: " + analys.justeradFrekvens + " kHz\n" +
+                "Kommentar: " + analys.frekvensKommentar + "\n\n" +
+                "Bedömning: " + analys.stationstyp + "\n" +
+                "Område: " + analys.område + "\n" +
+                "Säkerhet: " + analys.säkerhet + "%\n\n" +
+                "Analys: " + analys.kommentar;
+
+            renderaLoggar();
+            tomFormular();
+        }
+
+        // Exporterar sparade loggar till en JSON-fil.
+        function exporteraJson() {
+            const loggar = lasLoggar();
+
+            if (loggar.length === 0) {
+                alert("Det finns inga loggar att exportera ännu.");
+                return;
+            }
+
+            const blob = new Blob([JSON.stringify(loggar, null, 2)], { type: "application/json" });
+            const url = URL.createObjectURL(blob);
+            const länk = document.createElement("a");
+            länk.href = url;
+            länk.download = "dx_loggar.json";
+            länk.click();
+            URL.revokeObjectURL(url);
+        }
+
+        // Rensar alla sparade loggar efter bekräftelse.
+        function rensaAllaLoggar() {
+            const ok = confirm("Vill du verkligen rensa alla sparade loggar?");
+
+            if (!ok) {
+                return;
+            }
+
+            localStorage.removeItem(storageKey);
+            document.getElementById("analysRuta").textContent = "Alla loggar är rensade.";
+            renderaLoggar();
+        }
+
+        // Fyller i aktuell UTC-tid i tidsfältet.
+        function getUTC() {
+            const now = new Date();
+            const utc = now.getUTCHours().toString().padStart(2, "0") + ":" +
+                        now.getUTCMinutes().toString().padStart(2, "0");
+            document.getElementById("tid").value = utc;
+        }
+
+        // Kopplar knappar till funktioner.
+        document.getElementById("analyseraKnapp").addEventListener("click", analyseraOchSpara);
+        document.getElementById("exporteraKnapp").addEventListener("click", exporteraJson);
+        document.getElementById("rensaKnapp").addEventListener("click", rensaAllaLoggar);
+
+        // Visar sparade loggar direkt när sidan öppnas.
+        renderaLoggar();
+    </script>
+<script>if('serviceWorker' in navigator&&location.protocol==='https:')window.addEventListener('load',()=>navigator.serviceWorker.register('../../sw.js',{scope:'../../'}).catch(e=>console.warn(e)));</script></body>
+</html>
