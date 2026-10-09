@@ -1,5 +1,5 @@
 /* DX Centralen beta: sidor offline; inga personliga loggar eller externa radioströmmar cachas. */
-const CACHE='dx-centralen-beta-v3-20261009';
+const CACHE='dx-centralen-beta-v4-20261009';
 const SHELL=['./','./index.html','./centralen.html','./katastrof-dx.html','./receiver-hub.html','./asta.html','./dx-help.html','./guider.html','./kom-igang.html','./academy/index.html','./academy/lektioner.html','./academy/nyborgare/index.html','./manifest.webmanifest','./icon-192.png','./icon-512.png','./icon.svg'];
 const ALLOWED=new Set(SHELL.map(p=>new URL(p,self.registration.scope).pathname));
 const ACADEMY_ROOT=new URL('./academy/',self.registration.scope).pathname;

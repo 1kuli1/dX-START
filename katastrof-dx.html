@@ -121,6 +121,7 @@ label{display:block;color:var(--muted);font-size:13px;margin-bottom:5px}input,se
 <button type="button" class="btn" onclick="exportCSV()">⬇ Exportera CSV</button>
 <button type="button" class="btn" onclick="exportJSON()">⬇ Säkerhetskopia JSON</button>
 </div>
+<label for="catBackup">Återställ Katastrof-DX från JSON (ersätter denna loggbok)</label><input id="catBackup" type="file" accept=".json,application/json" onchange="importBackup(event)"><button type="button" class="btn" onclick="exportRaw()">Hämta originalets rådata</button>
 <div id="logStatus" class="small" role="status" aria-live="polite" style="margin-top:10px"></div>
 
 <div class="tablewrap"><table>
@@ -138,7 +139,11 @@ label{display:block;color:var(--muted);font-size:13px;margin-bottom:5px}input,se
 const KEY="dxKatastrofLogV1";
 const ids=["date","utc","event","area","status","source","freq","mode","rx","rxregion","callsign","confidence","heard","notes"];
 function esc(s){return String(s??"").replace(/[&<>"']/g,m=>({"&":"&amp;","<":"&lt;",">":"&gt;",'"':"&quot;","'":"&#39;"}[m]))}
-function load(){try{return JSON.parse(localStorage.getItem(KEY)||"[]")}catch(e){return[]}}
+function load(){const raw=localStorage.getItem(KEY);const data=raw===null?[]:JSON.parse(raw);if(!Array.isArray(data)||!data.every(x=>x&&typeof x==='object'&&!Array.isArray(x)))throw Error('Fel loggformat');return data;}
+function catError(e){document.getElementById('logStatus').textContent='Loggfel: '+e.message+'. Originaldata bevaras. Återställ en JSON-kopia eller hämta rådata.';}
+async function catLock(fn){if(!navigator.locks?.request)throw Error('Uppdatera webbläsaren för säker loggning.');return navigator.locks.request(KEY+'-write',fn);}
+function exportRaw(){try{download('katastrof-dx-radata.txt','text/plain',localStorage.getItem(KEY)||'[]')}catch(e){catError(e)}}
+async function importBackup(ev){try{const file=ev.target.files[0];if(!file)return;const x=JSON.parse(await file.text());if(!Array.isArray(x)||!x.every(v=>v&&typeof v==='object'&&!Array.isArray(v)))throw Error('Ogiltig JSON-loggbok');if(!confirm('Ersätt hela Katastrof-DX-loggboken med '+x.length+' poster? Tidigare rådata sparas separat.'))return;await catLock(()=>{const raw=localStorage.getItem(KEY);if(raw!==null)localStorage.setItem(KEY+'Recovery-'+Date.now(),raw);store(x)});render();logStatus.textContent='Katastrofloggen är återställd.';}catch(e){catError(e)}finally{ev.target.value=''}}
 function store(v){localStorage.setItem(KEY,JSON.stringify(v))}
 const SDR_AREAS={
 "nordic":{region:"Sverige, Norge, Finland, Danmark eller norra Tyskland",freq:"7.110 MHz",mode:"LSB",source:"IARU Region 1 – startpunkt, verifiera aktuell aktivering",tip:"Välj en SDR i eller nära Norden. För HF kan även norra Tyskland/Nederländerna ge bra regional täckning."},
@@ -173,7 +178,7 @@ function openRecommendedSdr(){
  if(!key){document.getElementById("sdrTip").textContent="Välj först katastrofområde.";return}
  const d=SDR_AREAS[key];
  try{localStorage.setItem("dxKatastrofSdrRegion",JSON.stringify({key:key,region:d.region,tip:d.tip,ts:Date.now()}))}catch(e){}
- window.location.href="./receiver-hub.html";
+ window.location.href="./receiver-hub.html?catastrophe=1";
 }
 function copySdrTip(){
  const key=document.getElementById("sdrArea").value;
@@ -183,26 +188,26 @@ function copySdrTip(){
 }
 function nowUTC(){const n=new Date();date.value=n.toISOString().slice(0,10);utc.value=n.toISOString().slice(11,16)}
 function clearForm(){ids.forEach(id=>{const e=document.getElementById(id);if(e.tagName==="SELECT")return;e.value=""});status.selectedIndex=1;confidence.selectedIndex=1;nowUTC();logStatus.textContent=""}
-function saveLog(){
- const item={id:Date.now()};
+async function saveLog(){
+ const item={id:'cat-'+Date.now()+'-'+Math.random().toString(36).slice(2,9)};
  ids.forEach(id=>item[id]=document.getElementById(id).value.trim());
  if(!item.event||!item.area){logStatus.textContent="Fyll i minst katastrof/händelse och land/område.";return}
- const data=load();data.unshift(item);store(data);render();clearForm();logStatus.textContent="Observationen är sparad i Katastrof-DX-loggboken på den här enheten."
+ try{await catLock(()=>{const data=load();data.unshift(item);store(data)});render();clearForm();logStatus.textContent="Observationen är sparad i Katastrof-DX-loggboken på den här enheten."}catch(e){catError(e)}
 }
-function del(id){if(!confirm("Radera den här observationen?"))return;store(load().filter(x=>x.id!==id));render()}
+async function del(id){if(!confirm("Radera den här observationen?"))return;try{await catLock(()=>store(load().filter(x=>String(x.id)!==String(id))));render()}catch(e){catError(e)}}
 function render(){
- const data=load(),tb=document.getElementById("rows"),empty=document.getElementById("empty");
- tb.innerHTML=data.map(x=>`<tr><td>${esc(x.date)} ${esc(x.utc)} UTC</td><td><b>${esc(x.event)}</b><br><span class="small">${esc(x.source)}</span></td><td>${esc(x.area)}</td><td>${esc(x.status)}</td><td>${esc(x.freq)}<br><span class="small">${esc(x.mode)}</span></td><td>${esc(x.rx)}<br><span class="small">${esc(x.rxregion)}</span></td><td>${esc(x.callsign)}<br><span class="small">${esc(x.confidence)}</span></td><td>${esc(x.heard)}</td><td><button type="button" class="btn danger" aria-label="Radera observation" onclick="del(${x.id})">Radera</button></td></tr>`).join("");
+ let data;try{data=load()}catch(e){catError(e);document.getElementById("rows").textContent="";document.getElementById("empty").textContent="Loggboken kunde inte läsas. Originaldata finns kvar.";return;}const tb=document.getElementById("rows"),empty=document.getElementById("empty");
+ tb.innerHTML=data.map(x=>`<tr><td>${esc(x.date)} ${esc(x.utc)} UTC</td><td><b>${esc(x.event)}</b><br><span class="small">${esc(x.source)}</span></td><td>${esc(x.area)}</td><td>${esc(x.status)}</td><td>${esc(x.freq)}<br><span class="small">${esc(x.mode)}</span></td><td>${esc(x.rx)}<br><span class="small">${esc(x.rxregion)}</span></td><td>${esc(x.callsign)}<br><span class="small">${esc(x.confidence)}</span></td><td>${esc(x.heard)}</td><td><button type="button" class="btn danger" aria-label="Radera observation" data-log-id="${esc(x.id)}" onclick="del(this.dataset.logId)">Radera</button></td></tr>`).join("");
  empty.style.display=data.length?"none":"block"
 }
 function download(name,type,text){const a=document.createElement("a");a.href=URL.createObjectURL(new Blob([text],{type}));a.download=name;a.click();setTimeout(()=>URL.revokeObjectURL(a.href),1000)}
-function exportJSON(){download("katastrof-dx-logg.json","application/json",JSON.stringify(load(),null,2))}
-function exportCSV(){
+function exportJSON(){try{download("katastrof-dx-logg.json","application/json",JSON.stringify(load(),null,2))}catch(e){catError(e)}}
+function exportCSV(){try{
  const cols=["date","utc","event","area","status","source","freq","mode","rx","rxregion","callsign","confidence","heard","notes"];
- const q=v=>'"'+String(v??"").replace(/"/g,'""')+'"';
+ const q=v=>{let s=String(v??'');if(/^[\s]*[=+@-]/.test(s))s="'"+s;return '"'+s.replace(/"/g,'""')+'"'};
  const csv=["Datum,UTC,Händelse,Område,Status,Källa,Frekvens,Mode,Mottagare,SDR-region,Anropssignal/Nät,Identifiering,Hört,Anteckningar"].concat(load().map(r=>cols.map(c=>q(r[c])).join(","))).join("\n");
  download("katastrof-dx-logg.csv","text/csv;charset=utf-8","\ufeff"+csv)
-}
+}catch(e){catError(e)}}
 nowUTC();render();
 </script>
 <script>

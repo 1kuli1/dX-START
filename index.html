@@ -218,7 +218,7 @@ footer{color:#7f8da3;font-size:13px;margin:28px 0 10px}
 </style>
 
 <script>
-// DX Start 7.29b: visa vald verktygssida redan under sidladdningen.
+// DX Start 7.30: visa vald verktygssida redan under sidladdningen.
 (function(){
   try{
     var t=new URLSearchParams(location.search).get('tool');
@@ -256,7 +256,7 @@ html[data-dx-tool] header,html[data-dx-tool] .tabs{display:none !important;}
 </script>
 <header>
   <div>
-    <h1>📻 DX Start 7.29 Online</h1>
+    <h1>📻 DX Start 7.30 Online</h1>
     <div class="sub">Mottagare, Excel-import, loggbok, QSL-uppföljning, stationsfakta och DX-karta i samma verktyg</div>
   </div>
   <div class="clock" id="utc">--:--:-- UTC</div>
@@ -323,7 +323,9 @@ html[data-dx-tool] header,html[data-dx-tool] .tabs{display:none !important;}
   </div>
   <div class="actions" style="margin-top:12px">
     <button type="button" class="btn accent" onclick="exportJSON()">⬇ Hämta fullständig säkerhetskopia (JSON)</button>
-    <label for="dxJsonImport">⬆ Sammanfoga JSON-säkerhetskopia</label><input id="dxJsonImport" type="file" accept=".json,application/json" onchange="importJSON(event)" style="max-width:420px">
+    <button type="button" class="btn" onclick="dxExportRawLogs()">Hämta originalets rådata</button>
+<label><input type="checkbox" id="dxRestoreMode"> Återställ hela huvudloggboken från fil (ersätter innehållet, sparar tidigare rådata separat)</label>
+<label for="dxJsonImport">⬆ Sammanfoga JSON-säkerhetskopia</label><input id="dxJsonImport" type="file" accept=".json,application/json" onchange="importJSON(event)" style="max-width:420px">
   </div>
   <div class="notice"><b>Viktigt under testperioden:</b> Loggarna ligger på den här enheten i webbläsaren. Om webbplatsdata rensas eller telefonen byts kan poster försvinna. Hämta en JSON-kopia regelbundet och innan uppdateringar.</div>
   <div class="small" style="margin-top:12px">
@@ -439,9 +441,9 @@ html[data-dx-tool] header,html[data-dx-tool] .tabs{display:none !important;}
     <div class="context-fields">
       <div class="kicker">Extra fält för vald signaltyp</div>
       <div class="grid">
-        <div><label id="extra1Label">Extra uppgift 1</label><input id="extra1"></div>
-        <div><label id="extra2Label">Extra uppgift 2</label><input id="extra2"></div>
-        <div><label id="extra3Label">Extra uppgift 3</label><input id="extra3"></div>
+        <div><label for="extra1" id="extra1Label">Extra uppgift 1</label><input id="extra1"></div>
+        <div><label for="extra2" id="extra2Label">Extra uppgift 2</label><input id="extra2"></div>
+        <div><label for="extra3" id="extra3Label">Extra uppgift 3</label><input id="extra3"></div>
       </div>
     </div>
     <div class="context-fields">
@@ -480,7 +482,7 @@ html[data-dx-tool] header,html[data-dx-tool] .tabs{display:none !important;}
       <button type="button" class="btn" onclick="exportCSV()">Exportera till Excel (CSV)</button>
       <label class="btn" style="display:inline-block">Importera JSON<input type="file" accept=".json" onchange="importJSON(event)" style="display:none"></label>
     </div>
-    <div class="notice"><b>Version 7.15 Online:</b> denna fil ersätter äldre dx_start_7_excel.html. Excel-importen stöder både USB/SSB-loggen och den stora DX-kontrollboken.</div>
+    <div class="notice"><b>Version 7.30 Online:</b> denna fil ersätter äldre dx_start_7_excel.html. Excel-importen stöder både USB/SSB-loggen och den stora DX-kontrollboken.</div>
     <div class="notice"><b>Excelkoppling:</b> exportera din Google Sheets-loggbok som Excel (.xlsx) och importera här. Både DX- och FM-huvudloggböckerna stöds. Befintliga poster bevaras och kompletteras utan att skrivas över. Originalfilen ändras aldrig.</div>
     <div id="excelStatus" class="small" role="status" aria-live="polite" style="margin-top:10px">Ingen Excel-fil importerad i denna session.</div>
     <div class="tablewrap" style="margin-top:14px">
@@ -523,7 +525,7 @@ html[data-dx-tool] header,html[data-dx-tool] .tabs{display:none !important;}
 </div>
 <div id="dxMap" style="margin-top:12px"><div id="dxMapCanvas"></div></div>
 <div id="mapDetails">Klicka på en nål för detaljer.</div>
-    <div class="map-note" style="margin-top:10px">Världskartan och de inbyggda verifierade nålarna fungerar lokalt. Zooma med +/− eller mushjulet och dra kartan med musen. Internet behövs bara om en importerad logg saknar koordinater och orten måste slås upp automatiskt.</div>
+    <div class="map-note" style="margin-top:10px">Världskartan och dina egna verifierade loggar med sparade koordinater fungerar lokalt. Zooma med +/− eller mushjulet och dra kartan med musen. Internet behövs bara om en importerad logg saknar koordinater och orten måste slås upp automatiskt.</div>
   </div>
 </section>
 
@@ -539,26 +541,26 @@ html[data-dx-tool] header,html[data-dx-tool] .tabs{display:none !important;}
 
     <div class="grid" style="margin-top:14px">
       <div>
-        <label>Frekvens kHz</label>
+        <label for="cwFreq">Frekvens kHz</label>
         <input id="cwFreq" inputmode="decimal" placeholder="t.ex. 14025">
       </div>
       <div>
-        <label>Mottagare / SDR</label>
+        <label for="cwRx">Mottagare / SDR</label>
         <input id="cwRx" placeholder="t.ex. Heppen, Julussdalen">
       </div>
       <div>
-        <label>CW-ton</label>
+        <label for="cwTone">CW-ton</label>
         <input id="cwTone" type="range" min="300" max="1200" step="10" value="700" oninput="cwUpdateLabels()">
         <div class="small"><span id="cwToneLabel">700 Hz</span></div>
       </div>
       <div>
-        <label>WPM / takt</label>
+        <label for="cwWpm">WPM / takt</label>
         <input id="cwWpm" type="range" min="5" max="40" step="1" value="18" oninput="cwUpdateLabels();cwResetTiming()">
         <div class="small"><span id="cwWpmLabel">18 WPM</span> · uppskattat <span id="cwWpmAuto">–</span></div>
         <label style="margin-top:7px"><input id="cwAutoWpm" type="checkbox" checked style="width:auto;margin-right:7px">Automatisk takt-anpassning</label>
       </div>
       <div>
-        <label>Känslighet</label>
+        <label for="cwThreshold">Känslighet</label>
         <input id="cwThreshold" type="range" min="5" max="60" step="1" value="24" oninput="cwUpdateLabels()">
         <div class="small">Tröskel <span id="cwThresholdLabel">24 dB</span></div>
       </div>
@@ -575,7 +577,7 @@ html[data-dx-tool] header,html[data-dx-tool] .tabs{display:none !important;}
       <button type="button" class="btn danger" onclick="cwStop()">Stoppa</button>
       <button type="button" class="btn" onclick="cwAutoTune()">Hitta ton</button>
       <button type="button" class="btn" onclick="cwMicPreset()">Mikrofonläge</button>
-      <select id="cwSensitivityMode" class="btn" onchange="cwSetSensitivityMode(this.value)" title="CW-känslighet">
+      <select id="cwSensitivityMode" aria-label="CW-känslighet" class="btn" onchange="cwSetSensitivityMode(this.value)" title="CW-känslighet">
         <option value="auto" selected>Auto känslighet</option>
         <option value="weak">Svag signal</option>
         <option value="normal">Normal</option>
@@ -597,12 +599,12 @@ html[data-dx-tool] header,html[data-dx-tool] .tabs{display:none !important;}
         <div id="cwSymbols" class="cw-symbols">–</div>
       </div>
       <div>
-        <label>Avkodad text – original CW</label>
-        <textarea id="cwText" class="cw-output" placeholder="Avkodad CW visas här..." oninput="cwUpdateSwedish()"></textarea>
+        <label for="cwText">Avkodad text – original CW</label>
+        <textarea id="cwText" aria-label="Avkodad CW" class="cw-output" placeholder="Avkodad CW visas här..." oninput="cwUpdateSwedish()"></textarea>
       </div>
       <div>
-        <label>Svensk tolkning</label>
-        <textarea id="cwSwedish" class="cw-output cw-swedish" readonly placeholder="Svensk tolkning av Q-koder och vanliga CW-förkortningar visas här..."></textarea>
+        <label for="cwSwedish">Svensk tolkning</label>
+        <textarea id="cwSwedish" aria-label="Svensk tolkning" class="cw-output cw-swedish" readonly placeholder="Svensk tolkning av Q-koder och vanliga CW-förkortningar visas här..."></textarea>
       </div>
     </div>
 
@@ -678,11 +680,11 @@ html[data-dx-tool] header,html[data-dx-tool] .tabs{display:none !important;}
 </section>
 
 </main>
-<footer>DX Start 7.29 Online • 7.23-design + specialmottagare + ljudarkiv + Drive-loggar • originalfiler ändras aldrig</footer>
+<footer>DX Start 7.30 Online • 7.23-design + specialmottagare + ljudarkiv + lokal loggning och säkerhetskopior • originalfiler ändras aldrig</footer>
 </div>
 
 <script>
-let selectedIndex=null;
+let selectedIndex=null, selectedLogId=null;
 
 function tick(){
   const d=new Date();
@@ -775,24 +777,40 @@ function getLogRecords(){
   const raw=localStorage.getItem('dxLogs');if(raw===null){dxLogStorageWarning='';return [];}
   const a=JSON.parse(raw);
   if(!Array.isArray(a)||!a.every(v=>v&&typeof v==='object'&&!Array.isArray(v)))throw Error('Ogiltigt loggformat');
-  dxLogStorageWarning='';return a;
+  dxLogStorageWarning='';return a.map(dxNormalizeLog);
  }catch(e){
   dxLogStorageWarning='Loggbokens lokala data kan inte läsas: '+e.message+'. Ingenting har raderats. Återställ från din JSON-kopia.';
   console.error(dxLogStorageWarning);return [];
  }
 }
 function getLogs(){return getLogRecords().filter(l=>!l._deletedAt);}
-function setLogs(x){
+async function dxWithLogLock(fn){
+ if(navigator.locks?.request)return navigator.locks.request('dxLogs-write',fn);
+ throw Error('Säker samtidig loggning kräver en aktuell webbläsare med Web Locks. Export fungerar fortfarande.');
+}
+async function setLogs(x){
+ try{return await dxWithLogLock(()=>{
  const prior=getLogRecords();
  if(dxLogStorageWarning){alert(dxLogStorageWarning);return false;}
- if(!Array.isArray(x)||!x.every(v=>v&&typeof v==='object'&&!Array.isArray(v))){alert('Ogiltiga loggdata. Inget sparades.');return false;}
- try{
-  const merged=dxMergeLogs(x,prior.filter(l=>l._deletedAt));
-  localStorage.setItem('dxLogs',JSON.stringify(merged));
-  dxUpdateSyncCount();if(!dxSyncBusy)dxScheduleCloudSync();return true;
- }catch(e){
-  alert('Loggboken kunde inte sparas: '+e.message+'. De tidigare sparade posterna finns kvar. Exportera en säkerhetskopia och kontrollera lagringsutrymmet.');return false;
- }
+ if(!Array.isArray(x)||!x.every(v=>v&&typeof v==='object'&&!Array.isArray(v)))throw Error('Ogiltiga loggdata');
+ const merged=dxMergeLogs(x,prior);
+ localStorage.setItem('dxLogs',JSON.stringify(merged));
+ dxUpdateSyncCount();if(!dxSyncBusy)dxScheduleCloudSync();return true;
+ });}catch(e){alert('Loggboken kunde inte sparas: '+e.message+'. Tidigare data finns kvar.');return false;}
+}
+async function dxRestoreLogs(records){
+ const normalized=records.map(dxNormalizeLog);
+ if(!confirm('ÅTERSTÄLLNING: ersätta hela huvudloggboken med '+normalized.filter(x=>!x._deletedAt).length+' aktiva poster från filen? Nuvarande rådata bevaras separat.'))return false;
+ try{return await dxWithLogLock(()=>{
+  const raw=localStorage.getItem('dxLogs');
+  if(raw!==null)localStorage.setItem('dxLogsRecovery-'+Date.now(),raw);
+  localStorage.setItem('dxLogs',JSON.stringify(normalized));
+  dxLogStorageWarning='';selectedLogId=null;selectedIndex=null;return true;
+ });}catch(e){alert('Återställningen avbröts: '+e.message+'. Originaldata har inte avsiktligt raderats.');return false;}
+}
+function dxExportRawLogs(){
+ try{const raw=localStorage.getItem('dxLogs');if(raw===null){alert('Ingen lokal rådata finns.');return;}
+ download('dx-loggbok-radata.txt',raw,'text/plain;charset=utf-8');}catch(e){alert('Rådata kunde inte hämtas: '+e.message);}
 }
 
 function dxHash(s){
@@ -975,7 +993,7 @@ function dxMakeSWLReport(l){
   'Hörd motstation: '+l.counterstation,
   'Datum: '+l.date,
   'Tid: '+l.time+' UTC',
-  'Frekvens: '+l.freq+' '+l.frequencyUnit,
+  'Frekvens: '+String(l.freq||'').replace(/\s*(mhz|khz)\s*$/i,'')+' '+(l.frequencyUnit||'kHz'),
   'Mode: '+(l.mode||'Ej angivet'),
   'Mottagare/SDR: '+(l.rx||'Ej angivet'),
   'Signalrapport: '+(l.signal||l.sinpo||'Ej angiven'),
@@ -983,7 +1001,7 @@ function dxMakeSWLReport(l){
   'Utkast skapat: '+new Date().toISOString(),
   'OBS: Rapporten är inte skickad och QSL-status måste följas upp manuellt.'].join('\n');
 }
-function saveLog(){
+async function saveLog(){
   const station=val('station'),freq=val('freq'),signal=val('signal');
   if(!station&&!freq){alert('Fyll i åtminstone station eller frekvens.');return;}
   if(freq&&!/^\d+(?:[.,]\d+)?\s*(?:kHz|MHz)?$/i.test(freq)){alert('Ange frekvens som ett tal, till exempel 1008 eller 96,6 MHz.');return;}
@@ -1003,7 +1021,7 @@ function saveLog(){
   };
   if(item.qsoHeard){item.swlReport=dxMakeSWLReport(item);item.reportStatus='Utkast – ej skickat';}
   const logs=getLogs();logs.unshift(item);
-  if(!setLogs(logs))return;
+  if(!await setLogs(logs))return;
   alert('Loggen är sparad lokalt. Säkerhetskopiera regelbundet via Synk/Säkerhetskopia.');
   clearForm(); fillNow(); showView('book');
 }
@@ -1046,11 +1064,12 @@ function renderLogs(){
   document.getElementById('rows').innerHTML=out||'<tr><td colspan="8">Inga loggar ännu.</td></tr>';
 }
 
-function normName(s){return (s||'').trim().toLowerCase()}
+function normName(s){return String(s??'').trim().toLowerCase()}
 function openProfile(i){
   selectedIndex=i;
   const logs=getLogs();
-  const l=logs[i];
+  const l=logs[i];if(!l){alert("Loggen finns inte längre.");return;}
+  selectedLogId=dxNormalizeLog(l)._id;
   const key=normName(l.station);
   const same=logs.filter(x=>normName(x.station)===key && key);
 
@@ -1111,7 +1130,7 @@ async function wikiExtract(query, target){
     document.getElementById(target).innerHTML='Ingen tydlig svensk Wikipedia-träff hittades. <button type="button" class="btn" onclick="searchWeb()">Sök på webben i stället</button>';
   }
 }
-function currentLog(){return selectedIndex===null?null:getLogs()[selectedIndex]}
+function currentLog(){return selectedLogId===null?null:getLogs().find(l=>dxNormalizeLog(l)._id===selectedLogId)||null}
 function wikiStation(){const l=currentLog(); wikiExtract(l?.station||'', 'stationInfo')}
 function wikiPlace(){const l=currentLog(); wikiExtract([l?.place,l?.country].filter(Boolean).join(', '), 'placeInfo')}
 function searchOfficial(){
@@ -1122,14 +1141,14 @@ function searchWeb(){
   const l=currentLog(); if(!l)return;
   window.open('https://www.google.com/search?q='+encodeURIComponent([l.station,l.freq,l.country,l.place,'history'].filter(Boolean).join(' ')),'_blank');
 }
-function deleteSelected(){
-  if(selectedIndex===null)return;
+async function deleteSelected(){
+  if(selectedLogId===null)return;
   if(!confirm('Ta bort loggen från den aktiva loggboken? En återställningsmarkering sparas i backup.'))return;
-  const logs=getLogs(),target=logs[selectedIndex];if(!target)return;
+  const target=currentLog();if(!target){alert("Den valda loggen finns inte längre. Ingen annan logg har raderats.");return;}
   const now=new Date().toISOString();
   const deleted={...dxNormalizeLog(target),_deletedAt:now,_updatedAt:now};
-  if(!setLogs(dxMergeLogs(getLogRecords(),[deleted])))return;
-  selectedIndex=null;showView('book');
+  if(!await setLogs([deleted]))return;
+  selectedIndex=null;selectedLogId=null;showView('book');
 }
 function download(name,text,type){
   const url=URL.createObjectURL(new Blob([text],{type}));
@@ -1140,11 +1159,11 @@ function downloadSelectedSWL(){
  const l=currentLog();if(!l?.swlReport){alert('Den valda loggen saknar SWL-rapport.');return;}
  download('SWL-'+String(l.station||'station').replace(/[^\w-]+/g,'_')+'.txt',l.swlReport,'text/plain;charset=utf-8');
 }
-function exportJSON(){download('dx-loggar-med-raderingshistorik.json',JSON.stringify(getLogRecords(),null,2),'application/json')}
+function exportJSON(){const records=getLogRecords();if(dxLogStorageWarning){alert(dxLogStorageWarning+' Hämta rådata i stället för en tom säkerhetskopia.');return;}download('dx-loggar-med-raderingshistorik.json',JSON.stringify(records,null,2),'application/json')}
 function exportCSV(){
   const logs=getLogs();
   const cols=['date','time','freq','band','mode','rx','station','counterstation','country','place','lang','signal','sinpo','reportExchange','operator','ptype','website','idwords','content','notes','reportStatus','contact','reply','extra1','extra2','extra3','txHistory','placeHistory','frequencyUnit','sinpoSource','swlReport','qsoHeard'];
-  const q=x=>'"'+String(x??'').replaceAll('"','""')+'"';
+  const q=x=>{let v=String(x??'');if(/^[\s]*[=+@-]/.test(v))v="'"+v;return '"'+v.replaceAll('"','""')+'"'};
   const csv='\ufeff'+[cols.join(';'),...logs.map(l=>cols.map(c=>q(l[c])).join(';'))].join('\r\n');
   download('dx-loggar-for-excel.csv',csv,'text/csv;charset=utf-8');
 }
@@ -1234,7 +1253,16 @@ function dxCanonicalKey(l){
   let freq=t(l.freq).replace(',','.');
   const n=parseFloat(freq);
   if(Number.isFinite(n))freq=String(Number(n.toFixed(4)));
-  return [t(l.date),t(l.time),unit,freq,t(l.station),t(l.rx)].join('|');
+  return [t(l.date),t(l.time),unit,freq,t(l.station),t(l.rx),t(l.mode)].join('|');
+}
+function dxExcelUnit(row,map,freq,fallback){
+ const explicit=firstVal(row,map,['Frekvensenhet','Enhet','Frequency unit','Unit']);
+ if(/^(mhz|khz)$/i.test(explicit))return /^mhz$/i.test(explicit)?'MHz':'kHz';
+ if(/mhz\s*$/i.test(freq))return 'MHz';if(/khz\s*$/i.test(freq))return 'kHz';
+ const band=firstVal(row,map,['Band','Kategori','Band / typ']);
+ if(/^fm$/i.test(band))return 'MHz';
+ if(!map.has('frekvens khz')&&!map.has('frekvens mhz')&&!map.has('frequency khz')&&!map.has('frequency mhz')&&/amatör|amateur/i.test(band))throw Error('Amatörlogg saknar frekvensenhet. Ange Frekvensenhet per rad eller använd kolumnen Frekvens kHz/MHz.');
+ return fallback;
 }
 function mapExcelRows(rows,sheetName){
   let hi=-1,headers=[];
@@ -1257,7 +1285,7 @@ function mapExcelRows(rows,sheetName){
     if(/^\d+(?:\.\d+)?$/.test(date)&&Number(date)>20000)date=excelSerialToDate(date);
     const item={
       date,time:excelTimeToHHMM(col(row,'UTC','Tid (UTC)','Tid','Time')),
-      freq,frequencyUnit:unit,station,
+      freq,frequencyUnit:dxExcelUnit(row,hm,freq,unit),station,
       band:col(row,'Kategori','Band','Band / typ')||(unit==='MHz'?'FM':(/amatör|usb|ssb/i.test(sheetName)?'Amatörradio':'')),
       mode:col(row,'Mode','Modulation'),
       rx:col(row,'Mottagare/SDR','Mottagare','Receiver','SDR'),
@@ -1291,7 +1319,7 @@ function mapExcelRows(rows,sheetName){
       stationLon:col(row,'Station lon','Sändar lon'),
       distanceKm:col(row,'Avstånd km'),bearing:col(row,'Azimut °','Riktning °','Riktning'),
       positionSource:col(row,'Positionskälla'),
-      txHistory:col(row,'Sändarens historia'),placeHistory:col(row,'Ortens historia'),
+      txHistory:col(row,'Sändarens historia','Historien bakom sändaren/stationen','Historien bakom stationen och sändaren','Historien bakom sändaren'),placeHistory:col(row,'Ortens historia','Historien bakom orten/sändarplatsen','Historien bakom orten och sändarplatsen'),
       signalHistory:col(row,'Historik / historien bakom signalen'),
       securityPercent:col(row,'Säkerhet %'),
       source1:col(row,'Källa 1'),source2:col(row,'Källa 2'),
@@ -1355,14 +1383,14 @@ async function importExcel(ev){
             prev[field]=value;changed=true;
           }
         }
-        if(changed)enriched++;else skipped++;
+        if(changed){prev._updatedAt=new Date().toISOString();enriched++;}else skipped++;
       }else{
         existing.push(incoming);
         if(incoming.station&&incoming.freq&&incoming.date)byKey.set(k,existing.length-1);
         added++;
       }
     }
-    if(!setLogs(existing)){status.textContent='Importen avbröts: sparning misslyckades. Originaldata finns kvar.';return;}
+    if(!await setLogs(existing)){status.textContent='Importen avbröts: sparning misslyckades. Originaldata finns kvar.';return;}
     renderLogs();
     status.textContent=`${f.name}: ${added} nya, ${enriched} kompletterade, ${skipped} redan befintliga, ${blocked} tidigare raderade. Blad: ${used.join(', ')}`;
     alert(`Excel-import: ${added} nya loggar, ${enriched} kompletterade. ${blocked} raderade poster återställdes inte.`);
@@ -1455,6 +1483,10 @@ function updateReceiverFilter(){
   const cur=sel.value, vals=[...new Set(allMapLogs().map(receiverPlace).filter(Boolean))].sort((a,b)=>a.localeCompare(b,'sv'));
   sel.innerHTML='<option value="">Alla mottagare</option>'+vals.map(v=>`<option ${v===cur?'selected':''}>${esc(v)}</option>`).join('');
 }
+function dxCoordinates(lat,lon){
+ if(!['string','number'].includes(typeof lat)||!['string','number'].includes(typeof lon)||String(lat).trim()===''||String(lon).trim()==='')return null;
+ const a=Number(lat),b=Number(lon);return Number.isFinite(a)&&Number.isFinite(b)&&Math.abs(a)<=90&&Math.abs(b)<=180?{lat:a,lon:b}:null;
+}
 async function renderMap(force){
   updateReceiverFilter();
   const status=document.getElementById('mapStatus');
@@ -1475,13 +1507,11 @@ async function renderMap(force){
     const rname=receiverPlace(l), sname=stationPlace(l);
     let rc=null, sc=null;
 
-    const rlat=Number(l.rxLat), rlon=Number(l.rxLon);
-    if(Number.isFinite(rlat)&&Number.isFinite(rlon)&&String(l.rxLat)!==''&&String(l.rxLon)!=='') rc={lat:rlat,lon:rlon};
+    rc=dxCoordinates(l.rxLat,l.rxLon);
     if(!rc&&l.rxLocator) rc=maidenheadToLatLon(l.rxLocator);
     if(!rc) rc=await geocode(rname);
 
-    const slat=Number(l.stationLat), slon=Number(l.stationLon);
-    if(Number.isFinite(slat)&&Number.isFinite(slon)&&String(l.stationLat)!==''&&String(l.stationLon)!=='') sc={lat:slat,lon:slon};
+    sc=dxCoordinates(l.stationLat,l.stationLon);
     if(!sc&&l.locator) sc=maidenheadToLatLon(l.locator);
     if(!sc&&l.stationMapPlace) sc=await geocode(l.stationMapPlace);
     if(!sc&&sname) sc=await geocode(sname);
@@ -1650,67 +1680,6 @@ function dxOpenExpert(){
   // Open a new ChatGPT conversation with the DX-expert instruction prefilled.
   window.open(DX_EXPERT_URL,'_blank','noopener');
 }
-
-function dxGetCustomReceivers(){
-  try{return JSON.parse(localStorage.getItem('dxCustomReceivers')||'[]')}catch(e){return []}
-}
-
-function dxSaveCustomReceivers(list){
-  localStorage.setItem('dxCustomReceivers',JSON.stringify(list));
-  dxRenderCustomReceivers();
-}
-
-function dxAddCustomReceiver(){
-  const category=(document.getElementById('customRxCategory')?.value||'Övrigt').trim();
-  const name=(document.getElementById('customRxName')?.value||'').trim();
-  let url=(document.getElementById('customRxUrl')?.value||'').trim();
-  const note=(document.getElementById('customRxNote')?.value||'').trim();
-  if(!name || !url){alert('Fyll i både namn och webbadress.');return;}
-  if(!/^https?:\/\//i.test(url)) url='https://'+url;
-  try{new URL(url)}catch(e){alert('Webbadressen verkar inte vara giltig.');return;}
-  const list=dxGetCustomReceivers();
-  list.push({id:'rx-'+Date.now()+'-'+Math.random().toString(36).slice(2,7),category,name,url,note});
-  dxSaveCustomReceivers(list);
-  document.getElementById('customRxName').value='';
-  document.getElementById('customRxUrl').value='';
-  document.getElementById('customRxNote').value='';
-}
-
-function dxDeleteCustomReceiver(id){
-  if(!confirm('Ta bort den här mottagaren?')) return;
-  dxSaveCustomReceivers(dxGetCustomReceivers().filter(x=>x.id!==id));
-}
-
-function dxEscRx(s){
-  return String(s||'').replace(/[&<>"']/g,c=>({'&':'&amp;','<':'&lt;','>':'&gt;','"':'&quot;',"'":'&#39;'}[c]));
-}
-
-function dxRenderCustomReceivers(){
-  const host=document.getElementById('customReceiverGroups');
-  if(!host) return;
-  const list=dxGetCustomReceivers();
-  if(!list.length){
-    host.innerHTML='<div class="small">Inga egna mottagare tillagda ännu.</div>';
-    return;
-  }
-  const groups={};
-  list.forEach(r=>(groups[r.category]||(groups[r.category]=[])).push(r));
-  host.innerHTML=Object.keys(groups).sort().map(cat=>`
-    <div class="guide" style="margin-top:10px">
-      <h3>${dxEscRx(cat)}</h3>
-      <div class="receiver-grid">
-        ${groups[cat].map(r=>`
-          <div class="linkcard" style="position:relative">
-            <button type="button" onclick="dxDeleteCustomReceiver('${r.id}')" title="Ta bort" style="position:absolute;right:6px;top:6px;background:#7f1d1d;color:white;border:0;border-radius:7px;padding:3px 7px;cursor:pointer">×</button>
-            <a href="#" onclick="event.preventDefault();dxOpenReceiver('${String(r.url).replace(/'/g,"\\'")}')" style="color:inherit;text-decoration:none;display:block;padding-right:24px">
-              <b>📻 ${dxEscRx(r.name)}</b>
-              <div class="small">${dxEscRx(r.note||r.url)}</div>
-            </a>
-          </div>`).join('')}
-      </div>
-    </div>`).join('');
-}
-document.addEventListener('DOMContentLoaded',dxRenderCustomReceivers);
 
 function dxOpenReceiver(url){
   try{
@@ -2204,6 +2173,7 @@ function cwToLog(){
   if(content)content.value=(content.value?content.value+'\n':'')+'CW-avkodning original: '+txt+(sv?'\nSvensk tolkning: '+sv:'');
   const notes=document.getElementById('notes');
   if(notes)notes.value=(notes.value?notes.value+'\n':'')+'CW live-avkodat i DX Start. Ton '+document.getElementById('cwTone').value+' Hz, inställd '+document.getElementById('cwWpm').value+' WPM.';
+  updateExtraFields();
 }
 
 let mapZoom=1, mapPanX=0, mapPanY=0, mapDragging=false, mapDragStartX=0, mapDragStartY=0, mapStartPanX=0, mapStartPanY=0;
@@ -2277,20 +2247,18 @@ function initMapPanZoom(){
 window.addEventListener('resize',()=>{constrainMapPan();applyMapTransform()});
 
 function importJSON(ev){
-  const f=ev.target.files[0]; if(!f)return;
-  const r=new FileReader();
-  r.onload=()=>{try{const x=JSON.parse(r.result);if(!Array.isArray(x))throw 0;
-    if(!x.every(l=>l&&typeof l==='object'&&!Array.isArray(l)))throw 0;
-    const existing=getLogRecords(),before=existing.filter(v=>!v._deletedAt).length;
-    if(dxLogStorageWarning){alert(dxLogStorageWarning);return;}
-    const merged=dxMergeLogs(existing,x),known=new Map(existing.map(dxNormalizeLog).map(v=>[v._id,v]));
-    const added=merged.filter(v=>!v._deletedAt&&!known.has(v._id)).length;
-    const removed=merged.filter(v=>v._deletedAt&&known.has(v._id)&&!known.get(v._id)._deletedAt).length;
-    if(!confirm('Importerar '+added+' nya poster. '+removed+' befintliga poster markeras som raderade av säkerhetskopian.\n\nExportera gärna en JSON-kopia först. Fortsätta?'))return;
-    if(!setLogs(merged))return;
-    renderLogs();alert('Import färdig. '+getLogs().length+' aktiva poster (före: '+before+'). Inga poster raderades permanent.');
-  }catch(e){alert('Filen kunde inte importeras. Kontrollera att den är en JSON-array med loggar.')}};
-  r.readAsText(f);
+ const f=ev.target.files[0];if(!f)return;const r=new FileReader();
+ r.onerror=()=>{alert('Filen kunde inte läsas. Inget ändrades.');ev.target.value=''};
+ r.onload=async()=>{try{
+  const x=JSON.parse(r.result);if(!Array.isArray(x)||!x.every(v=>v&&typeof v==='object'&&!Array.isArray(v)))throw Error('Filen ska innehålla en array med loggposter');
+  const incoming=x.map(dxNormalizeLog),restore=!!document.getElementById('dxRestoreMode')?.checked;
+  if(restore){if(await dxRestoreLogs(incoming)){renderLogs();alert('Loggboken är återställd. Tidigare rådata finns kvar separat.');}return;}
+  const existing=getLogRecords();if(dxLogStorageWarning){alert(dxLogStorageWarning+' Välj Återställ hela loggboken för att använda en frisk kopia.');return;}
+  const merged=dxMergeLogs(incoming,existing);
+  if(!confirm('Sammanfoga säkerhetskopian? Aktiva poster: '+existing.filter(v=>!v._deletedAt).length+' → '+merged.filter(v=>!v._deletedAt).length+'. Filens raderingsmarkeringar bevaras.'))return;
+  if(await setLogs(merged)){renderLogs();alert('Import färdig: '+getLogs().length+' aktiva poster.');}
+ }catch(e){alert('Import avbröts: '+e.message+'. Inget ändrades.')}finally{ev.target.value='';}};
+ r.readAsText(f);
 }
 renderLogs();
 updateExtraFields();
@@ -2298,7 +2266,7 @@ updateExtraFields();
 function updateExtraFields(){
   const b=document.getElementById('band').value;
   const unit=document.getElementById('frequencyUnit');
-  if(unit&&b==='FM')unit.value='MHz';
+  if(unit){if(b==='FM')unit.value='MHz';else if(['LW','MW','SW','NDB','Amatörradio'].includes(b))unit.value='kHz';}
   const m={
     'NDB':['Beacon-ID / morse','Frekvensnoggrannhet','Locator / plats'],
     'Utility':['Tjänst / nät','Modulation','Callsign / kanal'],
@@ -2321,8 +2289,9 @@ window.addEventListener('online',()=>dxCloudSync(false));
 document.addEventListener('visibilitychange',()=>{if(document.visibilityState==='visible')dxScheduleCloudSync();});
 
 
+let dxRecordingStarting=false;
 let dxMediaRecorder=null,dxAudioChunks=[],dxLastAudioBlob=null,dxLastAudioExt='webm';
-async function dxStartRecording(){try{const stream=await navigator.mediaDevices.getUserMedia({audio:true});dxAudioChunks=[];dxMediaRecorder=new MediaRecorder(stream);dxMediaRecorder.ondataavailable=e=>{if(e.data&&e.data.size)dxAudioChunks.push(e.data)};dxMediaRecorder.onstop=()=>{dxLastAudioBlob=new Blob(dxAudioChunks,{type:dxMediaRecorder.mimeType||'audio/webm'});dxLastAudioExt=dxLastAudioBlob.type.includes('ogg')?'ogg':dxLastAudioBlob.type.includes('mp4')?'m4a':'webm';document.getElementById('dxAudioPreview').src=URL.createObjectURL(dxLastAudioBlob);document.getElementById('dxSaveAudioBtn').disabled=false;stream.getTracks().forEach(t=>t.stop());document.getElementById('dxRecState').textContent='Inspelning klar – lyssna eller spara ljudfilen.'};dxMediaRecorder.start();document.getElementById('dxRecBtn').disabled=true;document.getElementById('dxRecStopBtn').disabled=false;document.getElementById('dxRecState').textContent='● Inspelning pågår…'}catch(e){document.getElementById('dxRecState').textContent='Kunde inte starta inspelningen. Kontrollera mikrofontillståndet.'}}
+async function dxStartRecording(){if(dxRecordingStarting||dxMediaRecorder?.state==='recording')return;dxRecordingStarting=true;let stream;try{stream=await navigator.mediaDevices.getUserMedia({audio:true});dxAudioChunks=[];dxMediaRecorder=new MediaRecorder(stream);dxMediaRecorder.ondataavailable=e=>{if(e.data&&e.data.size)dxAudioChunks.push(e.data)};dxMediaRecorder.onstop=()=>{dxLastAudioBlob=new Blob(dxAudioChunks,{type:dxMediaRecorder.mimeType||'audio/webm'});dxLastAudioExt=dxLastAudioBlob.type.includes('ogg')?'ogg':dxLastAudioBlob.type.includes('mp4')?'m4a':'webm';document.getElementById('dxAudioPreview').src=URL.createObjectURL(dxLastAudioBlob);document.getElementById('dxSaveAudioBtn').disabled=false;stream.getTracks().forEach(t=>t.stop());document.getElementById('dxRecState').textContent='Inspelning klar – lyssna eller spara ljudfilen.'};dxMediaRecorder.start();document.getElementById('dxRecBtn').disabled=true;document.getElementById('dxRecStopBtn').disabled=false;document.getElementById('dxRecState').textContent='● Inspelning pågår…'}catch(e){stream?.getTracks().forEach(t=>t.stop());document.getElementById('dxRecBtn').disabled=false;document.getElementById('dxRecState').textContent='Kunde inte starta inspelningen. Kontrollera mikrofontillståndet.'}finally{dxRecordingStarting=false;}}
 function dxStopRecording(){if(dxMediaRecorder&&dxMediaRecorder.state!=='inactive')dxMediaRecorder.stop();document.getElementById('dxRecBtn').disabled=false;document.getElementById('dxRecStopBtn').disabled=true}
 function dxPreviewAudioFile(inp){const f=inp.files&&inp.files[0];if(!f)return;dxLastAudioBlob=f;dxLastAudioExt=f.name.split('.').pop()||'audio';document.getElementById('dxAudioPreview').src=URL.createObjectURL(f);document.getElementById('dxSaveAudioBtn').disabled=false;document.getElementById('dxRecState').textContent='Importerad ljudfil redo.'}
 function dxSaveRecording(){if(!dxLastAudioBlob)return;const a=document.createElement('a'),now=new Date().toISOString().replace(/[:.]/g,'-');a.href=URL.createObjectURL(dxLastAudioBlob);a.download='DX_'+now+'.'+dxLastAudioExt;a.click();setTimeout(()=>URL.revokeObjectURL(a.href),1000)}
@@ -2365,10 +2334,11 @@ function dxDigitalToLog(){
  showView('log');document.getElementById('freq').value=f+' MHz';document.getElementById('band').value='Amatörradio';document.getElementById('mode').value=mode;
  const rx=document.getElementById('digitalRx')?.selectedOptions?.[0]?.textContent||'';document.getElementById('rx').value=rx;
  if(rx.includes('Heppen'))document.getElementById('rxplace').value='Heppen';
- document.getElementById('notes').value='Digital DX / SWL · '+mode+' · '+x.band+' · USB. Avkodat med FT8TW.';updateExtraFields();
+ document.getElementById('notes').value='Digital DX / SWL · '+mode+' · '+x.band+' · USB. Avkodat med FT8TW.';updateExtraFields();document.getElementById('frequencyUnit').value='MHz';
 }
 
 
+window.addEventListener('storage',e=>{if(e.key==='dxLogs'){renderLogs();dxUpdateSyncCount();}});
 window.addEventListener('DOMContentLoaded',dxApplyToolWindow);
 </script>
 <script>
@@ -2379,3 +2349,4 @@ if('serviceWorker' in navigator && (location.protocol==='https:' || location.hos
 </script>
 </body>
 </html>
+

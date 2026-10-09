@@ -1,0 +1,1 @@
+{"name":"dx-centralen-safety-tests","version":"7.30.0","private":true,"scripts":{"test":"node tests/dx-regression.cjs && node tests/dx-safety.cjs"},"devDependencies":{"jsdom":"26.1.0"}}

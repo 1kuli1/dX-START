@@ -282,7 +282,7 @@
         // Läser in sparade loggar från localStorage.
         function lasLoggar() {
             const sparat = localStorage.getItem(storageKey);
-            return sparat ? JSON.parse(sparat) : [];
+            const data=sparat?JSON.parse(sparat):[];if(!Array.isArray(data))throw Error("Loggboken har fel format. Originaldata finns kvar.");return data;
         }
 
         // Sparar loggar till localStorage.
@@ -291,97 +291,10 @@
         }
 
         // Avgör om frekvensen ligger nära europeiskt 9 kHz-raster.
-        function justeraFrekvens(frekvens) {
-            const nummer = Number(frekvens);
-
-            if (!nummer) {
-                return { justerad: "okänd", kommentar: "Ingen giltig frekvens angiven." };
-            }
-
-            const rest = nummer % 9;
-
-            if (rest === 0) {
-                return { justerad: nummer, kommentar: "Frekvensen ligger exakt på 9 kHz-raster." };
-            }
-
-            const nedat = nummer - rest;
-            const uppat = nedat + 9;
-            const närmast = Math.abs(nummer - nedat) <= Math.abs(uppat - nummer) ? nedat : uppat;
-
-            return {
-                justerad: närmast,
-                kommentar: "Frekvensen har justerats till närmaste europeiska 9 kHz-kanal."
-            };
-        }
-
-        // Gör en enkel expertbedömning baserat på det användaren skrivit.
-        function analyseraLogg(data) {
-            const justering = justeraFrekvens(data.frekvens);
-            const frekvens = Number(justering.justerad);
-            const text = (data.innehall + " " + data.sprak).toLowerCase();
-            let stationstyp = "Okänd station";
-            let område = "Okänt område";
-            let säkerhet = 50;
-            let kommentar = [];
-
-            if (frekvens === 1332) {
-                kommentar.push("1332 kHz är en verklig europeisk mellanvågskanal.");
-            }
-
-            if (data.signal === "S9" || data.signal === "S9+") {
-                kommentar.push("Stark signal tyder på kraftig sändare eller gynnsam väg.");
-                säkerhet += 10;
-            }
-
-            if (data.fading === "Ingen") {
-                kommentar.push("Stabil signal utan fading talar ofta för närmare station inom Europa.");
-                säkerhet += 10;
-            }
-
-            if (data.prat === "Nej") {
-                kommentar.push("Ingen prat mellan låtarna pekar mot ren musikstation eller privat station.");
-                säkerhet += 10;
-            }
-
-            if (text.includes("holländ") || text.includes("nederl") || text.includes("dutch")) {
-                stationstyp = "Nederländsk privat / fri musikstation";
-                område = "Nederländerna";
-                säkerhet += 20;
-                kommentar.push("Musikstilen pekar tydligt mot Nederländerna.");
-            }
-
-            if (text.includes("schlager") || text.includes("tysk")) {
-                kommentar.push("Schlager och tyskinspirerad musik är vanligt på nederländska MW-musikstationer.");
-                säkerhet += 10;
-            }
-
-            if (frekvens === 1332 && data.fading === "Ingen" && data.prat === "Nej" && (text.includes("holländ") || text.includes("schlager") || text.includes("tysk"))) {
-                stationstyp = "Trolig nederländsk musikstation på mellanvåg";
-                område = "Nederländerna / nära Västeuropa";
-                säkerhet = Math.max(säkerhet, 95);
-                kommentar.push("Kombinationen 1332 kHz + stabil S9 + holländsk/tysk schlager + ingen prat ger mycket stark NL-indikation.");
-            }
-
-            if (text.includes("rumän") && data.fading !== "Ingen") {
-                stationstyp = "Möjlig östeuropeisk public service-station";
-                område = "Rumänien / Östeuropa";
-                säkerhet = Math.max(säkerhet, 70);
-                kommentar.push("Rumänsk möjlighet ökar om signalen samtidigt har fading eller nyhetsmönster.");
-            }
-
-            säkerhet = Math.min(säkerhet, 99);
-
-            return {
-                justeradFrekvens: justering.justerad,
-                frekvensKommentar: justering.kommentar,
-                stationstyp: stationstyp,
-                område: område,
-                säkerhet: säkerhet,
-                kommentar: kommentar.join(" ")
-            };
-        }
-
-        // Ritar alla sparade loggar på sidan.
+        function justeraFrekvens(frekvens){const n=Number(String(frekvens).replace(',','.'));return {justerad:Number.isFinite(n)&&n>0?n:'okänd',kommentar:'Inmatad frekvens bevaras. Kanalraster beror på band och region.'};}
+function analyseraLogg(data){const f=justeraFrekvens(data.frekvens);return {justeradFrekvens:f.justerad,frekvensKommentar:f.kommentar,stationstyp:'Ej identifierad – lyssna efter stations-ID',område:'Ej fastställt',säkerhet:'Ej bedömd',kommentar:'Musik, språk och signalstyrka är ledtrådar men bekräftar inte stationen.'};}
+function lessonEsc(v){return String(v??'').replace(/[&<>"']/g,c=>({'&':'&amp;','<':'&lt;','>':'&gt;','"':'&quot;',"'":'&#39;'}[c]));}
+// Ritar alla sparade loggar på sidan.
         function renderaLoggar() {
             const loggar = lasLoggar();
             const lista = document.getElementById("loggLista");
@@ -401,12 +314,12 @@
                 const div = document.createElement("div");
                 div.className = "log-item";
                 div.innerHTML = `
-                    <div class="log-title">${logg.tid || "Ingen tid"} • ${logg.analys.justeradFrekvens} kHz • ${logg.plats || "Okänd plats"}</div>
-                    <div><strong>Signal:</strong> ${logg.signal || "-"}</div>
-                    <div><strong>Innehåll:</strong> ${logg.innehall || "-"}</div>
-                    <div><strong>Bedömning:</strong> ${logg.analys.stationstyp}</div>
-                    <div><strong>Område:</strong> ${logg.analys.område}</div>
-                    <div><strong>Säkerhet:</strong> ${logg.analys.säkerhet}%</div>
+                    <div class="log-title">${lessonEsc(logg.tid || "Ingen tid")} • ${lessonEsc(logg.analys.justeradFrekvens)} kHz • ${lessonEsc(logg.plats || "Okänd plats")}</div>
+                    <div><strong>Signal:</strong> ${lessonEsc(logg.signal || "-")}</div>
+                    <div><strong>Innehåll:</strong> ${lessonEsc(logg.innehall || "-")}</div>
+                    <div><strong>Bedömning:</strong> ${lessonEsc(logg.analys.stationstyp)}</div>
+                    <div><strong>Område:</strong> ${lessonEsc(logg.analys.område)}</div>
+                    <div><strong>Säkerhet:</strong> ${lessonEsc(logg.analys.säkerhet)}</div>
                 `;
                 lista.appendChild(div);
             });
@@ -425,7 +338,7 @@
         }
 
         // Sparar en ny logg och visar analysen.
-        function analyseraOchSpara() {
+        function analyseraOchSpara() {try{
             const data = hamtaFalt();
 
             if (!data.frekvens || !data.innehall) {
@@ -449,12 +362,12 @@
                 "Kommentar: " + analys.frekvensKommentar + "\n\n" +
                 "Bedömning: " + analys.stationstyp + "\n" +
                 "Område: " + analys.område + "\n" +
-                "Säkerhet: " + analys.säkerhet + "%\n\n" +
+                "Säkerhet: " + analys.säkerhet + "\n\n" +
                 "Analys: " + analys.kommentar;
 
             renderaLoggar();
             tomFormular();
-        }
+        }catch(e){document.getElementById("analysRuta").textContent="Kunde inte spara: "+e.message;}}
 
         // Exporterar sparade loggar till en JSON-fil.
         function exporteraJson() {
@@ -505,3 +418,4 @@
     </script>
 <script>if('serviceWorker' in navigator&&location.protocol==='https:')window.addEventListener('load',()=>navigator.serviceWorker.register('../../sw.js',{scope:'../../'}).catch(e=>console.warn(e)));</script></body>
 </html>
+

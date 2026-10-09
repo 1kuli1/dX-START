@@ -17,5 +17,8 @@ jobs:
         uses: actions/setup-node@v4
         with:
           node-version: '22'
-      - name: Kör DX regressionstester
-        run: node tests/dx-regression.cjs
+      - name: Installera testberoenden
+        run: npm ci --ignore-scripts --no-audit --no-fund
+      - name: Kör kod- och säkerhetstester
+        run: npm test
+

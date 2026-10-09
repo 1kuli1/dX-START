@@ -755,8 +755,9 @@ class="favorite-btn"
 <h2>KiwiSDR – DO6LSM Borgwedel</h2>
 <p>Publik KiwiSDR i Borgwedel i norra Tyskland. Bra för långvåg, NDB, mellanvåg, kortvåg, amatörradio och utility.</p>
 <div class="info"><div><strong>Land:</strong> Tyskland – Borgwedel</div><div><strong>Band:</strong> 0–30 MHz</div><div><strong>Typ:</strong> KiwiSDR</div></div>
+<p>Sök DO6LSM/Borgwedel i KiwiSDR-katalogen för aktuell mottagaradress.</p>
 <div class="status online">PUBLIK</div>
-<div class="actions"><button type="button" class="open-btn" onclick="window.open('http://21150.proxy.kiwisdr.com:8073/','_blank','noopener')">Öppna</button><button type="button" class="favorite-btn" >★ Favorit</button></div>
+<div class="actions"><button type="button" class="open-btn" onclick="window.open('https://kiwisdr.com/public/','_blank','noopener')">Sök Borgwedel i katalogen</button><button type="button" class="favorite-btn" >★ Favorit</button></div>
 </div>
 
 <div class="receiver-card hf amateur utility">
@@ -1231,7 +1232,7 @@ function addReceiverHelpButtons(){
     const base="https://1kuli1.github.io/dX-START/dx-help.html#";
     document.querySelectorAll(".receiver-card").forEach(card=>{
         if(card.querySelector(".receiver-help")) return;
-        const t=card.innerText.toLowerCase();
+        const t=(card.textContent||'').toLowerCase();
         let section="receiverhub";
         if(t.includes("kiwisdr")) section="kiwi";
         else if(t.includes("uber")) section="uber";
@@ -1330,5 +1331,9 @@ if('serviceWorker' in navigator && (location.protocol==='https:' || location.hos
    .catch(err=>console.warn('DX Centralen offline-läge kunde inte startas:',err)));
 }
 </script>
+<script>
+if(new URLSearchParams(location.search).has('catastrophe')){try{const d=JSON.parse(localStorage.getItem('dxKatastrofSdrRegion')||'null');if(d){const note=document.createElement('aside');note.className='hub-guide';note.setAttribute('role','status');note.textContent='Katastrof-DX: välj mottagare i '+d.region+'. '+d.tip+' Området är vägledning; listan är inte automatiskt geografiskt filtrerad.';document.querySelector('header').insertAdjacentElement('afterend',note);}}catch(e){}}
+</script>
 </body>
 </html>
+

@@ -44,7 +44,7 @@ button {
 <nav aria-label="DX Academy stöd" style="padding:10px;text-align:right"><a href="https://1kuli1.github.io/dX-START/asta.html?from=academy" target="_blank" rel="noopener noreferrer" style="display:inline-block;padding:9px 13px;background:#eab308;color:#111;border-radius:8px;font-weight:700">🤖 Fråga Asta</a></nav>
 
 <h1>🎧 DX Academy – Live analys (Demo)</h1>
-<p>Spela in → lyssna → analysera</p>
+<p>Spela in → lyssna. Analysknappen visar ett fast exempel, inte transkribering av din inspelning.</p>
 
 <button class="record" onclick="startRecording()">🎤 Spela in</button>
 <button class="stop" onclick="stopRecording()">⏹ Stoppa</button>
@@ -64,10 +64,11 @@ button {
 <script>
 let mediaRecorder;
 let audioChunks = [];
-let recordedBlob;
+let recordedBlob, recordingStream, recordingStarting=false, playbackUrl;
 
 async function startRecording() {
-  const stream = await navigator.mediaDevices.getUserMedia({ audio: true });
+  if(recordingStarting||mediaRecorder?.state==="recording")return;recordingStarting=true;
+  try{const stream = await navigator.mediaDevices.getUserMedia({ audio: true });recordingStream=stream;
 
   mediaRecorder = new MediaRecorder(stream);
   mediaRecorder.start();
@@ -79,21 +80,24 @@ async function startRecording() {
   };
 
   document.getElementById("transcript").innerText = "🎧 Spelar in...";
+  }catch(e){recordingStream?.getTracks().forEach(t=>t.stop());document.getElementById("transcript").innerText="Inspelning kunde inte startas: "+e.message;}finally{recordingStarting=false;}
 }
 
 function stopRecording() {
-  mediaRecorder.stop();
+  if(!mediaRecorder||mediaRecorder.state!=="recording")return;
 
   mediaRecorder.onstop = () => {
     recordedBlob = new Blob(audioChunks, { type: "audio/webm" });
+    recordingStream?.getTracks().forEach(t=>t.stop());
     document.getElementById("transcript").innerText = "✔️ Inspelning klar";
-  };
+  };mediaRecorder.stop();
 }
 
 function playAudio() {
   if (!recordedBlob) return;
 
-  const audioURL = URL.createObjectURL(recordedBlob);
+  if(playbackUrl)URL.revokeObjectURL(playbackUrl);
+  const audioURL = playbackUrl = URL.createObjectURL(recordedBlob);
   const audio = new Audio(audioURL);
   audio.play();
 }
@@ -117,3 +121,4 @@ function analyzeAudio() {
 
 <script>if('serviceWorker' in navigator&&location.protocol==='https:')window.addEventListener('load',()=>navigator.serviceWorker.register('../sw.js',{scope:'../'}).catch(e=>console.warn(e)));</script></body>
 </html>
+

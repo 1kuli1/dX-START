@@ -66,10 +66,10 @@ button {
 <div class="container">
 <h2>Identifiera station</h2>
 
-<input id="freq" placeholder="Frekvens (kHz)">
-<input id="utc" placeholder="UTC">
-<input id="lang" placeholder="Språk">
-<textarea id="obs" placeholder="Vad hör du?"></textarea>
+<input id="freq" aria-label="Frekvens kHz" placeholder="Frekvens (kHz)">
+<input id="utc" aria-label="UTC" placeholder="UTC">
+<input id="lang" aria-label="Språk" placeholder="Språk">
+<textarea id="obs" aria-label="Observationer" placeholder="Vad hör du?"></textarea>
 
 <br>
 <button onclick="utcNow()">UTC nu</button>
@@ -82,7 +82,7 @@ button {
 <div class="container">
 <h2>Störning / signal</h2>
 
-<select id="type">
+<select id="type" aria-label="Typ av störning">
 <option value="">Välj typ</option>
 <option>Brus</option>
 <option>Fading</option>
@@ -91,7 +91,7 @@ button {
 <option>Interferens</option>
 </select>
 
-<textarea id="desc" placeholder="Beskrivning"></textarea>
+<textarea id="desc" aria-label="Beskrivning" placeholder="Beskrivning"></textarea>
 
 <button onclick="interferenceAI()">Till fri AI</button>
 
@@ -102,7 +102,7 @@ button {
 <div class="container">
 <h2>Egen fråga</h2>
 
-<textarea id="question" placeholder="Skriv din fråga"></textarea>
+<textarea id="question" aria-label="Egen fråga" placeholder="Skriv din fråga"></textarea>
 
 <button onclick="questionAI()">Till fri AI</button>
 
@@ -118,8 +118,8 @@ function utcNow(){
 }
 
 function openAI(text){
-    navigator.clipboard.writeText(text);
-    window.open("https://chat.openai.com","_blank");
+    navigator.clipboard?.writeText(text).catch(()=>{});
+    window.open("https://chatgpt.com/","_blank","noopener");
 }
 
 function stationAI(){
@@ -143,3 +143,4 @@ function questionAI(){
 
 <script>if('serviceWorker' in navigator&&location.protocol==='https:')window.addEventListener('load',()=>navigator.serviceWorker.register('../sw.js',{scope:'../'}).catch(e=>console.warn(e)));</script></body>
 </html>
+

@@ -35,7 +35,7 @@ const textEscape=new Function(from(app,'function esc(s){','function linkifyText(
 check('Log table escapes HTML and handles numbers',()=>{
  assert.equal(textEscape(1008),'1008');assert(textEscape('<img>').includes('&lt;img&gt;'));
 });
-const swl=new Function(from(app,'function dxEstimateSinpo(signal){','function saveLog(){')+'return {dxEstimateSinpo,dxMakeSWLReport};')();
+const swl=new Function(from(app,'function dxEstimateSinpo(signal){','async function saveLog(){')+'return {dxEstimateSinpo,dxMakeSWLReport};')();
 check('Only described signals receive proposed SINPO',()=>{
  assert.equal(swl.dxEstimateSinpo(''),'');
  assert.equal(swl.dxEstimateSinpo('S9 mycket stark'),'45444');
@@ -92,3 +92,4 @@ check('Onboarding is linked from navigation and cached offline',()=>{
  assert(read('sw.js').includes("'./kom-igang.html'"));
 });
 if(process.exitCode)process.exit(process.exitCode);
+
