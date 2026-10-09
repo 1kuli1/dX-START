@@ -1,0 +1,213 @@
+<!doctype html>
+<html lang="sv">
+<head>
+<link rel="manifest" href="./manifest.webmanifest">
+<link rel="icon" href="./icon.svg" type="image/svg+xml">
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width,initial-scale=1">
+<meta name="theme-color" content="#07111f">
+<title>Katastrof-DX – DX Centralen</title>
+<style>
+:root{--bg:#07111f;--panel:#101b2d;--panel2:#16243a;--line:#31425f;--text:#f4f7fb;--muted:#b9c5d8;--accent:#eab308;--good:#22c55e;--watch:#f59e0b;--danger:#ef4444}
+*{box-sizing:border-box}body{margin:0;background:var(--bg);color:var(--text);font:16px system-ui,-apple-system,Segoe UI,sans-serif}
+.wrap{max-width:1080px;margin:auto;padding:18px}.skip-link{position:absolute;left:-9999px;top:6px;background:#fff;color:#000;padding:10px 14px;border-radius:8px;font-weight:800;z-index:20}.skip-link:focus{left:8px}
+a:focus-visible,button:focus-visible,input:focus-visible,select:focus-visible,textarea:focus-visible{outline:3px solid #fff;outline-offset:3px}
+header{display:flex;justify-content:space-between;gap:12px;align-items:flex-start;flex-wrap:wrap;border-bottom:1px solid var(--line);padding-bottom:14px}
+h1,h2,h3{color:var(--accent)}h1{margin:0}.sub,.small{color:var(--muted)}.small{font-size:13px}.nav,.buttons{display:flex;gap:8px;flex-wrap:wrap}
+.btn{display:inline-block;text-decoration:none;background:#17243a;color:#fff;border:1px solid #405577;border-radius:10px;padding:11px 14px;font-weight:750;cursor:pointer}.btn.main{background:var(--accent);color:#111;border-color:var(--accent)}.btn.danger{background:#3b1116;border-color:#7f1d1d}
+.notice,.card{background:var(--panel);border:1px solid var(--line);border-radius:14px;padding:16px}.notice{margin:16px 0;border-left:5px solid var(--watch)}.legal{border-left-color:var(--danger)}.grid{display:grid;grid-template-columns:repeat(2,1fr);gap:14px}.status-grid{display:grid;grid-template-columns:repeat(3,1fr);gap:10px;margin:16px 0}
+.status{border:1px solid var(--line);border-radius:12px;padding:13px;background:var(--panel2)}.status b{display:block;margin-bottom:5px}.s-green b{color:#86efac}.s-orange b{color:#fde68a}.s-red b{color:#fca5a5}
+.freqs{display:grid;grid-template-columns:repeat(auto-fit,minmax(180px,1fr));gap:10px}.freq{background:#0b1525;border:1px solid var(--line);border-radius:12px;padding:12px}.freq b{color:#fbbf24;font-size:18px}
+label{display:block;color:var(--muted);font-size:13px;margin-bottom:5px}input,select,textarea{width:100%;background:#0b1525;color:#fff;border:1px solid #405577;border-radius:9px;padding:10px;font:inherit}textarea{min-height:88px;resize:vertical}
+.formgrid{display:grid;grid-template-columns:repeat(2,1fr);gap:12px}.tablewrap{overflow:auto;border:1px solid var(--line);border-radius:12px;margin-top:12px}table{border-collapse:collapse;width:100%;min-width:930px}th,td{padding:9px 8px;border-bottom:1px solid #263955;text-align:left;vertical-align:top}th{background:#101b2d;color:#dce7f7;position:sticky;top:0}.empty{color:var(--muted);padding:14px}.toolbar{display:flex;gap:8px;flex-wrap:wrap;margin-top:12px}
+@media(max-width:760px){.grid,.status-grid,.formgrid{grid-template-columns:1fr}.wrap{padding:12px}.btn{min-height:44px}h1{font-size:28px}}
+</style>
+</head>
+<body>
+<a class="skip-link" href="#main">Hoppa till huvudinnehåll</a>
+<div class="wrap">
+<header>
+<div><h1>🚨 Katastrof-DX</h1><div class="sub">Lyssna, verifiera och dokumentera amatörradio vid större katastrofer.</div></div>
+<nav class="nav" aria-label="Katastrof-DX navigation"><a class="btn" href="./">← DX Centralen</a><a class="btn main" href="./guider.html#26_Katastrof_DX" target="_blank" rel="noopener">📖 Katastrof-guide</a><a class="btn" href="./receiver-hub.html">🎧 Receiver Hub</a><a class="btn" href="./asta.html" target="_blank" rel="noopener noreferrer">🤖 Fråga Asta</a></nav>
+</header>
+
+<main id="main">
+<div class="notice legal"><b>Lyssning först – stör aldrig nödradio.</b><br>Den här sidan är ett lyssnar- och dokumentationsverktyg. Den startar ingen sändning. Frekvenser ska alltid kontrolleras mot aktuell officiell källa. Publicera inte obekräftade uppgifter om skadade, saknade eller privata personer.</div>
+
+<section aria-labelledby="status-title">
+<h2 id="status-title">Statusnivåer</h2>
+<div class="status-grid">
+<div class="status s-green"><b>🟢 Ingen aktivering känd</b><span class="small">Ingen bekräftad EmComm-aktivitet.</span></div>
+<div class="status s-orange"><b>🟠 Bevakningsläge</b><span class="small">Katastrof pågår, men radioaktivering är ännu inte bekräftad.</span></div>
+<div class="status s-red"><b>🔴 Bekräftat nödradionät</b><span class="small">Aktiv EmComm/nödradio bekräftad av trovärdig källa.</span></div>
+</div>
+</section>
+
+<section class="grid">
+<div class="card">
+<h2>🌍 Välj katastrofområde</h2>
+<p class="small">Välj den del av världen där händelsen pågår. Katastrof-DX visar en rekommenderad SDR-region och öppnar Receiver Hub för fortsatt val av mottagare.</p>
+<div class="formgrid">
+<div><label for="sdrArea">Katastrofområde</label>
+<select id="sdrArea" onchange="updateSdrRecommendation()">
+<option value="">Välj område…</option>
+<option value="nordic">Norden / norra Europa</option>
+<option value="europe">Centraleuropa / Sydeuropa</option>
+<option value="med">Medelhavet / Turkiet / Balkan</option>
+<option value="africa">Afrika</option>
+<option value="mena">Mellanöstern</option>
+<option value="asia">Syd- och Sydostasien</option>
+<option value="japan">Japan / Korea / västra Stilla havet</option>
+<option value="pacific">Guam / Marianerna / Mikronesien / Stilla havet</option>
+<option value="usa-east">USA östkust / Karibien</option>
+<option value="usa-gulf">USA Gulfkust / Mexikanska golfen</option>
+<option value="usa-west">USA västkust / Baja California</option>
+<option value="latam">Central- och Sydamerika</option>
+<option value="oceania">Australien / Nya Zeeland</option>
+</select></div>
+<div><label for="sdrRegion">Rekommenderad SDR-region</label><input id="sdrRegion" readonly placeholder="Välj område ovan"></div>
+</div>
+<div class="buttons" style="margin-top:12px">
+<button type="button" class="btn main" onclick="openRecommendedSdr()">▶ Öppna lämplig SDR</button>
+<button type="button" class="btn" onclick="copySdrTip()">Kopiera SDR-tipset</button>
+</div>
+<div id="sdrTip" class="notice" role="status" aria-live="polite" style="margin-top:12px">Välj katastrofområde för att få ett mottagarförslag.</div>
+</div>
+<div class="card">
+<h2>📡 Startfrekvenser</h2>
+<p class="small">Endast startpunkter. Officiella aktiveringsbesked gäller alltid före denna lista.</p>
+<div class="freqs">
+<div class="freq"><b>3.760 MHz</b><br>LSB · Region 1 · kväll/natt</div>
+<div class="freq"><b>7.110 MHz</b><br>LSB · Region 1 · regionalt</div>
+<div class="freq"><b>14.300 MHz</b><br>USB · internationellt</div>
+<div class="freq"><b>14.325 MHz</b><br>USB · Hurricane Watch Net</div>
+<div class="freq"><b>7.268 MHz</b><br>LSB · Hurricane Watch Net</div>
+</div>
+</div>
+<div class="card">
+<h2>🌍 Kontrollera först</h2>
+<p>Kontrollera officiella källor innan du kopplar en radiosignal till en katastrof.</p>
+<div class="buttons">
+<a class="btn main" href="https://www.gdacs.org/" target="_blank" rel="noopener noreferrer">GDACS</a>
+<a class="btn" href="https://www.iaru-r1.org/about-us/committees-and-working-groups/emcomm/" target="_blank" rel="noopener noreferrer">IARU Region 1</a>
+<a class="btn" href="https://www.hwn.org/" target="_blank" rel="noopener noreferrer">Hurricane Watch Net</a>
+</div>
+<p class="small">Externa tjänster har egna villkor och integritetspolicyer.</p>
+</div>
+</section>
+
+<section class="card" style="margin-top:16px" aria-labelledby="log-title">
+<h2 id="log-title">📒 Katastrof-DX-loggbok</h2>
+<p class="small">Separat från den vanliga DX-loggboken. Sparas lokalt på den här enheten. Undvik personuppgifter som inte behövs.</p>
+<div class="formgrid">
+<div><label for="date">Datum</label><input id="date" type="date"></div>
+<div><label for="utc">UTC</label><input id="utc" type="time"></div>
+<div><label for="event">Katastrof / händelse</label><input id="event" placeholder="t.ex. jordbävning, tyfon, översvämning"></div>
+<div><label for="area">Land / område</label><input id="area" placeholder="Land, region eller ort"></div>
+<div><label for="status">Radiostatus</label><select id="status"><option>🟢 Ingen aktivering känd</option><option selected>🟠 Bevakningsläge</option><option>🔴 Bekräftat nödradionät</option></select></div>
+<div><label for="source">Källa / verifiering</label><input id="source" placeholder="IARU, GDACS, nationell organisation..."></div>
+<div><label for="freq">Frekvens</label><input id="freq" placeholder="t.ex. 7.110 MHz"></div>
+<div><label for="mode">Mode</label><input id="mode" placeholder="LSB, USB, FM, JS8Call..."></div>
+<div><label for="rx">Mottagare / SDR</label><input id="rx" placeholder="KiwiSDR, WebSDR..."></div>
+<div><label for="rxregion">SDR-region</label><input id="rxregion" placeholder="t.ex. Guam, Louisiana, Indonesien"></div>
+<div><label for="callsign">Anropssignal / nät</label><input id="callsign" placeholder="Endast om säkert hört"></div>
+<div><label for="confidence">Identifiering</label><select id="confidence"><option>Bekräftad</option><option selected>Trolig</option><option>Osäker</option></select></div>
+<div style="grid-column:1/-1"><label for="heard">Vad hördes?</label><textarea id="heard" placeholder="Kort saklig sammanfattning. Undvik känsliga personuppgifter."></textarea></div>
+<div style="grid-column:1/-1"><label for="notes">Anteckningar</label><textarea id="notes" placeholder="T.ex. Net Control, signalstyrka, störningar, frekvensbyte eller kontroll som behöver göras."></textarea></div>
+</div>
+<div class="toolbar">
+<button type="button" class="btn main" onclick="saveLog()">💾 Spara observation</button>
+<button type="button" class="btn" onclick="clearForm()">Rensa formulär</button>
+<button type="button" class="btn" onclick="exportCSV()">⬇ Exportera CSV</button>
+<button type="button" class="btn" onclick="exportJSON()">⬇ Säkerhetskopia JSON</button>
+</div>
+<div id="logStatus" class="small" role="status" aria-live="polite" style="margin-top:10px"></div>
+
+<div class="tablewrap"><table>
+<thead><tr><th>Datum/UTC</th><th>Händelse</th><th>Område</th><th>Status</th><th>Frekvens/mode</th><th>SDR</th><th>ID</th><th>Hört</th><th></th></tr></thead>
+<tbody id="rows"></tbody>
+</table></div>
+<div id="empty" class="empty">Inga katastrof-DX-observationer sparade ännu.</div>
+</section>
+
+<div class="notice"><b>Integritet och ansvar:</b> Loggen lagras lokalt i webbläsaren tills du själv exporterar eller raderar den. Lägg inte in känsliga personuppgifter. Uppgifter från radio bör behandlas som observationer tills de verifierats av officiell källa.</div>
+</main>
+</div>
+
+<script>
+const KEY="dxKatastrofLogV1";
+const ids=["date","utc","event","area","status","source","freq","mode","rx","rxregion","callsign","confidence","heard","notes"];
+function esc(s){return String(s??"").replace(/[&<>"']/g,m=>({"&":"&amp;","<":"&lt;",">":"&gt;",'"':"&quot;","'":"&#39;"}[m]))}
+function load(){try{return JSON.parse(localStorage.getItem(KEY)||"[]")}catch(e){return[]}}
+function store(v){localStorage.setItem(KEY,JSON.stringify(v))}
+const SDR_AREAS={
+"nordic":{region:"Sverige, Norge, Finland, Danmark eller norra Tyskland",freq:"7.110 MHz",mode:"LSB",source:"IARU Region 1 – startpunkt, verifiera aktuell aktivering",tip:"Välj en SDR i eller nära Norden. För HF kan även norra Tyskland/Nederländerna ge bra regional täckning."},
+"europe":{region:"Tyskland, Nederländerna, Frankrike, Italien eller Österrike",freq:"7.110 MHz",mode:"LSB",source:"IARU Region 1 – startpunkt, verifiera aktuell aktivering",tip:"Välj en SDR i Centraleuropa och helst i samma eller angränsande land som katastrofen."},
+"med":{region:"Grekland, Italien, Bulgarien, Rumänien eller Turkiet",freq:"7.110 MHz",mode:"LSB",source:"IARU Region 1 – startpunkt, verifiera aktuell aktivering",tip:"För Balkan/Turkiet/östra Medelhavet: välj en SDR nära området. 7 MHz är ofta särskilt användbart kvällstid."},
+"africa":{region:"Nordafrika, Sydeuropa eller Sydafrika beroende på händelse",freq:"14.300 MHz",mode:"USB",source:"IARU – internationell startpunkt, verifiera aktuell aktivering",tip:"Afrika har glesare SDR-täckning. Välj närmaste publika mottagare, gärna i samma del av kontinenten eller i Sydeuropa."},
+"mena":{region:"Grekland, Cypern, Turkiet, Israel eller Gulfregionen",freq:"14.300 MHz",mode:"USB",source:"IARU – internationell startpunkt, verifiera aktuell aktivering",tip:"Välj en SDR så nära händelseområdet som möjligt och kontrollera både regional HF och 14 MHz."},
+"asia":{region:"Indonesien, Malaysia, Singapore, Thailand eller Indien",freq:"7.110 MHz",mode:"LSB",source:"IARU/regionell startpunkt – verifiera lokal aktivering",tip:"För Syd-/Sydostasien: välj en SDR i samma land eller grannland. Australien kan fungera som reserv för HF."},
+"japan":{region:"Japan, Sydkorea, Taiwan eller Filippinerna",freq:"14.300 MHz",mode:"USB",source:"IARU – internationell startpunkt, verifiera aktuell aktivering",tip:"Välj en SDR i Japan/Korea/Taiwan för lokal/regional HF. För västra Stilla havet fungerar även Filippinerna."},
+"pacific":{region:"Guam, Marianerna, Palau, Mikronesien eller Filippinerna",freq:"14.300 MHz",mode:"USB",source:"IARU – internationell startpunkt, verifiera aktuell aktivering",tip:"För öar i västra Stilla havet: prioritera Guam/Marianerna. Filippinerna är ett bra reservområde för HF."},
+"usa-east":{region:"Florida, Georgia, Carolinas, Puerto Rico eller östra USA",freq:"14.325 MHz",mode:"USB",source:"Hurricane Watch Net – startpunkt; aktivt nät måste verifieras",tip:"För orkaner i Karibien/Atlanten: välj Florida, Puerto Rico eller USA:s östkust beroende på stormläge."},
+"usa-gulf":{region:"Louisiana, Mississippi, Alabama, Florida Panhandle eller östra Texas",freq:"7.268 MHz",mode:"LSB",source:"Hurricane Watch Net – startpunkt; aktivt nät måste verifieras",tip:"För Mexikanska golfen: välj mottagare längs centrala Gulfkusten. För HWN bevaka 14.325 USB och 7.268 LSB när nätet är aktivt."},
+"usa-west":{region:"Kalifornien, Arizona, Baja California eller Sonora",freq:"14.300 MHz",mode:"USB",source:"IARU – internationell startpunkt, verifiera regional aktivering",tip:"För Baja/nordvästra Mexiko: välj södra Kalifornien, Arizona eller Sonora. För lokal trafik är närhet viktigast."},
+"latam":{region:"Mexiko, Centralamerika, Brasilien, Argentina eller Chile beroende på händelse",freq:"14.300 MHz",mode:"USB",source:"IARU – internationell startpunkt, verifiera nationell aktivering",tip:"Välj samma land om möjligt. Annars grannland med god HF-täckning mot katastrofområdet."},
+"oceania":{region:"Australien eller Nya Zeeland",freq:"14.300 MHz",mode:"USB",source:"IARU – internationell startpunkt, verifiera aktuell aktivering",tip:"Välj mottagare i samma land eller närmaste kustregion. Australien kan även vara bra för Indonesien och södra Stilla havet."}
+};
+function updateSdrRecommendation(){
+ const key=document.getElementById("sdrArea").value;
+ const d=SDR_AREAS[key];
+ document.getElementById("sdrRegion").value=d?d.region:"";
+ document.getElementById("sdrTip").textContent=d?d.tip:"Välj katastrofområde för att få ett mottagarförslag.";
+ if(d){
+   document.getElementById("rxregion").value=d.region;
+   document.getElementById("freq").value=d.freq||"";
+   document.getElementById("mode").value=d.mode||"";
+   document.getElementById("source").value=d.source||"";
+   document.getElementById("status").value="🟠 Bevakningsläge";
+ }
+}
+function openRecommendedSdr(){
+ const key=document.getElementById("sdrArea").value;
+ if(!key){document.getElementById("sdrTip").textContent="Välj först katastrofområde.";return}
+ const d=SDR_AREAS[key];
+ try{localStorage.setItem("dxKatastrofSdrRegion",JSON.stringify({key:key,region:d.region,tip:d.tip,ts:Date.now()}))}catch(e){}
+ window.location.href="./receiver-hub.html";
+}
+function copySdrTip(){
+ const key=document.getElementById("sdrArea").value;
+ if(!key){document.getElementById("sdrTip").textContent="Välj först katastrofområde.";return}
+ const d=SDR_AREAS[key],txt="Rekommenderad SDR-region: "+d.region+"\n"+d.tip;
+ if(navigator.clipboard&&navigator.clipboard.writeText){navigator.clipboard.writeText(txt).then(()=>document.getElementById("sdrTip").textContent="SDR-tipset är kopierat.").catch(()=>{})}
+}
+function nowUTC(){const n=new Date();date.value=n.toISOString().slice(0,10);utc.value=n.toISOString().slice(11,16)}
+function clearForm(){ids.forEach(id=>{const e=document.getElementById(id);if(e.tagName==="SELECT")return;e.value=""});status.selectedIndex=1;confidence.selectedIndex=1;nowUTC();logStatus.textContent=""}
+function saveLog(){
+ const item={id:Date.now()};
+ ids.forEach(id=>item[id]=document.getElementById(id).value.trim());
+ if(!item.event||!item.area){logStatus.textContent="Fyll i minst katastrof/händelse och land/område.";return}
+ const data=load();data.unshift(item);store(data);render();clearForm();logStatus.textContent="Observationen är sparad i Katastrof-DX-loggboken på den här enheten."
+}
+function del(id){if(!confirm("Radera den här observationen?"))return;store(load().filter(x=>x.id!==id));render()}
+function render(){
+ const data=load(),tb=document.getElementById("rows"),empty=document.getElementById("empty");
+ tb.innerHTML=data.map(x=>`<tr><td>${esc(x.date)} ${esc(x.utc)} UTC</td><td><b>${esc(x.event)}</b><br><span class="small">${esc(x.source)}</span></td><td>${esc(x.area)}</td><td>${esc(x.status)}</td><td>${esc(x.freq)}<br><span class="small">${esc(x.mode)}</span></td><td>${esc(x.rx)}<br><span class="small">${esc(x.rxregion)}</span></td><td>${esc(x.callsign)}<br><span class="small">${esc(x.confidence)}</span></td><td>${esc(x.heard)}</td><td><button type="button" class="btn danger" aria-label="Radera observation" onclick="del(${x.id})">Radera</button></td></tr>`).join("");
+ empty.style.display=data.length?"none":"block"
+}
+function download(name,type,text){const a=document.createElement("a");a.href=URL.createObjectURL(new Blob([text],{type}));a.download=name;a.click();setTimeout(()=>URL.revokeObjectURL(a.href),1000)}
+function exportJSON(){download("katastrof-dx-logg.json","application/json",JSON.stringify(load(),null,2))}
+function exportCSV(){
+ const cols=["date","utc","event","area","status","source","freq","mode","rx","rxregion","callsign","confidence","heard","notes"];
+ const q=v=>'"'+String(v??"").replace(/"/g,'""')+'"';
+ const csv=["Datum,UTC,Händelse,Område,Status,Källa,Frekvens,Mode,Mottagare,SDR-region,Anropssignal/Nät,Identifiering,Hört,Anteckningar"].concat(load().map(r=>cols.map(c=>q(r[c])).join(","))).join("\n");
+ download("katastrof-dx-logg.csv","text/csv;charset=utf-8","\ufeff"+csv)
+}
+nowUTC();render();
+</script>
+<script>
+if('serviceWorker' in navigator&&location.protocol==='https:'){
+ window.addEventListener('load',()=>navigator.serviceWorker.register('./sw.js',{scope:'./'}).catch(e=>console.warn('PWA offline-läge',e)));
+}
+</script>
+</body></html>
