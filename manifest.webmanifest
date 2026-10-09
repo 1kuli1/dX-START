@@ -1,10 +1,10 @@
 {
   "id": "./",
-  "name": "DX Centralen – testversion",
+  "name": "DX Centralen – personlig testversion",
   "short_name": "DX Centralen",
   "lang": "sv",
-  "description": "DX-mottagare, guider och personlig DX-loggbok. Testversion utan konto.",
-  "start_url": "./",
+  "description": "DX Centralen med mottagare, loggbok, katastrof-DX och DX Academy. Testversion utan konto.",
+  "start_url": "./centralen.html",
   "scope": "./",
   "display": "standalone",
   "background_color": "#07111f",
