@@ -1177,6 +1177,9 @@ function showAllReceivers(){
  const u=new URL(location.href);u.searchParams.delete('band');history.replaceState(null,'',u.toString());
  rxActiveBand='all';rxShowFavorites=false;
  const input=document.getElementById('searchInput');if(input)input.value='';
+ document.body.classList.remove('band-view');
+ const h1=document.querySelector('header h1');if(h1)h1.textContent='Receiver Hub';
+ const back=document.getElementById('receiverBackBtn');if(back){back.textContent='← TILLBAKA TILL DX CENTRALEN';back.href='./centralen.html';}
  updateReceiverVisibility();
 }
 /* ===== ÖPPNA VALT BAND FRÅN URL ===== */
