@@ -1,7 +1,8 @@
 /* DX Centralen beta: sidor offline; inga personliga loggar eller externa radioströmmar cachas. */
-const CACHE='dx-centralen-beta-v1-20261009';
-const SHELL=['./','./index.html','./receiver-hub.html','./asta.html','./dx-help.html','./guider.html','./manifest.webmanifest','./icon-192.png','./icon-512.png','./icon.svg'];
+const CACHE='dx-centralen-beta-v2-20261009';
+const SHELL=['./','./index.html','./centralen.html','./katastrof-dx.html','./receiver-hub.html','./asta.html','./dx-help.html','./guider.html','./academy/index.html','./academy/lektioner.html','./academy/nyborgare/index.html','./manifest.webmanifest','./icon-192.png','./icon-512.png','./icon.svg'];
 const ALLOWED=new Set(SHELL.map(p=>new URL(p,self.registration.scope).pathname));
+const ACADEMY_ROOT=new URL('./academy/',self.registration.scope).pathname;
 self.addEventListener('install',event=>{
  event.waitUntil(caches.open(CACHE).then(cache=>cache.addAll(SHELL)));
 });
@@ -10,7 +11,7 @@ self.addEventListener('activate',event=>{
 });
 self.addEventListener('fetch',event=>{
  const req=event.request,url=new URL(req.url);
- if(req.method!=='GET'||url.origin!==self.location.origin||!ALLOWED.has(url.pathname))return;
+ if(req.method!=='GET'||url.origin!==self.location.origin||(!ALLOWED.has(url.pathname)&&!url.pathname.startsWith(ACADEMY_ROOT)))return;
  event.respondWith((async()=>{
   const cache=await caches.open(CACHE);
   try{
