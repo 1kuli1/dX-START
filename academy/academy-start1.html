@@ -1,0 +1,101 @@
+<!DOCTYPE html>
+<html lang="sv">
+<head>
+<link rel="manifest" href="../manifest.webmanifest">
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>DX Academy</title>
+
+<style>
+body {
+    margin: 0;
+    font-family: Arial, sans-serif;
+    background: #0b0f1a;
+    color: white;
+    text-align: center;
+}
+
+h1 {
+    margin-top: 30px;
+}
+
+.container {
+    padding: 20px;
+}
+
+.section {
+    margin: 30px auto;
+    max-width: 500px;
+    background: #111827;
+    padding: 20px;
+    border-radius: 15px;
+}
+
+button {
+    width: 80%;
+    padding: 12px;
+    margin: 10px;
+    border-radius: 10px;
+    border: none;
+    background: #eab308;
+    color: black;
+    font-weight: bold;
+    font-size: 16px;
+    cursor: pointer;
+}
+
+button:hover {
+    background: #facc15;
+}
+</style>
+</head>
+
+<body>
+<nav aria-label="DX Academy stöd" style="padding:10px;text-align:right"><a href="https://1kuli1.github.io/dX-START/asta.html?from=academy" target="_blank" rel="noopener noreferrer" style="display:inline-block;padding:9px 13px;background:#eab308;color:#111;border-radius:8px;font-weight:700">🤖 Fråga Asta</a></nav>
+
+<h1>DX Academy</h1>
+<p>Lär dig lyssna, förstå och identifiera radiosignaler</p>
+
+<div class="container">
+
+    <!-- START -->
+    <div class="section">
+        <h2>Start</h2>
+        <button onclick="location.href='lektioner.html'">▶ Starta kurs</button>
+        <button onclick="openAI()">🤖 Öppna AI-hjälp</button>
+    </div>
+
+    <!-- SNABBSTART -->
+    <div class="section">
+        <h2>Snabbstart</h2>
+        <button onclick="window.open('http://kiwisdr.com/public/', '_blank')">🔊 Lyssna på radio</button>
+        <button onclick="location.href='ai_niva_1.html'">📡 Identifiera station</button>
+        <button onclick="location.href='lektioner.html'">📘 Lär dig signaler</button>
+    </div>
+
+    <!-- NIVÅER -->
+    <div class="section">
+        <h2>Kursnivåer</h2>
+        <button onclick="location.href='nyborgare/start.html'">Nivå 1 – Nybörjare</button>
+        <button onclick="location.href='index.html'">Nivå 2 – Fortsättning</button>
+        <button onclick="location.href='index.html'">Nivå 3 – Avancerad</button>
+    </div>
+
+    <!-- VERKTYG -->
+    <div class="section">
+        <h2>Verktyg</h2>
+        <button onclick="location.href='ai_niva_1.html'">🧠 AI-verktyg</button>
+        <button onclick="location.href='nyborgare/dx_logg_v1_utc_knapp (1).html'">📊 Loggbok</button>
+        <button onclick="location.href='index.html'">🌍 DX-karta</button>
+    </div>
+
+</div>
+
+<script>
+function openAI() {
+    window.open("https://chat.openai.com/", "_blank");
+}
+</script>
+
+<script>if('serviceWorker' in navigator&&location.protocol==='https:')window.addEventListener('load',()=>navigator.serviceWorker.register('../sw.js',{scope:'../'}).catch(e=>console.warn(e)));</script></body>
+</html>
