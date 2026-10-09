@@ -297,52 +297,10 @@ html[data-dx-tool] header,html[data-dx-tool] .tabs{display:none !important;}
     </a>
   </div>
 
-  <div style="margin-top:20px;border-top:1px solid #31425f;padding-top:16px">
-    <div class="kicker">Egna mottagare</div>
-    <h3>Lägg till mottagare inom valfritt område</h3>
-    <div class="small">Sparas på den här enheten. Du kan lägga till hur många du vill och öppna dem direkt härifrån.</div>
-    <div class="grid" style="margin-top:12px">
-      <label>Område
-        <select id="customRxCategory">
-          <option>HF / Kortvåg</option>
-          <option>MW / Mellanvåg</option>
-          <option>LW / Långvåg</option>
-          <option>FM-DX</option>
-          <option>NDB / LF</option>
-          <option>Amatörradio</option>
-          <option>Utility</option>
-          <option>Flygradio</option>
-          <option>Maritim / AIS</option>
-          <option>Satellit</option>
-          <option>DAB</option>
-          <option>Meteor scatter / Aurora</option>
-          <option>Övrigt</option>
-        </select>
-      </label>
-      <label>Namn
-        <input id="customRxName" placeholder="t.ex. Julussdalen KiwiSDR">
-      </label>
-      <label>Webbadress
-        <input id="customRxUrl" placeholder="https://...">
-      </label>
-      <label>Anteckning
-        <input id="customRxNote" placeholder="t.ex. bra för FM, Norge">
-      </label>
-    </div>
-    <div class="row" style="margin-top:10px;gap:10px;flex-wrap:wrap">
-      <button type="button" class="btn" onclick="dxAddCustomReceiver()">➕ Lägg till mottagare</button>
-    </div>
-    <div id="customReceiverGroups" style="margin-top:14px"></div>
-  </div>
-  <div style="margin-top:20px;border-top:1px solid #31425f;padding-top:16px">
-    <div class="kicker">Google Drive – levande DX-böcker</div><h3>Loggar, register och ljudarkiv</h3>
-    <div class="receiver-grid">
-      <a class="linkcard" href="https://docs.google.com/spreadsheets/d/1ewZNIP4F0FHp2Z3jx53ORuR5qSWy0XxOLu26AEZPG-U/edit#gid=1929791472" target="_blank" rel="noopener noreferrer"><b>📒 DX MASTER LOGGBOK – LIVE</b><div class="small">Gemensam DX-loggbok</div></a>
-      <a class="linkcard" href="https://docs.google.com/spreadsheets/d/1KBSC8PQMdFLni0BRucLgibo96Q2Y_R4SOJi1UpI1f60/edit" target="_blank" rel="noopener noreferrer"><b>📻 FM-DX MASTER LOGGBOK – LIVE</b><div class="small">FM-DX-loggbok</div></a>
-      <a class="linkcard" href="https://docs.google.com/spreadsheets/d/1ewZNIP4F0FHp2Z3jx53ORuR5qSWy0XxOLu26AEZPG-U/edit#gid=715296592" target="_blank" rel="noopener noreferrer"><b>🎙 DX LJUDARKIV</b><div class="small">Ljudklipp och länkar</div></a>
-      <a class="linkcard" href="https://docs.google.com/spreadsheets/d/1g4WMbHHJ_RfVv2DkObzJBmL47EiHRoXhFqVDmFFcJ8k/edit" target="_blank" rel="noopener noreferrer"><b>📚 Stationsregister</b><div class="small">Stationer och bakgrund</div></a>
-      <a class="linkcard" href="https://docs.google.com/spreadsheets/d/1X5tWIYfx2ejC1MiUcPrQG4n7CPrH9NkCnw5Kcb4_-AY/edit" target="_blank" rel="noopener noreferrer"><b>📡 Mottagarregister</b><div class="small">Dina SDR- och mottagarlänkar</div></a>
-    </div>
+  <div class="notice">
+    <b>Dina personliga loggar</b> sparas lokalt i DX Start. Vill du säkerhetskopiera dem,
+    öppna Synk/Säkerhetskopia och hämta en JSON-fil. Egna Google Drive-dokument kopplas
+    inte automatiskt till en publik testversion.
   </div>
 
 </section>
@@ -439,7 +397,7 @@ html[data-dx-tool] header,html[data-dx-tool] .tabs{display:none !important;}
     <div class="actions"><button type="button" class="btn accent" id="dxRecBtn" onclick="dxStartRecording()">● Spela in</button><button type="button" class="btn danger" id="dxRecStopBtn" onclick="dxStopRecording()" disabled>■ Stoppa inspelning</button><label class="btn" style="display:inline-block">Importera ljudfil<input type="file" accept="audio/*" onchange="dxPreviewAudioFile(this)" style="display:none"></label></div>
     <div id="dxRecState" class="notice">Ingen inspelning pågår.</div>
     <audio id="dxAudioPreview" controls style="width:100%;margin-top:12px"></audio>
-    <div class="actions"><button type="button" class="btn" id="dxSaveAudioBtn" onclick="dxSaveRecording()" disabled>💾 Spara ljudfil</button><a class="btn" href="https://docs.google.com/spreadsheets/d/1ewZNIP4F0FHp2Z3jx53ORuR5qSWy0XxOLu26AEZPG-U/edit#gid=715296592" target="_blank" rel="noopener noreferrer">Öppna DX LJUDARKIV</a><a class="btn" href="https://drive.google.com/drive/my-drive" target="_blank" rel="noopener noreferrer">Öppna Google Drive</a></div>
+    <div class="actions"><button type="button" class="btn" id="dxSaveAudioBtn" onclick="dxSaveRecording()" disabled>💾 Spara ljudfil</button><a class="btn" href="https://drive.google.com/drive/my-drive" target="_blank" rel="noopener noreferrer">Öppna din Google Drive</a><a class="btn" href="https://drive.google.com/drive/my-drive" target="_blank" rel="noopener noreferrer">Öppna Google Drive</a></div>
     <div class="small">När ljudfilen ligger i Drive kan dess klickbara Drive-länk sparas i DX LJUDARKIV och i loggens ljudfält.</div>
   </div>
 </section>
@@ -874,57 +832,7 @@ function dxMergeLogs(a,b){
  return [...map.values()].sort((x,y)=>String(y.saved||y._updatedAt||'').localeCompare(String(x.saved||x._updatedAt||'')));
 }
 
-const DX_RECOVERY_SEED_URL='./dx-recovery-seed-2026-10-07.json';
-function dxRecoveryNorm(v){return String(v||'').trim().toLowerCase().replace(/\s+/g,' ')}
-function dxRecoveryFreq(v){return dxRecoveryNorm(v).replace(/\s*(khz|mhz)$/,'').replace(',', '.').replace(/\.0+$/,'')}
-function dxRecoveryKey(l){
-  return [
-    dxRecoveryNorm(l?.date),
-    dxRecoveryNorm(l?.time).replace(/^ca\s+/,''),
-    dxRecoveryFreq(l?.freq),
-    dxRecoveryNorm(l?.station),
-    dxRecoveryNorm(l?.rx)
-  ].join('|');
-}
-function dxNeedsMasterRecovery(remote){
-  if(!Array.isArray(remote) || remote.length!==1) return false;
-  const l=remote[0]||{};
-  return dxRecoveryFreq(l.freq)==='225' &&
-         dxRecoveryNorm(l.station).includes('polski') &&
-         String(l.date||'')==='2026-09-24';
-}
-async function dxFetchMasterRecoverySeed(){
-  const r=await fetch(DX_RECOVERY_SEED_URL+'?v=20261007',{cache:'no-store'});
-  if(!r.ok) throw new Error('Återställningsfilen kunde inte läsas (HTTP '+r.status+')');
-  const j=await r.json();
-  const logs=Array.isArray(j)?j:j.logs;
-  if(!Array.isArray(logs) || logs.length!==48) throw new Error('Återställningsfilen har oväntat innehåll');
-  return logs.map(dxNormalizeLog);
-}
-function dxMergeRecoverySeed(base,seed){
-  const out=(base||[]).map(dxNormalizeLog);
-  const byKey=new Map();
-  out.forEach((x,i)=>{const k=dxRecoveryKey(x); if(k!=='||||') byKey.set(k,i);});
-  for(const incoming0 of (seed||[])){
-    const incoming=dxNormalizeLog(incoming0);
-    const k=dxRecoveryKey(incoming);
-    const i=byKey.get(k);
-    if(i===undefined){
-      byKey.set(k,out.length);
-      out.push(incoming);
-      continue;
-    }
-    const existing=out[i];
-    const merged={...existing};
-    for(const [key,value] of Object.entries(incoming)){
-      const empty=merged[key]===undefined || merged[key]===null || String(merged[key]).trim()==='';
-      if(empty && value!==undefined && value!==null && String(value).trim()!=='') merged[key]=value;
-    }
-    out[i]=dxNormalizeLog(merged);
-  }
-  return out.sort((x,y)=>String(y.saved||y._updatedAt||'').localeCompare(String(x.saved||x._updatedAt||'')));
-}
-
+// Individuella återställningsposter ligger inte i den publika programkoden.
 function dxSyncStatus(msg,ok){
   const el=document.getElementById('dxSyncStatus');
   if(el){el.textContent=msg;el.style.color=ok===true?'#86efac':ok===false?'#fca5a5':'#fde68a';}
@@ -999,11 +907,7 @@ async function dxCloudSync(showMessage=false){
     const local=getLogRecords().map(dxNormalizeLog);
     const remote=await dxFetchRemote();
     let merged=dxMergeLogs(local,remote);
-    if(dxNeedsMasterRecovery(remote)){
-      dxSyncStatus('Återställer huvudloggböckerna…',null);
-      const seed=await dxFetchMasterRecoverySeed();
-      merged=dxMergeRecoverySeed(merged,seed);
-    }
+
     localStorage.setItem('dxLogs',JSON.stringify(merged));
     await dxPostRemote(merged);
     const when=new Date().toLocaleString('sv-SE');
@@ -1025,10 +929,7 @@ async function dxCloudPullOnly(){
   try{
     const remote=await dxFetchRemote();
     let merged=dxMergeLogs(getLogRecords(),remote);
-    if(dxNeedsMasterRecovery(remote)){
-      const seed=await dxFetchMasterRecoverySeed();
-      merged=dxMergeRecoverySeed(merged,seed);
-    }
+
     localStorage.setItem('dxLogs',JSON.stringify(merged));
     const when=new Date().toLocaleString('sv-SE');
     localStorage.setItem('dxSyncLast',when);
@@ -1420,7 +1321,8 @@ async function importExcel(ev){
 }
 
 // ===== DX-karta =====
-const EMBEDDED_VERIFIED_LOGS = [{"date": "2026-09-29", "time": "", "freq": "14285", "band": "Amatörradio", "mode": "USB", "rx": "KiwiSDR – Julussdalen", "rxplace": "Julussdalen", "rxLocator": "JP51UA", "rxLat": "61.020833", "rxLon": "11.708333", "station": "SV7AFF", "country": "Grekland", "place": "Xanthi", "stationLat": "41.1349", "stationLon": "24.8880", "signal": "59 / 59+10", "sinpo": "", "operator": "Giannis", "verifyStatus": "Bekräftad", "mapCategory": "Radioamatör", "mapStatus": "Verifierad", "reportStatus": "Ej skapad", "reply": "Inväntar svar", "positionSource": "Mottagare: JP51UA. Station: verifierad QTH Xanthi; kartnål vid stadscentrum.", "embedded": true}, {"date": "2026-09-29", "time": "12:31", "freq": "14160", "band": "Amatörradio", "mode": "USB", "rx": "KiwiSDR – Heppen", "rxplace": "Heppen", "rxLocator": "JO21OC", "rxLat": "51.104167", "rxLon": "5.208333", "station": "RA3GZ", "country": "Ryssland", "place": "Lipetsk", "stationLat": "52.6031", "stationLon": "39.5708", "signal": "59 / ca S9+5 dB", "sinpo": "45444 (prel.)", "operator": "Sergej", "verifyStatus": "Bekräftad", "mapCategory": "Radioamatör", "mapStatus": "Verifierad", "reportStatus": "Klar – ej bekräftat skickad", "contact": "E-post: ra3gz@mail.ru | QRZ: https://www.qrz.com/db/RA3GZ", "reply": "Inväntar svar", "positionSource": "Mottagare: JO21OC. Station: verifierad QTH Lipetsk; kartnål vid stadscentrum.", "embedded": true}, {"date": "2026-08-29", "time": "03:59", "freq": "648", "band": "MW", "mode": "AM", "rx": "KiwiSDR Arvika", "rxplace": "Arvika", "rxLat": "59.6553", "rxLon": "12.5852", "station": "Radio Caroline", "country": "Storbritannien", "place": "Orfordness, Suffolk", "stationLat": "52.0900", "stationLon": "1.5700", "sinpo": "", "verifyStatus": "Verifierad", "mapCategory": "Radiostation", "mapStatus": "Verifierad", "reportStatus": "Ej skapad", "reply": "Inväntar svar", "positionSource": "Mottagare: Arvika. Sändarplats: Orfordness.", "embedded": true}, {"date": "2026-09-28", "time": "06:06", "freq": "648", "band": "MW", "mode": "AM", "rx": "Heppen WebSDR", "rxplace": "Heppen", "rxLocator": "JO21OC", "rxLat": "51.104167", "rxLon": "5.208333", "station": "Radio Caroline", "country": "Storbritannien", "place": "Orfordness, Suffolk", "stationLat": "52.0900", "stationLon": "1.5700", "verifyStatus": "Verifierad", "mapCategory": "Radiostation", "mapStatus": "Verifierad", "reportStatus": "Ej skapad", "reply": "Inväntar svar", "positionSource": "Mottagare: JO21OC. Sändarplats: Orfordness.", "embedded": true}, {"date": "2026-08-29", "time": "04:27", "freq": "1035", "band": "MW", "mode": "AM", "rx": "KiwiSDR Arvika", "rxplace": "Arvika", "rxLat": "59.6553", "rxLon": "12.5852", "station": "Radio Eli", "country": "Estland", "place": "Kavastu/Tartu", "stationLat": "58.3776", "stationLon": "26.7290", "verifyStatus": "Verifierad", "mapCategory": "Radiostation", "mapStatus": "Verifierad", "reportStatus": "Ej skapad", "reply": "Inväntar svar", "positionSource": "Mottagare: Arvika. Sändarområde: Kavastu/Tartu; kartnål vid Tartu.", "embedded": true}, {"date": "2026-09-25", "time": "19:09", "freq": "540", "band": "MW", "mode": "AM", "rx": "Tjörn KiwiSDR", "rxplace": "Tjörn", "rxLat": "57.9900", "rxLon": "11.5500", "station": "Kossuth Rádió", "country": "Ungern", "place": "Solt", "stationLat": "46.8010", "stationLon": "19.0050", "verifyStatus": "Verifierad", "mapCategory": "Radiostation", "mapStatus": "Verifierad", "reportStatus": "Ej skapad", "reply": "Inväntar svar", "positionSource": "Mottagare: Tjörn. Sändarplats: Solt.", "embedded": true}, {"date": "2026-09-28", "time": "06:22", "freq": "693", "band": "MW", "mode": "AM", "rx": "Heppen WebSDR", "rxplace": "Heppen", "rxLocator": "JO21OC", "rxLat": "51.104167", "rxLon": "5.208333", "station": "BBC Radio 5 Live", "country": "Storbritannien", "place": "Droitwich, Worcestershire", "stationLat": "52.2610", "stationLon": "-2.1500", "verifyStatus": "Verifierad", "mapCategory": "Radiostation", "mapStatus": "Verifierad", "reportStatus": "Ej skapad", "reply": "Inväntar svar", "positionSource": "Mottagare: JO21OC. Sändarplats enligt logg: Droitwich.", "embedded": true}, {"date": "2026-09-28", "time": "06:36", "freq": "747", "band": "MW", "mode": "AM", "rx": "Heppen WebSDR", "rxplace": "Heppen", "rxLocator": "JO21OC", "rxLat": "51.104167", "rxLon": "5.208333", "station": "Radio Emmeloord", "country": "Nederländerna", "place": "Pietersbierum, Friesland", "stationLat": "53.2150", "stationLon": "5.4750", "verifyStatus": "Verifierad", "mapCategory": "Radiostation", "mapStatus": "Verifierad", "reportStatus": "Ej skapad", "reply": "Inväntar svar", "positionSource": "Mottagare: JO21OC. Sändarplats enligt logg: Pietersbierum/Friesland.", "embedded": true}];
+// Personliga DX-observationer laddas från användarens egen lokala loggbok.
+const EMBEDDED_VERIFIED_LOGS = []
 let dxMap=null, dxMapLayers=null, mapBusy=false;
 function geoCacheGet(){try{return JSON.parse(localStorage.getItem('dxGeoCache')||'{}')}catch(e){return {}}}
 function geoCacheSet(x){localStorage.setItem('dxGeoCache',JSON.stringify(x))}
