@@ -279,7 +279,9 @@ html[data-dx-tool] header,html[data-dx-tool] .tabs{display:none !important;}
 <section id="receivers">
   <div class="kicker">Snabbstart</div>
   <h2>Mottagare och hjälpsidor</h2>
-  <div class="notice"><b>Tips:</b> mottagare som öppnas härifrån registreras av DX Start. Tryck <b>⏹ Stäng mottagning</b> när du vill stänga deras ljud och samtidigt stoppa eventuell CW-ljudingång.</div>
+  <div class="notice"><b>Tips:</b> stoppknappen stoppar DX Starts egen ljudinspelning och CW-avkodning. Externa WebSDR-/KiwiSDR-flikar behöver du stänga själv i webbläsaren.</div>
+  <div class="actions"><button type="button" class="btn danger" onclick="dxStopReception()">⏹ Stoppa ljud i DX Start</button></div>
+  <div class="small" role="status" aria-live="polite" id="dxReceptionStopStatus"></div>
   <div class="receiver-grid">
     <a class="linkcard" href="https://1kuli1.github.io/dX-START/receiver-hub.html">
       <b>🎧 Öppna Receiver Hub</b>
@@ -1709,53 +1711,30 @@ function dxRenderCustomReceivers(){
 }
 document.addEventListener('DOMContentLoaded',dxRenderCustomReceivers);
 
-let dxReceiverWindows=[];
-
 function dxOpenReceiver(url){
   try{
-    // Remove closed handles before opening a new receiver.
-    dxReceiverWindows=dxReceiverWindows.filter(w=>w && !w.closed);
-    const w=window.open(url,'_blank','noopener');
-    if(w) dxReceiverWindows.push(w);
-    else alert('Webbläsaren blockerade det nya fönstret/fliken. Tillåt popup-fönster för DX Start.');
-  }catch(e){
-    window.open(url,'_blank','noopener');
-  }
+    const target=new URL(url,location.href);
+    if(!['http:','https:'].includes(target.protocol))throw new Error('Endast HTTP och HTTPS är tillåtna.');
+    const link=document.createElement('a');
+    link.href=target.href;link.target='_blank';link.rel='noopener noreferrer';
+    document.body.appendChild(link);link.click();link.remove();
+  }catch(err){alert('Mottagaren kunde inte öppnas: '+err.message);}
 }
-
 function dxStopReception(){
-  // Stop all CW/audio capture owned by DX Start.
-  try{ if(typeof cwStop==='function') cwStop(); }catch(e){}
-  try{
-    document.querySelectorAll('audio,video').forEach(el=>{
-      try{el.pause();el.currentTime=0;}catch(e){}
-      try{
-        if(el.srcObject && el.srcObject.getTracks) el.srcObject.getTracks().forEach(tr=>tr.stop());
-      }catch(e){}
-    });
-  }catch(e){}
-
-  // Close SDR/receiver tabs/windows that were opened from DX Start.
-  let closed=0;
-  dxReceiverWindows.forEach(w=>{
-    try{
-      if(w && !w.closed){w.close();closed++;}
-    }catch(e){}
-  });
-  dxReceiverWindows=[];
-
-  const st=document.getElementById('cwStatus');
-  if(st) st.textContent='Mottagningen är stoppad. Ljudingången är avstängd.';
-  const ds=document.getElementById('cwDecodeState');
-  if(ds) ds.textContent='stoppad';
-
-  // Small confirmation; on mobile the browser may refuse to close a tab after user navigated away.
-  if(closed>0){
-    console.log('DX Start stängde '+closed+' mottagarflik(ar).');
+  try{if(typeof cwStop==='function')cwStop();}catch(e){}
+  try{if(typeof dxStopRecording==='function')dxStopRecording();}catch(e){}
+  for(const el of document.querySelectorAll('audio,video')){
+    try{el.pause();el.currentTime=0;}catch(e){}
+    try{if(el.srcObject?.getTracks)el.srcObject.getTracks().forEach(t=>t.stop());}catch(e){}
   }
+  const st=document.getElementById('cwStatus');
+  if(st)st.textContent='DX Starts egen ljudmottagning är stoppad.';
+  const ds=document.getElementById('cwDecodeState');if(ds)ds.textContent='stoppad';
+  const result=document.getElementById('dxReceptionStopStatus');
+  if(result)result.textContent='DX Starts ljud och inspelning stoppades. Stäng eventuella externa SDR-flikar separat.';
 }
 
-// Receiver links opened from the Mottagare section are tracked so the Stop button can close them.
+// Publika mottagare öppnas säkert separat; externa flikar kan inte stängas från DX Start.
 document.addEventListener('DOMContentLoaded',()=>{
   const sec=document.getElementById('receivers');
   if(!sec) return;
