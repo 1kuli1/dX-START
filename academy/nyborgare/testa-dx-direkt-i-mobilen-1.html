@@ -1,0 +1,72 @@
+<!DOCTYPE html>
+<html lang="sv">
+<head>
+<link rel="manifest" href="../../manifest.webmanifest">
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Testa DX – Direkt i mobilen</title>
+<style>
+body {
+    margin: 0;
+    font-family: Arial, sans-serif;
+    background: #020617;
+    color: white;
+    text-align: center;
+    padding: 20px;
+}
+.container {
+    max-width: 600px;
+    margin: auto;
+}
+h1 {
+    color: #facc15;
+    font-size: 28px;
+}
+p {
+    font-size: 18px;
+    line-height: 1.5;
+}
+.button {
+    display: block;
+    width: 100%;
+    box-sizing: border-box;
+    padding: 20px;
+    margin: 20px 0;
+    background: #22c55e;
+    color: black;
+    font-size: 20px;
+    border-radius: 12px;
+    text-decoration: none;
+    font-weight: bold;
+}
+.button:hover {
+    background: #4ade80;
+}
+.small {
+    font-size: 14px;
+    color: #94a3b8;
+    margin-top: 20px;
+}
+</style>
+</head>
+<body>
+<nav aria-label="DX Academy stöd" style="padding:10px;text-align:right"><a href="https://1kuli1.github.io/dX-START/asta.html?from=academy" target="_blank" rel="noopener noreferrer" style="display:inline-block;padding:9px 13px;background:#eab308;color:#111;border-radius:8px;font-weight:700">🤖 Fråga Asta</a></nav>
+<div class="container">
+<h1>🌍 Hör världen i din mobil</h1>
+<p>
+Tryck på knappen nedan och lyssna på riktiga radiosignaler från hela världen.
+</p>
+<a class="button" href="http://89.9.173.33:8073/" target="_blank">
+▶ Starta lyssning
+</a>
+<p>
+1. Välj en frekvens (t.ex. 600–1200 kHz)<br>
+2. Tryck play<br>
+3. Du är igång
+</p>
+<p class="small">
+Detta är inte en app – det är riktiga radiosignaler genom luften.
+</p>
+</div>
+<script>if('serviceWorker' in navigator&&location.protocol==='https:')window.addEventListener('load',()=>navigator.serviceWorker.register('../../sw.js',{scope:'../../'}).catch(e=>console.warn(e)));</script></body>
+</html>

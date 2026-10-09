@@ -1,0 +1,111 @@
+<!DOCTYPE html>
+<html lang="sv">
+<head>
+<link rel="manifest" href="../../manifest.webmanifest">
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>UPPGIFT 3 - Signalstyrka</title>
+
+<style>
+body {
+    font-family: Arial;
+    background:#0b0f1a;
+    color:white;
+    margin:0;
+    padding:20px;
+}
+
+.container {
+    max-width:900px;
+    margin:auto;
+}
+
+.section {
+    background:#111827;
+    padding:20px;
+    border-radius:15px;
+    margin-bottom:20px;
+}
+
+h1 { color:#eab308; }
+
+button {
+    width:100%;
+    padding:12px;
+    margin-top:10px;
+    border:none;
+    border-radius:10px;
+    background:#eab308;
+    font-weight:bold;
+    cursor:pointer;
+}
+
+.back {
+    background:#374151;
+    color:white;
+}
+
+/* RESPONSIV */
+@media (max-width:600px){
+    body { padding:10px; }
+    h1 { font-size:22px; }
+    h2 { font-size:18px; }
+    .section { padding:15px; }
+    button { font-size:16px; padding:14px; }
+}
+</style>
+</head>
+
+<body>
+<nav aria-label="DX Academy stöd" style="padding:10px;text-align:right"><a href="https://1kuli1.github.io/dX-START/asta.html?from=academy" target="_blank" rel="noopener noreferrer" style="display:inline-block;padding:9px 13px;background:#eab308;color:#111;border-radius:8px;font-weight:700">🤖 Fråga Asta</a></nav>
+
+<div class="container">
+
+<h1>📡 UPPGIFT 3 – Signalstyrka</h1>
+
+<div class="section">
+<h2>📡 Vad är en signal?</h2>
+<p>En signal är själva radiosändningen du hör.</p>
+<p>👉 en röst<br>👉 musik<br>👉 brus</p>
+<p>Signalen färdas genom luften från en sändare till din radio.</p>
+<p>Ju längre bort stationen är – desto svagare blir signalen.</p>
+</div>
+
+<div class="section">
+<h2>📊 Vad är signalstyrka?</h2>
+<p>Signalstyrka visar hur stark signalen är när den når din radio.</p>
+<p>Den mäts ofta i något som kallas <b>S-skala</b>.</p>
+<p>👉 S1 = mycket svag<br>👉 S5 = medel<br>👉 S9 = mycket stark</p>
+<p>Över S9 kan den bli ännu starkare.</p>
+</div>
+
+<div class="section">
+<h2>🎧 Hur låter det?</h2>
+<p>👉 Svag signal – brusig, svår att höra</p>
+<p>👉 Stark signal – tydlig och klar</p>
+</div>
+
+<div class="section">
+<h2>📡 Varför ändras signalstyrkan?</h2>
+<p>👉 avstånd<br>👉 atmosfär<br>👉 tid på dygnet<br>👉 störningar</p>
+</div>
+
+<div class="section">
+<h2>🎯 Uppgifter</h2>
+<p>1. Hitta en svag signal</p>
+<p>2. Hitta en stark signal</p>
+<p>3. Uppskatta S1–S9</p>
+</div>
+
+<button onclick="window.location.href='lektion4.html'">
+➡ Till lektion 4
+</button>
+
+<button class="back" onclick="window.location.href='https://classroom.google.com/'">
+⬅ Till Classroom
+</button>
+
+</div>
+
+<script>if('serviceWorker' in navigator&&location.protocol==='https:')window.addEventListener('load',()=>navigator.serviceWorker.register('../../sw.js',{scope:'../../'}).catch(e=>console.warn(e)));</script></body>
+</html>
