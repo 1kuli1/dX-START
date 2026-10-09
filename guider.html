@@ -1,6 +1,10 @@
 <!doctype html>
 <html lang="sv">
 <head>
+<link rel="manifest" href="./manifest.webmanifest">
+<meta name="theme-color" content="#07111f">
+<link rel="icon" href="./icon.svg" type="image/svg+xml">
+<link rel="apple-touch-icon" href="./icon-192.png">
 <meta charset="utf-8">
 <meta name="viewport" content="width=device-width,initial-scale=1">
 <meta name="theme-color" content="#07111f">
@@ -229,6 +233,12 @@ function showSelected(){
 }
 showSelected();
 window.addEventListener("hashchange",showSelected);
+</script>
+<script>
+if('serviceWorker' in navigator && (location.protocol==='https:' || location.hostname==='localhost')){
+ window.addEventListener('load',()=>navigator.serviceWorker.register('./sw.js',{scope:'./'})
+   .catch(err=>console.warn('DX Centralen offline-läge kunde inte startas:',err)));
+}
 </script>
 </body>
 </html>
