@@ -409,7 +409,8 @@ html[data-dx-tool] header,html[data-dx-tool] .tabs{display:none !important;}
     <div class="grid">
       <div><label for="date">Datum</label><input id="date" type="date"></div>
       <div><label for="time">UTC</label><input id="time" type="time"></div>
-      <div><label for="freq">Frekvens</label><input id="freq" placeholder="t.ex. 9740 kHz"></div>
+      <div><label for="freq">Frekvens</label><input id="freq" inputmode="decimal" placeholder="t.ex. 9740 eller 96,6" aria-describedby="freqHelp"><span class="small" id="freqHelp">Ange frekvensen och välj kHz eller MHz.</span></div>
+      <div><label for="frequencyUnit">Frekvensenhet</label><select id="frequencyUnit"><option value="kHz">kHz</option><option value="MHz">MHz</option></select></div>
       <div><label>Band / typ</label>
         <select id="band" onchange="updateExtraFields()">
           <option>SW</option><option>MW</option><option>LW</option><option>FM</option>
@@ -432,6 +433,8 @@ html[data-dx-tool] header,html[data-dx-tool] .tabs{display:none !important;}
       <div><label for="idwords">ID-ord / identifiering</label><textarea id="idwords" placeholder="Vad hördes som bekräftar stationen?"></textarea></div>
       <div><label for="content">Kort innehåll / transkript</label><textarea id="content" placeholder="Kort sammanfattning eller transkript"></textarea></div>
       <div><label for="notes">Anteckningar</label><textarea id="notes" placeholder="Övriga observationer"></textarea></div>
+      <div><label for="txHistory">Historien bakom stationen och sändaren</label><textarea id="txHistory" placeholder="Sändarens historia, effekt, antenn, källa (om känd)"></textarea></div>
+      <div><label for="placeHistory">Historien bakom orten och sändarplatsen</label><textarea id="placeHistory" placeholder="Ortens bakgrund, läge, geografi och källor"></textarea></div>
     </div>
     <div class="context-fields">
       <div class="kicker">Extra fält för vald signaltyp</div>
@@ -451,6 +454,8 @@ html[data-dx-tool] header,html[data-dx-tool] .tabs{display:none !important;}
         <div><label for="reportStatus">Rapportstatus</label><select id="reportStatus"><option>Ej skapad</option><option>Klar – ej bekräftat skickad</option><option>Skickad</option></select></div>
         <div><label for="contact">Kontaktväg</label><input id="contact" placeholder="E-post, QRZ, LoTW, Direct..."></div>
         <div><label for="reply">Svar / QSL</label><select id="reply"><option>Inväntar svar</option><option>Svar mottaget</option><option>QSL mottaget</option><option>Inget svar</option></select></div>
+        <div><label for="listenerName">Lyssnarens namn (frivilligt, enbart lokalt)</label><input id="listenerName" autocomplete="name"></div>
+        <div><label for="qsoHeard">Bekräftat hört tvåvägs-QSO</label><input id="qsoHeard" type="checkbox" style="width:auto" aria-describedby="qsoHelp"><span id="qsoHelp" class="small">Skapar ett SWL-rapportutkast bara om station, motstation och identifiering är bekräftade. Rapporten skickas inte.</span></div>
       </div>
     </div>
     <div class="actions">
@@ -647,6 +652,7 @@ html[data-dx-tool] header,html[data-dx-tool] .tabs{display:none !important;}
     </div>
 
     <div id="pWebsite" style="margin-top:14px"></div>
+    <div class="notice" id="pSwlBox" hidden><b>SWL-rapport (utkast, inte skickad)</b><pre id="pSwlReport" style="white-space:pre-wrap"></pre><button type="button" class="btn" onclick="downloadSelectedSWL()">⬇ Hämta SWL-rapport som text</button></div>
 
     <div class="actions">
       <button type="button" class="btn accent" onclick="wikiStation()">Hämta stationshistorik</button>
@@ -953,28 +959,61 @@ function fillNow(){
 fillNow();
 
 function val(id){return document.getElementById(id).value.trim()}
+function dxEstimateSinpo(signal){
+ const s=String(signal||'').toLowerCase().trim();
+ if(!s)return '';
+ if(/mycket svag|knappt|svår|s1\b|s2\b|s3\b|kraftigt brus/.test(s))return '23222';
+ if(/svag|mycket brus|störning|s4\b|s5\b/.test(s))return '33333';
+ if(/fading|svaj|växlar|interferens|s6\b|s7\b/.test(s))return '34333';
+ if(/mycket stark|s9\b|stark|klar|tydlig|utmärkt|perfekt|s8\b/.test(s))return '45444';
+ return '';
+}
+function dxMakeSWLReport(l){
+ return ['SWL-RAPPORT (UTKAST – EJ SKICKAD)',
+  'Lyssnare: '+(l.listenerName||'[fyll i ditt namn]'),
+  'Hörd station: '+l.station,
+  'Hörd motstation: '+l.counterstation,
+  'Datum: '+l.date,
+  'Tid: '+l.time+' UTC',
+  'Frekvens: '+l.freq+' '+l.frequencyUnit,
+  'Mode: '+(l.mode||'Ej angivet'),
+  'Mottagare/SDR: '+(l.rx||'Ej angivet'),
+  'Signalrapport: '+(l.signal||l.sinpo||'Ej angiven'),
+  'Identifiering / innehåll: '+(l.idwords||l.content||'Ej angivet'),
+  'Utkast skapat: '+new Date().toISOString(),
+  'OBS: Rapporten är inte skickad och QSL-status måste följas upp manuellt.'].join('\n');
+}
 function saveLog(){
-  const station=val('station'), freq=val('freq');
-  if(!station && !freq){alert('Fyll i åtminstone station eller frekvens.');return}
+  const station=val('station'),freq=val('freq'),signal=val('signal');
+  if(!station&&!freq){alert('Fyll i åtminstone station eller frekvens.');return;}
+  if(freq&&!/^\d+(?:[.,]\d+)?\s*(?:kHz|MHz)?$/i.test(freq)){alert('Ange frekvens som ett tal, till exempel 1008 eller 96,6 MHz.');return;}
+  const frequencyUnit=/mhz$/i.test(freq)?'MHz':/khz$/i.test(freq)?'kHz':val('frequencyUnit');
+  const userSinpo=val('sinpo'),autoSinpo=userSinpo?'':dxEstimateSinpo(signal);
+  if(document.getElementById('qsoHeard').checked&&
+    (val('band')!=='Amatörradio'||val('verifyStatus')!=='Bekräftad'||!station||!val('counterstation')||!val('date')||!val('time')||!freq)){
+    alert('För SWL-rapport krävs bekräftat amatör-QSO, station och motstation, datum, UTC och frekvens. Avmarkera QSO om bara en station hördes.');return;
+  }
   const item={
-    date:val('date'),time:val('time'),freq,band:val('band'),rx:val('rx'),rxplace:val('rxplace'),station,
-    country:val('country'),place:val('place'),lang:val('lang'),sinpo:val('sinpo'),
+    date:val('date'),time:val('time'),freq,frequencyUnit,band:val('band'),rx:val('rx'),rxplace:val('rxplace'),station,
+    country:val('country'),place:val('place'),lang:val('lang'),sinpo:userSinpo||autoSinpo,sinpoSource:autoSinpo?'Automatisk preliminär uppskattning från signalbeskrivning':'Manuellt angiven',txHistory:val('txHistory'),placeHistory:val('placeHistory'),
     ptype:val('ptype'),website:val('website'),verifyStatus:val('verifyStatus'),idwords:val('idwords'),
     content:val('content'),notes:val('notes'),extra1:val('extra1'),extra2:val('extra2'),extra3:val('extra3'),
-    mode:val('mode'),counterstation:val('counterstation'),signal:val('signal'),operator:val('operator'),
+    mode:val('mode'),counterstation:val('counterstation'),signal,operator:val('operator'),listenerName:val('listenerName'),qsoHeard:document.getElementById('qsoHeard').checked,
     reportStatus:val('reportStatus'),contact:val('contact'),reply:val('reply'),saved:new Date().toISOString(),_id:'dx-'+Date.now()+'-'+Math.random().toString(36).slice(2,9),_updatedAt:new Date().toISOString()
   };
+  if(item.qsoHeard){item.swlReport=dxMakeSWLReport(item);item.reportStatus='Utkast – ej skickat';}
   const logs=getLogs();logs.unshift(item);
   if(!setLogs(logs))return;
   alert('Loggen är sparad lokalt. Säkerhetskopiera regelbundet via Synk/Säkerhetskopia.');
   clearForm(); fillNow(); showView('book');
 }
 function clearForm(){
-  ['freq','rx','rxplace','station','country','place','lang','sinpo','ptype','website','idwords','content','notes','extra1','extra2','extra3','mode','counterstation','signal','operator','contact']
+  ['freq','rx','rxplace','station','country','place','lang','sinpo','ptype','website','idwords','content','notes','txHistory','placeHistory','extra1','extra2','extra3','mode','counterstation','signal','operator','contact','listenerName']
    .forEach(id=>document.getElementById(id).value='');
   document.getElementById('reportStatus').value='Ej skapad';
   document.getElementById('verifyStatus').value='Preliminär';
   document.getElementById('reply').value='Inväntar svar';
+  document.getElementById('qsoHeard').checked=false;
 }
 function esc(s){return String(s??'').replace(/[&<>"']/g,m=>({'&':'&amp;','<':'&lt;','>':'&gt;','"':'&quot;',"'":'&#39;'}[m]))}
 function linkifyText(s){
@@ -1029,8 +1068,11 @@ function openProfile(i){
   document.getElementById('pReportStatus').textContent=l.reportStatus||'–';
   document.getElementById('pContact').innerHTML=linkifyText(l.contact||'–');
   document.getElementById('pReply').textContent=l.reply||'–';
+  const swlBox=document.getElementById('pSwlBox');
+  swlBox.hidden=!l.swlReport;
+  document.getElementById('pSwlReport').textContent=l.swlReport||'';
 
-  const websites=[...new Set(same.map(x=>x.website).filter(Boolean))];
+  const websites=[...new Set(same.map(x=>x.website).filter(u=>{try{return ['http:','https:'].includes(new URL(u).protocol)}catch(e){return false}}))];
   document.getElementById('pWebsite').innerHTML=websites.length
     ? '<b>Hemsida:</b> '+websites.map(u=>'<a href="'+esc(u)+'" target="_blank" style="color:#eab308" rel="noopener noreferrer">'+esc(u)+'</a>').join(' • ')
     : '<span class="small">Ingen hemsida sparad ännu.</span>';
@@ -1045,8 +1087,8 @@ function openProfile(i){
     </tr>`).join('');
   document.getElementById('stationHistoryRows').innerHTML=hist||'<tr><td colspan="7">Inga tidigare loggar.</td></tr>';
 
-  document.getElementById('stationInfo').textContent='Tryck på “Hämta stationshistorik” för att söka extern bakgrund om stationen.';
-  document.getElementById('placeInfo').textContent='Tryck på “Hämta ortens historik” för att söka bakgrund om sändarorten eller platsen.';
+  document.getElementById('stationInfo').textContent=l.txHistory||'Tryck på “Hämta stationshistorik” för att söka extern bakgrund om stationen.';
+  document.getElementById('placeInfo').textContent=l.placeHistory||'Tryck på “Hämta ortens historik” för att söka bakgrund om sändarorten eller platsen.';
   showView('profile');
 }
 
@@ -1090,10 +1132,14 @@ function download(name,text,type){
   const a=document.createElement('a');a.href=url;a.download=name;document.body.appendChild(a);a.click();a.remove();
   setTimeout(()=>URL.revokeObjectURL(url),60000);
 }
+function downloadSelectedSWL(){
+ const l=currentLog();if(!l?.swlReport){alert('Den valda loggen saknar SWL-rapport.');return;}
+ download('SWL-'+String(l.station||'station').replace(/[^\w-]+/g,'_')+'.txt',l.swlReport,'text/plain;charset=utf-8');
+}
 function exportJSON(){download('dx-loggar-med-raderingshistorik.json',JSON.stringify(getLogRecords(),null,2),'application/json')}
 function exportCSV(){
   const logs=getLogs();
-  const cols=['date','time','freq','band','mode','rx','station','counterstation','country','place','lang','signal','sinpo','reportExchange','operator','ptype','website','idwords','content','notes','reportStatus','contact','reply','extra1','extra2','extra3'];
+  const cols=['date','time','freq','band','mode','rx','station','counterstation','country','place','lang','signal','sinpo','reportExchange','operator','ptype','website','idwords','content','notes','reportStatus','contact','reply','extra1','extra2','extra3','txHistory','placeHistory','frequencyUnit','sinpoSource','swlReport','qsoHeard'];
   const q=x=>'"'+String(x??'').replaceAll('"','""')+'"';
   const csv='\ufeff'+[cols.join(';'),...logs.map(l=>cols.map(c=>q(l[c])).join(';'))].join('\r\n');
   download('dx-loggar-for-excel.csv',csv,'text/csv;charset=utf-8');
@@ -2247,6 +2293,8 @@ updateExtraFields();
 
 function updateExtraFields(){
   const b=document.getElementById('band').value;
+  const unit=document.getElementById('frequencyUnit');
+  if(unit&&b==='FM')unit.value='MHz';
   const m={
     'NDB':['Beacon-ID / morse','Frekvensnoggrannhet','Locator / plats'],
     'Utility':['Tjänst / nät','Modulation','Callsign / kanal'],
