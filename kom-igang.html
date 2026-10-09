@@ -1,0 +1,176 @@
+<!doctype html>
+<html lang="sv">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width,initial-scale=1">
+<meta name="theme-color" content="#07111f">
+<meta name="description" content="Lär dig installera DX Centralen och komma igång med att lyssna och logga. Tydliga vägar för nybörjare och erfarna DX-are.">
+<title>Kom igång med DX Centralen – nybörjare och erfarna</title>
+<link rel="manifest" href="./manifest.webmanifest">
+<link rel="icon" href="./icon.svg" type="image/svg+xml">
+<link rel="apple-touch-icon" href="./icon-192.png">
+<style>
+:root{color-scheme:dark;--bg:#07111f;--card:#101b2d;--line:#405577;--ink:#f6f8fc;--muted:#c6d0df;--gold:#eab308;--focus:#fff}
+*{box-sizing:border-box}
+html{scroll-behavior:smooth;scroll-padding-top:18px}
+body{margin:0;background:var(--bg);color:var(--ink);font:17px/1.6 system-ui,-apple-system,Segoe UI,sans-serif}
+a{color:#fde047;text-underline-offset:3px}
+a:focus-visible,button:focus-visible,summary:focus-visible{outline:3px solid var(--focus);outline-offset:3px}
+.skip{position:absolute;left:-9999px;top:8px;background:#fff;color:#000;padding:10px;z-index:40}
+.skip:focus{left:8px}
+.container{max-width:1100px;margin:auto;padding:18px}
+header{border-bottom:1px solid var(--line)}
+nav{display:flex;gap:10px;align-items:center;flex-wrap:wrap}
+nav a{color:#fff}
+h1{font-size:clamp(1.9rem,4.5vw,3rem);line-height:1.15;color:var(--gold);margin:.4em 0}
+h2{font-size:1.55rem;color:var(--gold);margin-top:0}
+h3{font-size:1.17rem;margin:.15em 0}
+p{margin:.4em 0 1em}
+.lead{font-size:1.14rem;color:var(--muted);max-width:68ch}
+.grid{display:grid;grid-template-columns:repeat(2,minmax(0,1fr));gap:16px}
+.card,section.panel{border:1px solid var(--line);background:var(--card);border-radius:14px;padding:20px;min-width:0}
+.card p{color:var(--muted)}
+.section{margin-top:28px}
+.btn{display:inline-flex;align-items:center;justify-content:center;text-align:center;min-height:46px;border-radius:9px;border:1px solid #64748b;padding:10px 14px;color:#fff;background:#1e293b;text-decoration:none;font-weight:750}
+.btn.main{background:var(--gold);color:#111;border-color:var(--gold)}
+.btn:hover{filter:brightness(1.1)}
+.buttons{display:flex;gap:10px;flex-wrap:wrap;margin-top:12px}
+.steps{counter-reset:step;list-style:none;margin:0;padding:0;display:grid;gap:12px}
+.steps li{position:relative;padding:14px 14px 14px 60px;border:1px solid var(--line);border-radius:12px;background:#17243a}
+.steps li::before{counter-increment:step;content:counter(step);display:grid;place-items:center;position:absolute;top:13px;left:13px;height:32px;width:32px;border-radius:50%;background:var(--gold);color:#111;font-weight:800}
+small,.muted{color:var(--muted)}
+details{border:1px solid var(--line);border-radius:10px;padding:12px 15px;margin:10px 0;background:#142239}
+summary{cursor:pointer;font-weight:750;min-height:32px}
+details[open] summary{margin-bottom:10px;color:var(--gold)}
+aside{border-left:4px solid var(--gold);padding:14px 16px;background:#1b2940;margin-top:16px}
+table{border-collapse:collapse;width:100%}
+td,th{border-bottom:1px solid var(--line);padding:9px;text-align:left;vertical-align:top}
+.table-scroll{overflow-x:auto}
+.tag{font-size:.82rem;font-weight:800;letter-spacing:.03em;text-transform:uppercase;color:var(--gold)}
+footer{border-top:1px solid var(--line);margin-top:40px;color:var(--muted)}
+@media(max-width:710px){.grid{grid-template-columns:1fr}.container{padding:12px}.card,section.panel{padding:16px}.steps li{padding-left:58px}}
+@media print{body{background:white;color:#111;font-size:11pt}.container{max-width:100%;padding:0}header,footer{border:0}.skip,nav,.buttons{display:none!important}.card,section.panel,aside,details{break-inside:avoid;border:1px solid #999;background:white;color:#111}h1,h2,h3,a,.tag{color:#111}.lead,p,small,.muted,.card p{color:#111}details:not([open]){display:block}details:not([open])>*:not(summary){display:block!important}a::after{content:""}.grid{grid-template-columns:1fr}.section{margin-top:18px}}
+</style>
+</head>
+<body>
+<a class="skip" href="#innehall">Hoppa till innehållet</a>
+<header><div class="container">
+<nav aria-label="Huvudnavigation">
+<a class="btn" href="./centralen.html">← DX Centralen</a>
+<a href="#installera">Installera</a>
+<a href="#nyborjare">Nybörjare</a>
+<a href="#erfaren">Erfaren DX-are</a>
+<a href="#hjalp">Få hjälp</a>
+<a href="./asta.html" target="_blank" rel="noopener noreferrer">Fråga Asta ↗</a>
+</nav>
+</div></header>
+<main class="container" id="innehall">
+<p class="tag">Välkommen • DX Centralen</p>
+<h1>Börja lyssna på världen</h1>
+<p class="lead">Du behöver inte kunna något om radio för att börja. Du behöver bara en mobil, surfplatta eller dator med internet. Har du redan DX:at? Hoppa direkt till dina verktyg.</p>
+<div class="grid" aria-label="Välj hur du vill börja">
+<div class="card">
+<h2>🟢 Jag är helt ny</h2>
+<p>Vi tar det från början: vad DX är, hur du hör ljud, vad frekvens betyder och hur du sparar din första observation.</p>
+<div class="buttons"><a class="btn main" href="#nyborjare">Visa mig steg för steg</a></div>
+</div>
+<div class="card">
+<h2>🔵 Jag är redan DX-are</h2>
+<p>Hoppa förbi introduktionen. Se snabbvägar till mottagare, loggning, DX-karta, CW, FT8 och analys.</p>
+<div class="buttons"><a class="btn main" href="#erfaren">Till expertverktygen</a></div>
+</div>
+</div>
+
+<section class="section panel" id="installera" aria-labelledby="installera-title">
+<h2 id="installera-title">1. Installera DX Centralen (frivilligt)</h2>
+<p>Du kan <a href="./centralen.html">börja direkt i webbläsaren</a> utan installation eller konto. Installationen lägger till en appikon och gör det lättare att öppna programmet nästa gång. Den här testversionen är en PWA, inte en nedladdad APK.</p>
+<details><summary>📱 Android – Samsung och andra mobiler eller surfplattor</summary>
+<ol><li>Öppna <a href="./centralen.html">DX Centralen</a> i Google Chrome.</li>
+<li>Tryck på Chromes meny med tre prickar (⋮).</li>
+<li>Välj <strong>Installera app</strong> eller <strong>Lägg till på startskärmen</strong> – namnet beror på webbläsaren och enheten.</li>
+<li>Bekräfta med <strong>Installera</strong> eller <strong>Lägg till</strong>. Leta efter ikonen <strong>DX Centralen</strong>.</li>
+<li>Tryck på ikonen för att öppna programmet. Saknas installationsvalet? Fortsätt gärna direkt i Chrome; funktionen behöver kontrolleras på din enhet.</li></ol>
+</details>
+<details><summary>💻 Windows – Microsoft Edge</summary>
+<ol><li>Öppna <a href="./centralen.html">DX Centralen</a> i Microsoft Edge.</li>
+<li>Titta efter en installationsikon i adressfältet, eller öppna menyn <strong>… → Appar</strong> eller <strong>Fler verktyg → Appar</strong> (menyvalen varierar).</li>
+<li>Välj <strong>Installera den här webbplatsen som en app</strong> och bekräfta.</li>
+<li>Öppna den installerade appen från Startmenyn. I Edge kan du även hantera installerade appar via <code>edge://apps</code>.</li></ol>
+</details>
+<details><summary>🍎 iPhone eller iPad – Safari</summary>
+<ol><li>Öppna <a href="./centralen.html">DX Centralen</a> i Safari.</li>
+<li>Tryck på <strong>Dela</strong> (eller sidmenyn och sedan Dela).</li>
+<li>Välj <strong>Lägg till på hemskärmen</strong>.</li>
+<li>Välj <strong>Öppna som webbapp</strong> om alternativet visas och tryck på <strong>Lägg till</strong>.</li></ol>
+</details>
+<aside><strong>Viktigt om dina loggar:</strong> Dina personliga loggar sparas lokalt i den webbläsare där du använder DX Centralen. De följer inte automatiskt med mellan enheter. Rensa inte webbplatsdata och avinstallera inte med riktiga loggar utan att först hämta en <a href="./?tool=sync">JSON-säkerhetskopia</a>. Den automatiska Google Drive-synkningen är ännu avstängd.</aside>
+</section>
+
+<section class="section panel" id="nyborjare" aria-labelledby="nyborjare-title">
+<h2 id="nyborjare-title">2. Din allra första DX-lyssning</h2>
+<p>DX betyder att lyssna efter radiosignaler, ofta från andra orter och länder. Här använder vi mottagare som andra har anslutit till internet. Du behöver alltså ingen egen antenn för att prova.</p>
+<ol class="steps">
+<li><h3>Öppna en radiomottagare</h3>
+<p>Gå till <a href="./receiver-hub.html">Receiver Hub</a>. Där finns många mottagare. Som ett första exempel kan du välja <strong>Twente WebSDR</strong> och trycka på <strong>Öppna</strong>. Om den är upptagen eller offline, välj en annan.</p>
+</li>
+<li><h3>Få igång ljudet</h3>
+<p>Höj ljudet på mobilen eller datorn. På själva mottagarens sida kan det också finnas en startknapp för ljud. Kontrollera att ljudet inte är avstängt. Det kan höras brus innan du hittar en station – det är normalt.</p>
+</li>
+<li><h3>Välj frekvens och lyssna</h3>
+<p>En <strong>frekvens</strong> är radiokanalens nummer. I en WebSDR kan du ofta klicka på en frekvens eller flytta markeringen i ett <strong>waterfall</strong>, en bild där radiosignalerna syns. Prova att hitta en tydlig signal. På mellanvåg väljer man ofta <strong>AM</strong> som mottagningssätt; olika mottagarsidor har olika knappar.</p>
+</li>
+<li><h3>Försök identifiera stationen</h3>
+<p>Lyssna efter stationsnamn, språk, nyheter, jinglar eller orter som nämns. Det gör inget om du ännu inte vet vilken station det är – markera den som <strong>Osäker</strong> eller <strong>Trolig</strong>, inte Bekräftad.</p>
+</li>
+<li><h3>Spara din första logg</h3>
+<p>Öppna <a href="./?tool=log">Ny logg</a>. Börja med datum, UTC-tid, frekvens och mottagare. Fyll i stationens namn om du vet det och skriv vad du hörde. Tryck på <strong>Spara logg</strong> och öppna sedan <a href="./?tool=book">Loggbok</a>.</p>
+</li>
+<li><h3>Ta en säkerhetskopia</h3>
+<p>Gå till <a href="./?tool=sync">Säkerhetskopia</a> och välj <strong>Hämta fullständig säkerhetskopia (JSON)</strong>. Spara filen på en plats du hittar igen. Upprepa regelbundet.</p>
+</li>
+</ol>
+<div class="buttons"><a class="btn main" href="./receiver-hub.html">🎧 Börja lyssna</a><a class="btn" href="./academy/">📚 Lär dig mer i DX Academy</a><a class="btn" href="./dx-help.html#receiverhub">❓ Hjälp med mottagarna</a></div>
+</section>
+
+<section class="section panel" id="erfaren" aria-labelledby="erfaren-title">
+<h2 id="erfaren-title">3. För dig som redan är DX-are</h2>
+<p>Du behöver inte följa nybörjarstegen. Här är arbetsverktygen samlade direkt. Kontrollera alltid vad en extern mottagare faktiskt stöder – programmet kan inte garantera att en station är hörbar eller att SDR:n är online.</p>
+<div class="grid">
+<div class="card"><h3>🎛 Mottagare, band och favoriter</h3><p>Välj WebSDR, KiwiSDR, OpenWebRX och FM-DX; filtrera och spara egna favoriter i webbläsaren.</p><div class="buttons"><a class="btn" href="./receiver-hub.html">Mottagarlista</a></div></div>
+<div class="card"><h3>📋 Avancerad loggning</h3><p>Logga UTC, frekvens, band, mottagare, SINPO, stations-ID, säkerhetsnivå och separat sändar- och ortshistorik. Importera loggar från Excel vid behov.</p><div class="buttons"><a class="btn" href="./?tool=log">Ny logg</a><a class="btn" href="./?tool=book">Loggbok</a></div></div>
+<div class="card"><h3>🗺 Geografi och identifikation</h3><p>Utforska DX-kartan för egna verifierade observationer och stationskort med historik, ort, källa och uppföljning.</p><div class="buttons"><a class="btn" href="./?tool=map">DX-karta</a><a class="btn" href="./dx-help.html#profile">Stationskort</a></div></div>
+<div class="card"><h3>〰 CW, FT8 och signalanalys</h3><p>Öppna CW-verktygen, FT8/FT4-hjälpen eller ljudverktygen. Avkodning och mottagningskvalitet beror på tillgänglig signal och utrustning.</p><div class="buttons"><a class="btn" href="./?tool=cw">CW</a><a class="btn" href="./?tool=digital">FT8/FT4</a><a class="btn" href="./?tool=audio">Ljud</a></div></div>
+<div class="card"><h3>📨 SWL och QSL</h3><p>För ett uttryckligen bekräftat hört tvåvägs-QSO kan programmet skapa ett SWL-rapportutkast. Ingen rapport skickas automatiskt; QSL-uppföljning sker manuellt.</p><div class="buttons"><a class="btn" href="./?tool=log">Skapa rapportutkast</a></div></div>
+<div class="card"><h3>🚨 Katastrof-DX och speciallyssning</h3><p>Separat logg för krisrelaterade radiobservationer och länkar för specialområden. Katastrof-DX är inte ett automatiskt larm- eller räddningssystem.</p><div class="buttons"><a class="btn" href="./katastrof-dx.html">Katastrof-DX</a><a class="btn" href="./?tool=special">Speciallyssning</a></div></div>
+</div>
+</section>
+
+<section class="section panel" id="ordlista" aria-labelledby="ordlista-title">
+<h2 id="ordlista-title">4. Fem ord som är bra att kunna</h2>
+<div class="table-scroll"><table><thead><tr><th scope="col">Ord</th><th scope="col">Enkel förklaring</th></tr></thead><tbody>
+<tr><th scope="row">SDR</th><td>En radiomottagare som styrs med programvara, ofta via internet.</td></tr>
+<tr><th scope="row">Frekvens</th><td>Radiokanalens nummer, till exempel 1008 kHz eller 96,6 MHz.</td></tr>
+<tr><th scope="row">UTC</th><td>Gemensam världstid som gör DX-loggar jämförbara oavsett land.</td></tr>
+<tr><th scope="row">Waterfall</th><td>En rörlig bild av radiosignaler; signaler kan synas som streck eller fält.</td></tr>
+<tr><th scope="row">SINPO</th><td>Ett sätt att beskriva mottagningskvalitet. Du kan börja utan att kunna det.</td></tr>
+</tbody></table></div>
+</section>
+
+<section class="section panel" id="hjalp" aria-labelledby="hjalp-title">
+<h2 id="hjalp-title">5. Fastnat? Så får du hjälp</h2>
+<details><summary>Jag får inget ljud – vad gör jag?</summary><p>Kontrollera först volymen på enheten och på mottagarsidan. Se efter om ljudet behöver startas med en knapp. Prova en annan mottagare om den första är offline eller upptagen. Hjälp finns i <a href="./dx-help.html#receiverhub">mottagarguiden</a>.</p></details>
+<details><summary>Jag vet inte vad alla knappar betyder</summary><p>Du behöver inte lära dig alla på en gång. Börja med ljud, frekvens och AM/FM. Använd <a href="./dx-help.html#begrepp">förklaringen av SDR-knappar</a> och gå vidare när du känner dig trygg.</p></details>
+<details><summary>Var tog min loggbok vägen?</summary><p>Loggar sparas i den webbläsare och på den webbadress där du loggade. Använder du en annan webbläsare eller enhet kan loggboken se tom ut. Öppna <a href="./?tool=sync">Säkerhetskopia</a> och använd en tidigare JSON-export om du har en. Rensa inte lagringen som innehåller originalet.</p></details>
+<details><summary>Kan Asta lyssna på mottagaren åt mig?</summary><p>Inte automatiskt. <a href="./asta.html">Asta</a> hjälper dig formulera en fråga och öppnar ChatGPT i en separat flik. Du kan beskriva ljudet, frekvensen och vad du hörde för att få hjälp med nästa steg.</p></details>
+<details><summary>Fungerar programmet utan internet?</summary><p>Vissa redan besökta program- och hjälpsidor kan fungera offline. Externa WebSDR-/KiwiSDR-mottagare behöver internet, och hjälp via ChatGPT behöver uppkoppling. Offlinefunktionen ska testas på varje plattform före slutlig utgåva.</p></details>
+<div class="buttons"><a class="btn main" href="./dx-help.html#start">❓ Fler hjälpsidor</a><a class="btn" href="./asta.html" target="_blank" rel="noopener noreferrer">🤖 Fråga Asta ↗</a><a class="btn" href="./centralen.html">← Återgå till DX Centralen</a><button type="button" class="btn" onclick="window.print()">🖨 Skriv ut guiden</button></div>
+</section>
+</main>
+<footer><div class="container"><strong>DX Centralen – introduktionsguide</strong><p>Den här guiden ingår i testversionen. Installationsmenyer och mottagarsidor kan se olika ut på olika enheter. En testperson ska kunna börja utan hjälp; en erfaren DX-are ska kunna gå direkt till sina verktyg.</p></div></footer>
+<script>
+if('serviceWorker' in navigator&&(location.protocol==='https:'||location.hostname==='localhost')){
+ window.addEventListener('load',()=>navigator.serviceWorker.register('./sw.js',{scope:'./'}).catch(e=>console.warn('Offlineguiden kunde inte registreras',e)));
+}
+</script>
+</body>
+</html>
