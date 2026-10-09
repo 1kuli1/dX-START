@@ -57,8 +57,8 @@ Tester kördes som isolerade funktionsprov med simulerad lokal lagring och DOM. 
 
 ### Säkerhetskopior på Google Drive
 Innan fortsatt utveckling kopierades de två **originalböckerna utan att originalen ändrades**:
-- [Backup – DX MASTER LOGGBOK](https://docs.google.com/spreadsheets/d/1RaimFROSVyZJeRarO_a5PLUnL1LIRApOzdnJVxPUruo/edit)
-- [Backup – FM DX MASTER LOGGBOK](https://docs.google.com/spreadsheets/d/1Bn3KoCi0FkYW3kRTRv-BJ77XFmvY0DH6RYCVw4nVC_E/edit)
+- [Backup – DX MASTER LOGGBOK](https://drive.google.com/drive/my-drive)
+- [Backup – FM DX MASTER LOGGBOK](https://drive.google.com/drive/my-drive)
 
 Backupkopiorna verifierades med 21 respektive 13 kalkylbladsflikar samt exempelvärden i loggbladens första rader.
 
@@ -144,3 +144,6 @@ En samlad kontroll gav **33/33 godkända statiska och isolerade funktionstester*
 **Ej testat:** fysisk Samsung A52/Tab S9, Windows-installation, webbläsarens verkliga service worker/offline-drift, publicerad GitHub Pages-körning, riktiga externa SDR-mottagare samt tillgänglighet med skärmläsare.
 
 **Testplan:** [BETA-TESTPLAN-2026-10-09.md](BETA-TESTPLAN-2026-10-09.md). Teststart sker först efter att intern acceptanskontroll är genomförd. Försäljning eller fristående distribution planeras först efter pilotperioden.
+
+
+> **Integritet:** Direkta länkar till ägarens privata Google Drive-filer har tagits bort ur denna offentliga rapport. Originalkopiorna finns kvar hos ägaren på Google Drive. Tidigare GitHub-commitversioner kan fortfarande innehålla länkarna.
