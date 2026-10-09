@@ -72,4 +72,23 @@ check('DX-OS cannot overwrite corrupt shared logbook',()=>{
  // integrators not to remove the shared-store failure check.
  assert(app.includes('dxLogStorageWarning'));assert(app.includes('if(dxLogStorageWarning){alert(dxLogStorageWarning);return false;}'));
 });
+check('Onboarding guide is accessible to beginners and veteran listeners',()=>{
+ const guide=read('kom-igang.html');
+ assert(guide.includes('id="nyborjare"'));
+ assert(guide.includes('id="erfaren"'));
+ assert(guide.includes('id="installera"'));
+ assert(guide.includes('JSON-säkerhetskopia'));
+ assert(guide.includes('DX-are'));
+ const ids=new Set([...guide.matchAll(/\bid="([^"]+)"/g)].map(m=>m[1]));
+ const refs=[...guide.matchAll(/\bhref="#([^"]+)"/g)].map(m=>m[1]);
+ for(const anchor of refs)assert(ids.has(anchor),'Missing onboarding section '+anchor);
+});
+check('Onboarding is linked from navigation and cached offline',()=>{
+ assert(read('centralen.html').includes('kom-igang.html#nyborjare'));
+ assert(read('centralen.html').includes('kom-igang.html#erfaren'));
+ assert(read('receiver-hub.html').includes('kom-igang.html'));
+ assert(read('dx-help.html').includes('kom-igang.html'));
+ assert(read('academy/index.html').includes('../kom-igang.html'));
+ assert(read('sw.js').includes("'./kom-igang.html'"));
+});
 if(process.exitCode)process.exit(process.exitCode);
