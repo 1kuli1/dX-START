@@ -15,7 +15,7 @@ self.addEventListener('fetch',event=>{
   const cache=await caches.open(CACHE);
   try{
    const response=await fetch(req);
-   if(response.ok && response.type==='basic')await cache.put(req,response.clone());
+   if(response.ok && response.type==='basic'){try{await cache.put(req,response.clone());}catch(e){console.warn('Offline-kopia kunde inte uppdateras',e);}}
    return response;
   }catch(error){
    const saved=await cache.match(req,{ignoreSearch:true});
