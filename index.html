@@ -62,7 +62,7 @@ tr.clickable:hover{background:#142138}
 .linkcard:hover{border-color:var(--accent);background:var(--panel2)}
 .hidden{display:none}
 footer{color:#7f8da3;font-size:13px;margin:28px 0 10px}
-@media(max-width:700px){th:nth-child(5),td:nth-child(5),th:nth-child(6),td:nth-child(6){display:none}}
+@media(max-width:700px){.tablewrap{overflow-x:auto}.tablewrap table{min-width:780px}}
 
 .guide{margin-top:12px;background:#0b1525;border:1px solid #263955;border-radius:12px;padding:14px}
 .guide h3{margin:0 0 8px;font-size:17px}.pills{display:flex;flex-wrap:wrap;gap:7px;margin:8px 0}
@@ -361,8 +361,9 @@ html[data-dx-tool] header,html[data-dx-tool] .tabs{display:none !important;}
   </div>
   <div class="actions" style="margin-top:12px">
     <button type="button" class="btn accent" onclick="exportJSON()">⬇ Hämta fullständig säkerhetskopia (JSON)</button>
-    <label class="btn" style="display:inline-block">⬆ Sammanfoga säkerhetskopia<input type="file" accept=".json" onchange="importJSON(event)" style="display:none"></label>
+    <label for="dxJsonImport">⬆ Sammanfoga JSON-säkerhetskopia</label><input id="dxJsonImport" type="file" accept=".json,application/json" onchange="importJSON(event)" style="max-width:420px">
   </div>
+  <div class="notice"><b>Viktigt under testperioden:</b> Loggarna ligger på den här enheten i webbläsaren. Om webbplatsdata rensas eller telefonen byts kan poster försvinna. Hämta en JSON-kopia regelbundet och innan uppdateringar.</div>
   <div class="small" style="margin-top:12px">
     Senaste lyckade synk: <span id="dxSyncLast">–</span><br>
     Lokal logg: <span id="dxLocalCount">0</span> poster
@@ -463,7 +464,7 @@ html[data-dx-tool] header,html[data-dx-tool] .tabs{display:none !important;}
       <div><label>SINPO</label><input id="sinpo" maxlength="5" placeholder="t.ex. 55445"></div>
       <div><label>Programtyp</label><input id="ptype" placeholder="Nyheter, musik, intervju..."></div>
       <div><label>Hemsida</label><input id="website" placeholder="https://..."></div>
-      <div><label>Verifiering</label><select id="verifyStatus"><option>Preliminär</option><option>Bekräftad</option></select></div>
+      <div><label>Verifiering</label><select id="verifyStatus"><option>Preliminär</option><option>Osäker</option><option>Trolig</option><option>Bekräftad</option></select></div>
     </div>
     <div class="grid" style="margin-top:12px">
       <div><label>ID-ord / identifiering</label><textarea id="idwords" placeholder="Vad hördes som bekräftar stationen?"></textarea></div>
@@ -800,20 +801,30 @@ const DX_SYNC_URL=null;
 const DX_SYNC_SAFE=false;
 let dxSyncBusy=false, dxSyncTimer=null;
 
+let dxLogStorageWarning='';
 function getLogRecords(){
-  try{
-    const x=JSON.parse(localStorage.getItem('dxLogs')||'[]');
-    return Array.isArray(x)?x:[];
-  }catch(e){return []}
+ try{
+  const raw=localStorage.getItem('dxLogs');if(raw===null)return [];
+  const a=JSON.parse(raw);
+  if(!Array.isArray(a)||!a.every(v=>v&&typeof v==='object'&&!Array.isArray(v)))throw Error('Ogiltigt loggformat');
+  dxLogStorageWarning='';return a;
+ }catch(e){
+  dxLogStorageWarning='Loggbokens lokala data kan inte läsas: '+e.message+'. Ingenting har raderats. Återställ från din JSON-kopia.';
+  console.error(dxLogStorageWarning);return [];
+ }
 }
 function getLogs(){return getLogRecords().filter(l=>!l._deletedAt);}
 function setLogs(x){
-  // Gravstenar (tombstones) bevaras även efter import eller äldre lokala sparningar.
-  const deleted=getLogRecords().filter(l=>l._deletedAt);
-  const combined=dxMergeLogs(x,deleted);
-  localStorage.setItem('dxLogs',JSON.stringify(combined));
-  dxUpdateSyncCount();
-  if(!dxSyncBusy) dxScheduleCloudSync();
+ const prior=getLogRecords();
+ if(dxLogStorageWarning){alert(dxLogStorageWarning);return false;}
+ if(!Array.isArray(x)||!x.every(v=>v&&typeof v==='object'&&!Array.isArray(v))){alert('Ogiltiga loggdata. Inget sparades.');return false;}
+ try{
+  const merged=dxMergeLogs(x,prior.filter(l=>l._deletedAt));
+  localStorage.setItem('dxLogs',JSON.stringify(merged));
+  dxUpdateSyncCount();if(!dxSyncBusy)dxScheduleCloudSync();return true;
+ }catch(e){
+  alert('Loggboken kunde inte sparas: '+e.message+'. De tidigare sparade posterna finns kvar. Exportera en säkerhetskopia och kontrollera lagringsutrymmet.');return false;
+ }
 }
 
 function dxHash(s){
@@ -1032,8 +1043,9 @@ function saveLog(){
     mode:val('mode'),counterstation:val('counterstation'),signal:val('signal'),operator:val('operator'),
     reportStatus:val('reportStatus'),contact:val('contact'),reply:val('reply'),saved:new Date().toISOString(),_id:'dx-'+Date.now()+'-'+Math.random().toString(36).slice(2,9),_updatedAt:new Date().toISOString()
   };
-  const logs=getLogs(); logs.unshift(item); setLogs(logs);
-  alert('Loggen är sparad.');
+  const logs=getLogs();logs.unshift(item);
+  if(!setLogs(logs))return;
+  alert('Loggen är sparad lokalt. Säkerhetskopiera regelbundet via Synk/Säkerhetskopia.');
   clearForm(); fillNow(); showView('book');
 }
 function clearForm(){
@@ -1143,11 +1155,13 @@ function deleteSelected(){
   const logs=getLogs(),target=logs[selectedIndex];if(!target)return;
   const now=new Date().toISOString();
   const deleted={...dxNormalizeLog(target),_deletedAt:now,_updatedAt:now};
-  setLogs(dxMergeLogs(getLogRecords(),[deleted]));
+  if(!setLogs(dxMergeLogs(getLogRecords(),[deleted])))return;
   selectedIndex=null;showView('book');
 }
 function download(name,text,type){
-  const a=document.createElement('a'); a.href=URL.createObjectURL(new Blob([text],{type})); a.download=name; a.click(); URL.revokeObjectURL(a.href);
+  const url=URL.createObjectURL(new Blob([text],{type}));
+  const a=document.createElement('a');a.href=url;a.download=name;document.body.appendChild(a);a.click();a.remove();
+  setTimeout(()=>URL.revokeObjectURL(url),60000);
 }
 function exportJSON(){download('dx-loggar-med-raderingshistorik.json',JSON.stringify(getLogRecords(),null,2),'application/json')}
 function exportCSV(){
@@ -1371,7 +1385,8 @@ async function importExcel(ev){
         added++;
       }
     }
-    setLogs(existing);renderLogs();
+    if(!setLogs(existing)){status.textContent='Importen avbröts: sparning misslyckades. Originaldata finns kvar.';return;}
+    renderLogs();
     status.textContent=`${f.name}: ${added} nya, ${enriched} kompletterade, ${skipped} redan befintliga, ${blocked} tidigare raderade. Blad: ${used.join(', ')}`;
     alert(`Excel-import: ${added} nya loggar, ${enriched} kompletterade. ${blocked} raderade poster återställdes inte.`);
   }catch(e){status.textContent='Import misslyckades: '+e.message; alert('Excel-filen kunde inte importeras. '+e.message)}
@@ -2288,9 +2303,14 @@ function importJSON(ev){
   const r=new FileReader();
   r.onload=()=>{try{const x=JSON.parse(r.result);if(!Array.isArray(x))throw 0;
     if(!x.every(l=>l&&typeof l==='object'&&!Array.isArray(l)))throw 0;
-    const before=getLogs().length;
-    setLogs(dxMergeLogs(getLogRecords(),x));
-    renderLogs();alert('Import sammanfogad. '+getLogs().length+' aktiva poster (tidigare '+before+'). Inga befintliga loggar ersattes.');
+    const existing=getLogRecords(),before=existing.filter(v=>!v._deletedAt).length;
+    if(dxLogStorageWarning){alert(dxLogStorageWarning);return;}
+    const merged=dxMergeLogs(existing,x),known=new Map(existing.map(dxNormalizeLog).map(v=>[v._id,v]));
+    const added=merged.filter(v=>!v._deletedAt&&!known.has(v._id)).length;
+    const removed=merged.filter(v=>v._deletedAt&&known.has(v._id)&&!known.get(v._id)._deletedAt).length;
+    if(!confirm('Importerar '+added+' nya poster. '+removed+' befintliga poster markeras som raderade av säkerhetskopian.\n\nExportera gärna en JSON-kopia först. Fortsätta?'))return;
+    if(!setLogs(merged))return;
+    renderLogs();alert('Import färdig. '+getLogs().length+' aktiva poster (före: '+before+'). Inga poster raderades permanent.');
   }catch(e){alert('Filen kunde inte importeras. Kontrollera att den är en JSON-array med loggar.')}};
   r.readAsText(f);
 }
