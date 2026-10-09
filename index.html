@@ -224,17 +224,17 @@ footer{color:#7f8da3;font-size:13px;margin:28px 0 10px}
 </script>
 <style>
 /* Reservvisning: fungerar även om den vanliga startkoden längre ned inte hinner köras. */
-html[data-dx-tool] body > .wrap > section{display:none !important;}
-html[data-dx-tool="sync"] #sync{display:block !important;}
-html[data-dx-tool="receivers"] #receivers{display:block !important;}
-html[data-dx-tool="log"] #log{display:block !important;}
-html[data-dx-tool="book"] #book{display:block !important;}
-html[data-dx-tool="map"] #map{display:block !important;}
-html[data-dx-tool="cw"] #cw{display:block !important;}
-html[data-dx-tool="digital"] #digital{display:block !important;}
-html[data-dx-tool="audio"] #audio{display:block !important;}
-html[data-dx-tool="profile"] #profile{display:block !important;}
-html[data-dx-tool="special"] #special{display:block !important;}
+html[data-dx-tool] main > section{display:none;}
+html[data-dx-tool="sync"] #sync{display:block;}
+html[data-dx-tool="receivers"] #receivers{display:block;}
+html[data-dx-tool="log"] #log{display:block;}
+html[data-dx-tool="book"] #book{display:block;}
+html[data-dx-tool="map"] #map{display:block;}
+html[data-dx-tool="cw"] #cw{display:block;}
+html[data-dx-tool="digital"] #digital{display:block;}
+html[data-dx-tool="audio"] #audio{display:block;}
+html[data-dx-tool="profile"] #profile{display:block;}
+html[data-dx-tool="special"] #special{display:block;}
 html[data-dx-tool] header,html[data-dx-tool] .tabs{display:none !important;}
 </style>
 </head>
@@ -350,12 +350,16 @@ html[data-dx-tool] header,html[data-dx-tool] .tabs{display:none !important;}
   <div class="small">Synkmodul: 7.29c</div>
   <div class="notice">
     <b>Status:</b> <span id="dxSyncStatus" role="status" aria-live="polite">Inte synkad ännu</span><br>
-    <span class="small">DX Start sparar alltid lokalt först. När internet finns slås den lokala loggboken ihop med Drive-loggen så att dina enheter kan dela samma poster.</span>
+    <span class="small">Drive-synk är tillfälligt avstängd av säkerhetsskäl. Dina loggar sparas lokalt. För över dem mellan enheter med JSON-export och sammanfogande JSON-import tills den autentiserade servern är klar.</span>
   </div>
   <div class="row" style="margin-top:12px;gap:10px;flex-wrap:wrap">
     <button type="button" class="btn accent" id="dxSyncNowBtn" onclick="dxCloudSync(true)">🔄 Synka nu</button>
     <button type="button" class="btn" id="dxSyncPullBtn" onclick="dxCloudPullOnly()">⬇ Hämta från Drive</button>
     <button type="button" class="btn" id="dxSyncPushBtn" onclick="dxCloudPushMerged()">⬆ Skicka/sammanfoga</button>
+  </div>
+  <div class="actions" style="margin-top:12px">
+    <button type="button" class="btn accent" onclick="exportJSON()">⬇ Hämta fullständig säkerhetskopia (JSON)</button>
+    <label class="btn" style="display:inline-block">⬆ Sammanfoga säkerhetskopia<input type="file" accept=".json" onchange="importJSON(event)" style="display:none"></label>
   </div>
   <div class="small" style="margin-top:12px">
     Senaste lyckade synk: <span id="dxSyncLast">–</span><br>
@@ -718,8 +722,7 @@ setInterval(tick,1000); tick();
 function dxOpenToolWindow(view){
   const u=new URL(window.location.href);
   u.searchParams.set('tool',view);
-  const w=window.open(u.toString(),'_blank','noopener');
-  if(!w) alert('Webbläsaren blockerade det nya fönstret. Tillåt popup-fönster för DX Start.');
+  const a=document.createElement('a');a.href=u.toString();a.target='_blank';a.rel='noopener noreferrer';a.click();
 }
 
 function dxCloseToolWindow(){
@@ -770,6 +773,11 @@ function dxApplyToolWindow(){
 }
 
 function showView(id){
+  if(new URLSearchParams(location.search).has('tool')){
+    const u=new URL(location.href);u.searchParams.set('tool',id);history.replaceState(null,'',u.toString());
+    document.documentElement.setAttribute('data-dx-tool',id);
+    const h=document.getElementById('dxHelpLink');if(h)h.href='dx-help.html#'+({receivers:'receiverhub',log:'log',book:'book',sync:'sync',map:'map',cw:'cw',digital:'digital',audio:'audio',profile:'profile',special:'special'}[id]||'start');
+  }
   ['receivers','log','book','sync','map','cw','digital','audio','profile','special'].forEach(x=>{
     const el=document.getElementById(x);
     if(el){ el.classList.add('hidden'); el.style.display='none'; }
@@ -783,15 +791,25 @@ function showView(id){
   if(id==='cw'){setTimeout(cwConfigureForDevice,20);setTimeout(cwOnlineDiagnostics,25);}
   if(id==='digital'){setTimeout(dxDigitalInit,20);}
 }
-const DX_SYNC_URL='https://script.google.com/macros/s/AKfycbxfMEeg6kiAchsiGKJnl2y0MdKbVDkbitUJizljLlLvblKkfdci6Prk3k6P5z051y-U/exec';
+// Säkerhetsstopp 2026-10-09: gamla Apps Script-gränssnittet saknar verifierad
+// användarautentisering och stöd för bekräftade raderingar. Anropa det inte från publik klient.
+// Återaktivera först när en autentiserad, användarisolerad v2-server finns.
+const DX_SYNC_URL=null;
+const DX_SYNC_SAFE=false;
 let dxSyncBusy=false, dxSyncTimer=null;
 
-function getLogs(){
-  try{return JSON.parse(localStorage.getItem('dxLogs')||'[]')}catch(e){return []}
+function getLogRecords(){
+  try{
+    const x=JSON.parse(localStorage.getItem('dxLogs')||'[]');
+    return Array.isArray(x)?x:[];
+  }catch(e){return []}
 }
-
+function getLogs(){return getLogRecords().filter(l=>!l._deletedAt);}
 function setLogs(x){
-  localStorage.setItem('dxLogs',JSON.stringify(x));
+  // Gravstenar (tombstones) bevaras även efter import eller äldre lokala sparningar.
+  const deleted=getLogRecords().filter(l=>l._deletedAt);
+  const combined=dxMergeLogs(x,deleted);
+  localStorage.setItem('dxLogs',JSON.stringify(combined));
   dxUpdateSyncCount();
   if(!dxSyncBusy) dxScheduleCloudSync();
 }
@@ -808,7 +826,8 @@ function dxNormalizeLog(l){
     const sig=[x.date,x.time,x.freq,x.station,x.rx,x.mode,x.saved,x.content].map(v=>v||'').join('|');
     x._id='legacy-'+dxHash(sig);
   }
-  if(!x._updatedAt) x._updatedAt=x.saved||new Date(0).toISOString();
+  if(!x._updatedAt) x._updatedAt=x._deletedAt||x.saved||new Date(0).toISOString();
+  if(x._deletedAt && String(x._deletedAt)>String(x._updatedAt)) x._updatedAt=x._deletedAt;
   return x;
 }
 
@@ -816,7 +835,8 @@ function dxMergeLogs(a,b){
   const map=new Map();
   [...(a||[]),...(b||[])].map(dxNormalizeLog).forEach(x=>{
     const prev=map.get(x._id);
-    if(!prev || String(x._updatedAt||x.saved||'')>=String(prev._updatedAt||prev.saved||'')) map.set(x._id,x);
+    const v=String(x._updatedAt||x.saved||''),p=String(prev?._updatedAt||prev?.saved||'');
+    if(!prev || v>p || (v===p && !!x._deletedAt && !prev._deletedAt)) map.set(x._id,x);
   });
   return [...map.values()].sort((x,y)=>String(y.saved||y._updatedAt||'').localeCompare(String(x.saved||x._updatedAt||'')));
 }
@@ -881,6 +901,10 @@ function dxSyncButtonsBusy(busy){
 }
 
 function dxUpdateSyncCount(){
+  if(!DX_SYNC_SAFE){
+    dxSyncStatus('Drive-synk pausad: säker autentisering saknas. Exportera en säkerhetskopia.',false);
+    ['dxSyncNowBtn','dxSyncPullBtn','dxSyncPushBtn'].forEach(id=>{const b=document.getElementById(id);if(b)b.disabled=true;});
+  }
   const el=document.getElementById('dxLocalCount');
   if(el) el.textContent=getLogs().length;
   const last=localStorage.getItem('dxSyncLast');
@@ -889,11 +913,13 @@ function dxUpdateSyncCount(){
 }
 
 function dxScheduleCloudSync(){
+  if(!DX_SYNC_SAFE) return;
   clearTimeout(dxSyncTimer);
   dxSyncTimer=setTimeout(()=>dxCloudSync(false),900);
 }
 
 async function dxFetchRemote(){
+  if(!DX_SYNC_SAFE) throw new Error('Drive-synk är säkerhetspausad.');
   const controller=new AbortController();
   const timer=setTimeout(()=>controller.abort(),15000);
   try{
@@ -910,6 +936,7 @@ async function dxFetchRemote(){
 }
 
 async function dxPostRemote(logs){
+  if(!DX_SYNC_SAFE) throw new Error('Drive-synk är säkerhetspausad.');
   const controller=new AbortController();
   const timer=setTimeout(()=>controller.abort(),15000);
   try{
@@ -930,12 +957,13 @@ async function dxPostRemote(logs){
 }
 
 async function dxCloudSync(showMessage=false){
+  if(!DX_SYNC_SAFE){dxUpdateSyncCount();if(showMessage)alert('Drive-synk är pausad för att skydda loggarna. Använd JSON-export och import tills servern har verifierad inloggning.');return;}
   if(dxSyncBusy) return;
   dxSyncBusy=true;
   dxSyncButtonsBusy(true);
   dxSyncStatus('Synkar… kontaktar Google Drive');
   try{
-    const local=getLogs().map(dxNormalizeLog);
+    const local=getLogRecords().map(dxNormalizeLog);
     const remote=await dxFetchRemote();
     let merged=dxMergeLogs(local,remote);
     if(dxNeedsMasterRecovery(remote)){
@@ -958,11 +986,12 @@ async function dxCloudSync(showMessage=false){
 }
 
 async function dxCloudPullOnly(){
+  if(!DX_SYNC_SAFE){dxUpdateSyncCount();return;}
   if(dxSyncBusy) return;
   dxSyncBusy=true; dxSyncButtonsBusy(true); dxSyncStatus('Hämtar från Drive… kontaktar Google');
   try{
     const remote=await dxFetchRemote();
-    let merged=dxMergeLogs(getLogs(),remote);
+    let merged=dxMergeLogs(getLogRecords(),remote);
     if(dxNeedsMasterRecovery(remote)){
       const seed=await dxFetchMasterRecoverySeed();
       merged=dxMergeRecoverySeed(merged,seed);
@@ -1108,13 +1137,17 @@ function searchWeb(){
 }
 function deleteSelected(){
   if(selectedIndex===null)return;
-  if(!confirm('Radera denna logg?'))return;
-  const logs=getLogs(); logs.splice(selectedIndex,1); setLogs(logs); selectedIndex=null; showView('book');
+  if(!confirm('Ta bort loggen från den aktiva loggboken? En återställningsmarkering sparas i backup.'))return;
+  const logs=getLogs(),target=logs[selectedIndex];if(!target)return;
+  const now=new Date().toISOString();
+  const deleted={...dxNormalizeLog(target),_deletedAt:now,_updatedAt:now};
+  setLogs(dxMergeLogs(getLogRecords(),[deleted]));
+  selectedIndex=null;showView('book');
 }
 function download(name,text,type){
   const a=document.createElement('a'); a.href=URL.createObjectURL(new Blob([text],{type})); a.download=name; a.click(); URL.revokeObjectURL(a.href);
 }
-function exportJSON(){download('dx-loggar.json',JSON.stringify(getLogs(),null,2),'application/json')}
+function exportJSON(){download('dx-loggar-med-raderingshistorik.json',JSON.stringify(getLogRecords(),null,2),'application/json')}
 function exportCSV(){
   const logs=getLogs();
   const cols=['date','time','freq','band','mode','rx','station','counterstation','country','place','lang','signal','sinpo','reportExchange','operator','ptype','website','idwords','content','notes','reportStatus','contact','reply','extra1','extra2','extra3'];
@@ -1285,7 +1318,7 @@ function receiverPlace(l){
   return cleanPlace(s);
 }
 function stationPlace(l){return cleanPlace([l.place,l.country].filter(Boolean).join(', '))}
-function isVerified(l){return /bekräft|verifier/i.test([l.verifyStatus,l.idwords,l.notes].filter(Boolean).join(' '))}
+function isVerified(l){return !l._deletedAt && /^(bekräftad|verifierad)$/i.test(String(l.verifyStatus||l.mapStatus||'').trim())}
 function isAmateur(l){
   if(/amatör|amateur/i.test(String(l.band||''))) return true;
   if(/usb-ssb|contest|tävling/i.test(String(l.importedSheet||''))) return true;
@@ -2198,7 +2231,12 @@ window.addEventListener('resize',()=>{constrainMapPan();applyMapTransform()});
 function importJSON(ev){
   const f=ev.target.files[0]; if(!f)return;
   const r=new FileReader();
-  r.onload=()=>{try{const x=JSON.parse(r.result); if(!Array.isArray(x))throw 0; setLogs(x); renderLogs(); alert('Import klar.')}catch(e){alert('Filen kunde inte importeras.')}};
+  r.onload=()=>{try{const x=JSON.parse(r.result);if(!Array.isArray(x))throw 0;
+    if(!x.every(l=>l&&typeof l==='object'&&!Array.isArray(l)))throw 0;
+    const before=getLogs().length;
+    setLogs(dxMergeLogs(getLogRecords(),x));
+    renderLogs();alert('Import sammanfogad. '+getLogs().length+' aktiva poster (tidigare '+before+'). Inga befintliga loggar ersattes.');
+  }catch(e){alert('Filen kunde inte importeras. Kontrollera att den är en JSON-array med loggar.')}};
   r.readAsText(f);
 }
 renderLogs();
