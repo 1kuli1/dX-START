@@ -50,3 +50,61 @@ Tester kördes som isolerade funktionsprov med simulerad lokal lagring och DOM. 
 5. Behåll JSON-filen som egen säkerhetskopia.
 
 **Observera:** Detta är en manuell lösning. Automatisk synkning mellan enheter är ännu inte säkerhetsgodkänd.
+
+---
+
+## Etapp 2: fortsättning den 9 oktober 2026
+
+### Säkerhetskopior på Google Drive
+Innan fortsatt utveckling kopierades de två **originalböckerna utan att originalen ändrades**:
+- [Backup – DX MASTER LOGGBOK](https://docs.google.com/spreadsheets/d/1RaimFROSVyZJeRarO_a5PLUnL1LIRApOzdnJVxPUruo/edit)
+- [Backup – FM DX MASTER LOGGBOK](https://docs.google.com/spreadsheets/d/1Bn3KoCi0FkYW3kRTRv-BJ77XFmvY0DH6RYCVw4nVC_E/edit)
+
+Backupkopiorna verifierades med 21 respektive 13 kalkylbladsflikar samt exempelvärden i loggbladens första rader.
+
+### Reparerad Excel-import från huvudloggböcker
+Commit `4c09c5cabeab949b279fdcacb405cc67897ddb65` kompletterar DX Start så att huvudböckernas verkliga fältnamn nu känns igen:
+- DX Loggbok: `Kategori`, `Plats mottagare`, `Trolig station/signal`, `ID-ord / transkript`, `Stationens hemsida`, historiespalterna m.fl.
+- FM Loggbok: `Frekvens MHz`, `Trolig station`, RDS/PI/PS/RT/PTY, ERP, antenn, historia m.fl.
+- Bevarar skillnaden mellan kHz och MHz.
+- Identifierar återimporterade observationer deterministiskt och försöker komplettera tomma fält i stället för att skriva över befintlig information.
+- Respekterar raderingsmarkeringar vid återimport.
+
+Commit `b02cc774dba7eb59dba3fae0b4d4c9eb734ae7f6` hindrar tomma källceller från att bli den bokstavliga texten "null". Olika observationer utan datum/tid kan få separata stabila import-ID:n.
+
+**Test med levande innehåll från de två privata säkerhetskopiorna:** 41 DX-observationer och 7 FM-observationer importerades korrekt från tabellvärdena i hela respektive loggblad. Samtliga 48 fick rätt frekvensenhet, stationsnamn och unikt import-ID; 30 DX-poster respektive 4 FM-poster hade historikfält som hittades.
+
+**Browsertest med Chromium:** Äkta exporterade Excel-filer öppnades, dekomprimerades och deras kalkylbladsstrukturer tolkades. DX-filen hade 82 ZIP-delar, FM-filen 50, och de 38 respektive 33 kolumnrubrikerna hittades på korrekta loggblad. Det är ett filformatstest; komplett klicktest av det publicerade DX Start-formuläret på fysisk Android återstår.
+
+### Receiver Hub och stoppknapp
+Commit `e19d1be46314730ba64b6b8a7eba23f4723ea43b`:
+- Samtliga **49** tidigare falska "Favorit sparad"-knappar ersatta av riktiga favoriter, sparade i `localStorage`.
+- Ny knapp **Mina favoriter**, med möjlighet att lägga till och ta bort samt tillgänglig `aria-pressed`.
+- Bandfilter, sökning och favoritfilter fungerar tillsammans.
+- Fasta ONLINE-märkningar ersattes med **STATUS EJ KONTROLLERAD**; ingen påhittad livekontroll.
+
+Funktionen klarade **åtta simulerade UI-/funktionstester**: synlighet, knappbindning, lagring, tillgängligt tillstånd, favoriturval, kombinerat band+sök, kvarvarande bandfilter och borttagning.
+
+Commit `9577c6739f7852bcc95fe62e9dc64abe122a475b`:
+- Säker, separat fliköppning utan falsk popupvarning.
+- En fungerande **Stoppa ljud i DX Start**-knapp stoppar eget ljud/CW/inspelning, inte externa SDR-flikar som webbläsaren inte kan stänga.
+- Förklarande text på mottagarsidan.
+
+De två äldre Receiver Hub-sidorna i **DX-OS** dirigeras till den enda uppdaterade mottagarlistan, så att användare inte hamnar på en gammal version:
+- `dx-os/modules/receiver-hub.html`: commit `3bcbf17a91206b92bc4c48a0df55df9dc5731636`
+- `dx-os/receiver-hub.html`: commit `8734a57733ac3c8aa6dc621089f6e688eaf9231a`
+
+### Säkerhetsbedömning: ej slutligt löst
+- Google Drive-metadata visade endast ägarbehörighet på de två originalkalkylböckerna. Det räcker **inte** för att godkänna det gamla offentligt åtkomliga Google Apps Script-endpointets behörigheter.
+- Äldre Apps Script-deployment och serverkod gick **inte** att hitta eller administrera med tillgänglig anslutning.
+- Automatisk Drive-synk i DX Start ska därför förbli **avstängd** tills en autentiserad och versionssäker server kan provas, inklusive återställnings-/raderingslogik.
+- Återstående praktiska test: öppna publicerade sidor på Samsung-mobil, Samsung-platta och Windows samt validera hela flödet och externa mottagarlänkar. Aktuell publicerad GitHub Pages-HTML var inte direkt tillgänglig för automatisk extern webbgranskning.
+
+### Nästa säkerhetssteg i Google Apps Script
+1. Öppna det gamla Apps Script-projektet som användes för Drive-synk.
+2. Kontrollera **Distribuera → Hantera distributioner** och vilka användare som kan komma åt varje aktiv webapp.
+3. Inaktivera gamla offentliga/okända deployment-länkar efter att projektet och backupen verifierats.
+4. Bygg ersättningsserver med inloggning/ägarkontroll, versions-ID och tombstones. Låt inte en dold URL räknas som autentisering.
+5. Prova otillåten åtkomst med annat konto och synkning mellan två enheter **innan** klientens spärr tas bort.
+
+Referens: [Google – Apps Script Web Apps](https://developers.google.com/apps-script/guides/web) samt [Apps Script manifest och åtkomstlägen](https://developers.google.com/apps-script/manifest/web-app-api-executable).
