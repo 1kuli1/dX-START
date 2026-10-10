@@ -174,5 +174,6 @@ if('serviceWorker' in navigator&&(location.protocol==='https:'||location.hostnam
  window.addEventListener('load',()=>navigator.serviceWorker.register('./sw.js',{scope:'./'}).catch(e=>console.warn('Offlineguiden kunde inte registreras',e)));
 }
 </script>
+<script src="pwa-update.js" defer></script>
 </body>
 </html>

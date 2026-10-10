@@ -1335,6 +1335,7 @@ if('serviceWorker' in navigator && (location.protocol==='https:' || location.hos
 <script>
 if(new URLSearchParams(location.search).has('catastrophe')){try{const d=JSON.parse(localStorage.getItem('dxKatastrofSdrRegion')||'null');if(d){const note=document.createElement('aside');note.className='hub-guide';note.setAttribute('role','status');note.textContent='Katastrof-DX: välj mottagare i '+d.region+'. '+d.tip+' Området är vägledning; listan är inte automatiskt geografiskt filtrerad.';document.querySelector('header').insertAdjacentElement('afterend',note);}}catch(e){}}
 </script>
+<script src="pwa-update.js" defer></script>
 </body>
 </html>
 
