@@ -1,6 +1,6 @@
 /* DXportalen beta: sidor offline; inga personliga loggar eller externa radioströmmar cachas. */
-const CACHE='dxportalen-v10-20261010-above-receivers';
-const SHELL=['./','./index.html','./centralen.html','./katastrof-dx.html','./receiver-hub.html','./asta.html','./dx-help.html','./guider.html','./kom-igang.html','./academy/index.html','./academy/lektioner.html','./academy/nyborgare/index.html','./pwa-update.js','./receiver-custom.js','./manifest.webmanifest','./icon-192.png','./icon-512.png','./icon.svg'];
+const CACHE='dxportalen-v11-20261010-country-search';
+const SHELL=['./','./index.html','./centralen.html','./katastrof-dx.html','./receiver-hub.html','./asta.html','./dx-help.html','./guider.html','./kom-igang.html','./academy/index.html','./academy/lektioner.html','./academy/nyborgare/index.html','./pwa-update.js','./receiver-custom.js','./receiver-catalog.js','./receiver-catalog.json','./manifest.webmanifest','./icon-192.png','./icon-512.png','./icon.svg'];
 const ALLOWED=new Set(SHELL.map(p=>new URL(p,self.registration.scope).pathname));
 const ACADEMY_ROOT=new URL('./academy/',self.registration.scope).pathname;
 self.addEventListener('install',event=>{

@@ -558,9 +558,11 @@ footer{
 }
 
 .directory-links{display:flex;flex-wrap:wrap;gap:10px;margin:12px 0}.directory-links a,.directory-links button{display:inline-block;padding:12px 16px;min-height:44px;box-sizing:border-box;border:2px solid #287aaf;border-radius:8px;background:#102b40;color:#fff;font:inherit;text-decoration:none}.directory-links a:focus-visible,.directory-links button:focus-visible{outline:3px solid #ffcf33;outline-offset:3px}#rxCustomForm label{display:block;margin-top:12px}#rxCustomForm input{display:block;box-sizing:border-box;width:100%;padding:12px;font:inherit}#rxCustomFavorites a{overflow-wrap:anywhere}summary{cursor:pointer;padding:12px 0}
+#rxCatalogCountry,#rxCatalogType{font:inherit;min-height:44px;padding:8px;max-width:100%;margin:8px}#rxCatalogResults .receiver-card h4{font-size:1.15rem;overflow-wrap:anywhere}#rxCatalogMore{min-height:44px;padding:12px;font:inherit}
 </style>
 
 <style>.dxportal-nav{display:flex;flex-wrap:wrap;gap:8px;padding:12px;background:#07111f;border-bottom:1px solid #405577;font:600 16px system-ui;position:relative;z-index:10}.dxportal-nav a{display:inline-block;padding:10px 12px;border:1px solid #405577;border-radius:8px;color:#fff;background:#17243a;text-decoration:none}.dxportal-nav a:focus-visible{outline:3px solid #eab308;outline-offset:3px}.directory-links{display:flex;flex-wrap:wrap;gap:10px;margin:12px 0}.directory-links a,.directory-links button{display:inline-block;padding:12px 16px;min-height:44px;box-sizing:border-box;border:2px solid #287aaf;border-radius:8px;background:#102b40;color:#fff;font:inherit;text-decoration:none}.directory-links a:focus-visible,.directory-links button:focus-visible{outline:3px solid #ffcf33;outline-offset:3px}#rxCustomForm label{display:block;margin-top:12px}#rxCustomForm input{display:block;box-sizing:border-box;width:100%;padding:12px;font:inherit}#rxCustomFavorites a{overflow-wrap:anywhere}summary{cursor:pointer;padding:12px 0}
+#rxCatalogCountry,#rxCatalogType{font:inherit;min-height:44px;padding:8px;max-width:100%;margin:8px}#rxCatalogResults .receiver-card h4{font-size:1.15rem;overflow-wrap:anywhere}#rxCatalogMore{min-height:44px;padding:12px;font:inherit}
 </style></head>
 
 <body><nav aria-label="DXportalens huvudmeny" class="dxportal-nav"><a href="./centralen.html">DXportalen</a><a href="./receiver-hub.html">Lyssna</a><a href="./index.html?tool=book">Loggbok</a><a href="./index.html?tool=map">DX-karta</a><a href="./academy/index.html">DX Academy</a><a href="./guider.html">Guider</a><a href="./asta.html">Asta</a></nav>
@@ -639,12 +641,22 @@ DXportalens mottagarlista för WebSDR, KiwiSDR, OpenWebRX, FM-DX, flygradio, sat
 <input
 type="text"
 id="searchInput"
-placeholder="Sök mottagare, land eller typ..."
+placeholder="Sök mottagare, land eller typ – t.ex. Sverige..."
 onkeyup="searchReceivers()"
 >
 
 </div>
 
+<section class="hub-guide" aria-labelledby="rxCatalogTitle">
+<h3 id="rxCatalogTitle">Hitta fler mottagare med samma sökruta</h3>
+<p>Skriv exempelvis Sverige, Finland eller Netherlands i sökrutan ovan. Tryck sedan på Sök fler mottagare. Listan är en daterad katalog, inte en kontroll av vilka mottagare som är igång just nu.</p>
+<div class="directory-links"><button type="button" id="rxCatalogSearch">Sök fler mottagare</button></div>
+<label for="rxCatalogCountry">Land i katalogen</label><select id="rxCatalogCountry"><option value="">Alla länder</option></select>
+<label for="rxCatalogType">Mottagartyp i katalogen</label><select id="rxCatalogType"><option value="">Alla typer</option><option>KiwiSDR</option><option>WebSDR</option><option>OpenWebRX</option><option>FM-DX</option></select>
+<p id="rxCatalogStatus" role="status"></p><div id="rxCatalogResults" class="grid"></div>
+<button type="button" id="rxCatalogMore" hidden>Visa fler</button>
+<p><small>Källor: <a href="https://www.receiverbook.de/map" target="_blank" rel="noopener noreferrer">Receiverbook</a> och <a href="https://servers.fmdx.org/" target="_blank" rel="noopener noreferrer">FMDX.org</a>. Land för Receiverbook bestäms ungefärligt från mottagarens koordinater med Natural Earth. Katalogen innehåller inte alla mottagare; använd listorna och kartorna nedan för fler alternativ.</small></p>
+</section>
 <section class="hub-guide" aria-labelledby="rxDirectoriesTitle">
 <h3 id="rxDirectoriesTitle">Välj en annan mottagare från lista eller karta</h3>
 <p>Öppna en lista eller karta i en ny flik och välj en mottagare där. Du behöver inte lägga till den som favorit.</p>
@@ -1362,6 +1374,7 @@ if('serviceWorker' in navigator && (location.protocol==='https:' || location.hos
 <script>
 if(new URLSearchParams(location.search).has('catastrophe')){try{const d=JSON.parse(localStorage.getItem('dxKatastrofSdrRegion')||'null');if(d){const note=document.createElement('aside');note.className='hub-guide';note.setAttribute('role','status');note.textContent='Katastrof-DX: välj mottagare i '+d.region+'. '+d.tip+' Området är vägledning; listan är inte automatiskt geografiskt filtrerad.';document.querySelector('header').insertAdjacentElement('afterend',note);}}catch(e){}}
 </script>
+<script src="receiver-catalog.js" defer></script>
 <script src="receiver-custom.js" defer></script>
 <script src="pwa-update.js" defer></script>
 </body>
