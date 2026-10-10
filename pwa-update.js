@@ -53,3 +53,40 @@
   }
  });
 })();
+
+/* Shared Asta shortcut on every DX page, independent of PWA support. */
+(()=>{
+ 'use strict';
+ const source=document.currentScript;
+ if(!source?.src)return;
+ const astaURL=new URL('asta.html',source.src);
+ function addShortcut(){
+  if(document.getElementById('dx-asta-shortcut'))return;
+  const style=document.createElement('style');
+  style.textContent=`
+   html{scroll-padding-bottom:100px}
+   #dx-asta-space{height:88px;flex-shrink:0}
+   #dx-asta-shortcut,#dx-asta-shortcut:visited{position:fixed;right:max(12px,env(safe-area-inset-right));bottom:calc(12px + env(safe-area-inset-bottom));z-index:9990;display:flex;align-items:center;gap:8px;min-height:52px;box-sizing:border-box;padding:8px 14px;border:2px solid #fff;border-radius:30px;background:#facc15;color:#111827;text-decoration:none;font:700 17px/1.2 system-ui,sans-serif;box-shadow:0 3px 14px #0008}
+   #dx-asta-shortcut:focus-visible{outline:3px solid #38bdf8;outline-offset:4px}
+   #dx-asta-shortcut:hover{background:#fde68a}
+   #dx-asta-shortcut svg{width:30px;height:30px;flex:none}
+   #dx-asta-shortcut[hidden]{display:none}
+   @media print{#dx-asta-shortcut,#dx-asta-space{display:none}}
+  `;
+  document.head.append(style);
+  const link=document.createElement('a');link.id='dx-asta-shortcut';
+  const onAsta=location.pathname===astaURL.pathname;
+  link.href=onAsta?'#question':astaURL.href;
+  link.setAttribute('aria-label',onAsta?'Asta – gå till din fråga':'Fråga Asta – öppnas i en ny flik');
+  link.title='Fråga Asta';
+  if(!onAsta){link.target='_blank';link.rel='noopener';}
+  link.innerHTML='<svg viewBox="0 0 32 32" aria-hidden="true" focusable="false" fill="none" stroke="currentColor" stroke-width="2"><path d="M16 5V2M12 2h8"/><rect x="5" y="7" width="22" height="18" rx="6"/><path d="M2 13v6M30 13v6M11 29v-4M21 29v-4M12 20h8"/><circle cx="11" cy="14" r="1.5" fill="currentColor"/><circle cx="21" cy="14" r="1.5" fill="currentColor"/></svg><span>Asta</span>';
+  if(onAsta)link.addEventListener('click',()=>document.getElementById('question')?.focus());
+  const space=document.createElement('div');space.id='dx-asta-space';space.setAttribute('aria-hidden','true');
+  document.body.append(space,link);
+  // Keep the shortcut out of the way while the onscreen keyboard is open.
+  const viewport=window.visualViewport;
+  if(viewport){const adjust=()=>{link.hidden=window.innerHeight-viewport.height>150;};viewport.addEventListener('resize',adjust);adjust();}
+ }
+ if(document.readyState==='loading')document.addEventListener('DOMContentLoaded',addShortcut,{once:true});else addShortcut();
+})();
