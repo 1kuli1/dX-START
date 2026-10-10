@@ -617,7 +617,8 @@ DXportalens mottagarlista för WebSDR, KiwiSDR, OpenWebRX, FM-DX, flygradio, sat
 
 <button type="button" onclick="openBandTab('lw')">LW / NDB ↗</button>
 <button type="button" onclick="openBandTab('mw')">MW ↗</button>
-<button type="button" onclick="openBandTab('hf')">SW / HF ↗</button>
+<button type="button" onclick="openBandTab('sw')">SW – kortvågsradio ↗</button>
+<button type="button" onclick="openBandTab('hf')">HF – 3–30 MHz ↗</button>
 <button type="button" onclick="openBandTab('fm')">FM ↗</button>
 <button type="button" onclick="openBandTab('amateur')">Amatörradio ↗</button>
 <button type="button" onclick="openBandTab('utility')">Utility / digitalt ↗</button>
@@ -683,7 +684,7 @@ onkeyup="searchReceivers()"
 <div class="grid" id="receiverGrid">
 
 <!-- ===== TWENTE ===== -->
-<div class="receiver-card lw mw hf amateur utility">
+<div class="receiver-card lw mw sw hf amateur utility">
 
 <h2>Twente WebSDR – Enschede</h2>
 
@@ -724,7 +725,7 @@ class="favorite-btn"
 </div>
 
 <!-- ===== KIWI ===== -->
-<div class="receiver-card lw mw hf amateur utility">
+<div class="receiver-card lw mw sw hf amateur utility">
 
 <h2>KiwiSDR – SK6WW Karlsborg</h2>
 
@@ -767,7 +768,7 @@ class="favorite-btn"
 </div>
 
 <!-- ===== VERIFIERADE MOTTAGARE ===== -->
-<div class="receiver-card lw mw hf amateur utility">
+<div class="receiver-card lw mw sw hf amateur utility">
 <h2>KiwiSDR – SM5AJV Heby</h2>
 <p>Svensk KiwiSDR i Heby, nära Kungsberget-regionen. Bra för långvåg, NDB, mellanvåg, kortvåg, amatörradio och utility.</p>
 <div class="info"><div><strong>Land:</strong> Sverige – Heby</div><div><strong>Band:</strong> 0–30 MHz</div><div><strong>Typ:</strong> KiwiSDR</div></div>
@@ -775,7 +776,7 @@ class="favorite-btn"
 <div class="actions"><button type="button" class="open-btn" onclick="window.open('http://websdr.qrq.se/','_blank','noopener')">Öppna</button><button type="button" class="favorite-btn" >★ Favorit</button></div>
 </div>
 
-<div class="receiver-card lw mw hf amateur utility">
+<div class="receiver-card lw mw sw hf amateur utility">
 <h2>KiwiSDR – OH3AA Hämeenlinna</h2>
 <p>Publik KiwiSDR hos Hämeenlinnan Radioamatöörit. Öppen för allmän lyssning och bra för nordisk DX, MW, SW, amatörradio och utility.</p>
 <div class="info"><div><strong>Land:</strong> Finland – Hämeenlinna</div><div><strong>Band:</strong> 0,1–30 MHz</div><div><strong>Typ:</strong> KiwiSDR</div></div>
@@ -783,7 +784,7 @@ class="favorite-btn"
 <div class="actions"><button type="button" class="open-btn" onclick="window.open('http://oh3aa.dy.fi:18073/','_blank','noopener')">Öppna</button><button type="button" class="favorite-btn" >★ Favorit</button></div>
 </div>
 
-<div class="receiver-card lw mw hf amateur utility">
+<div class="receiver-card lw mw sw hf amateur utility">
 <h2>KiwiSDR – Esbjerg</h2>
 <p>Dansk 0–30 MHz-mottagare, bra geografiskt komplement för nordisk och europeisk DX.</p>
 <div class="info"><div><strong>Land:</strong> Danmark – Esbjerg</div><div><strong>Band:</strong> 0–30 MHz</div><div><strong>Typ:</strong> KiwiSDR 2</div></div>
@@ -791,7 +792,7 @@ class="favorite-btn"
 <div class="actions"><button type="button" class="open-btn" onclick="window.open('http://21086.proxy.kiwisdr.com/','_blank','noopener')">Öppna</button><button type="button" class="favorite-btn" >★ Favorit</button></div>
 </div>
 
-<div class="receiver-card lw mw hf amateur utility">
+<div class="receiver-card lw mw sw hf amateur utility">
 <h2>KiwiSDR – DO6LSM Borgwedel</h2>
 <p>Publik KiwiSDR i Borgwedel i norra Tyskland. Bra för långvåg, NDB, mellanvåg, kortvåg, amatörradio och utility.</p>
 <div class="info"><div><strong>Land:</strong> Tyskland – Borgwedel</div><div><strong>Band:</strong> 0–30 MHz</div><div><strong>Typ:</strong> KiwiSDR</div></div>
@@ -1237,7 +1238,7 @@ function applyBandFromUrl(){
         filterReceivers(band);
 
         const titles = {
-            "lw":"LW / NDB","mw":"MW","hf":"SW / HF","fm":"FM",
+            "lw":"LW / NDB","mw":"MW","sw":"SW – kortvågsradio","hf":"HF – 3–30 MHz","fm":"FM",
             "amateur":"Amatörradio","utility":"Utility / digitalt","vhf":"VHF",
             "air-simple":"Air – Enkel","airband":"Air – Avancerad SDR",
             "sat-simple":"Satellit – Enkel","satellite":"Satellit – Avancerad",
@@ -1247,6 +1248,11 @@ function applyBandFromUrl(){
 
         const h1=document.querySelector("header h1");
         if(h1 && titles[band]) h1.textContent="Receiver Hub – "+titles[band];
+        if(band==='sw'||band==='hf'){
+            const p=document.createElement('p');p.id='rxBandExplanation';
+            p.textContent=band==='sw'?'SW: mottagare för rundradiolyssning på kortvåg. Dessa mottagare kan även användas för annan HF-lyssning.':'HF: mottagare för 3–30 MHz, inklusive kortvågsradio, amatörradio och utility. Frekvenser och antenner varierar mellan mottagarna.';
+            h1?.after(p);
+        }
 
         if(backBtn){
             backBtn.textContent="← TILLBAKA TILL RECEIVER HUB";
@@ -1270,7 +1276,7 @@ window.addEventListener("DOMContentLoaded", applyBandFromUrl);
 
 function addReceiverHelpButtons(){
     const base="./dx-help.html#";
-    document.querySelectorAll(".receiver-card").forEach(card=>{
+    document.querySelectorAll("#receiverGrid > .receiver-card").forEach(card=>{
         if(card.querySelector(".receiver-help")) return;
         const t=(card.textContent||'').toLowerCase();
         let section="receiverhub";
@@ -1295,7 +1301,7 @@ function addReceiverHelpButtons(){
 window.addEventListener("DOMContentLoaded", addReceiverHelpButtons);
 
 function improveReceiverAccessibility(){
-    document.querySelectorAll(".receiver-card").forEach(card=>{
+    document.querySelectorAll("#receiverGrid > .receiver-card").forEach(card=>{
         const name=(card.querySelector("h2")?.textContent||"mottagaren").trim();
         card.querySelectorAll(".open-btn").forEach(btn=>{
             btn.setAttribute("aria-label","Öppna "+name+" i ny flik");
@@ -1327,7 +1333,7 @@ function rxId(card){
 }
 function rxApplyFavoriteButtons(){
  const favs=new Set(rxGetFavorites());
- document.querySelectorAll('.receiver-card').forEach(card=>{
+ document.querySelectorAll('#receiverGrid > .receiver-card').forEach(card=>{
   const btn=card.querySelector('.favorite-btn');if(!btn)return;
   const id=rxId(card);
   const refresh=()=>{
@@ -1347,7 +1353,7 @@ function updateReceiverVisibility(){
  const search=(document.getElementById('searchInput')?.value||'').toLowerCase().trim()
  .replace(/turnholt|turnhold|turnhoutt/g,'turnhout');
  const favs=new Set(rxGetFavorites());
- document.querySelectorAll('.receiver-card').forEach(card=>{
+ document.querySelectorAll('#receiverGrid > .receiver-card').forEach(card=>{
   const text=(card.textContent+' '+(card.dataset.search||'')).toLowerCase()
    .replace(/turnholt|turnhold|turnhoutt/g,'turnhout');
   const inBand=rxActiveBand==='all'||card.classList.contains(rxActiveBand);
