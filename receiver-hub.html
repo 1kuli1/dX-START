@@ -10,7 +10,7 @@
 <meta charset="UTF-8">
 <meta name="viewport" content="width=device-width, initial-scale=1.0">
 
-<title>DX Centralen – Receiver Hub</title>
+<title>DXportalen – Receiver Hub</title>
 
 <style>
 
@@ -559,18 +559,18 @@ footer{
 
 </style>
 
-</head>
+<style>.dxportal-nav{display:flex;flex-wrap:wrap;gap:8px;padding:12px;background:#07111f;border-bottom:1px solid #405577;font:600 16px system-ui;position:relative;z-index:10}.dxportal-nav a{display:inline-block;padding:10px 12px;border:1px solid #405577;border-radius:8px;color:#fff;background:#17243a;text-decoration:none}.dxportal-nav a:focus-visible{outline:3px solid #eab308;outline-offset:3px}</style></head>
 
-<body>
+<body><nav aria-label="DXportalens huvudmeny" class="dxportal-nav"><a href="./centralen.html">DXportalen</a><a href="./receiver-hub.html">Lyssna</a><a href="./index.html?tool=book">Loggbok</a><a href="./index.html?tool=map">DX-karta</a><a href="./academy/index.html">DX Academy</a><a href="./guider.html">Guider</a><a href="./asta.html">Asta</a></nav>
 <a class="skip-link" href="#main-content">Hoppa till huvudinnehåll</a>
 
 <nav class="back-row" aria-label="Receiver Hub-navigation">
 <a class="help-btn" href="./kom-igang.html#nyborjare">🚀 NY HÄR?</a>
 <a class="help-btn" href="./kom-igang.html#erfaren">🔵 ERFAREN DX</a>
-<a class="help-btn" href="https://1kuli1.github.io/dX-START/asta.html" target="_blank" rel="noopener">🤖 ASTA</a>
-<a class="help-btn" href="https://1kuli1.github.io/dX-START/guider.html" target="_blank" rel="noopener">📚 GUIDER & PDF</a>
-<a class="help-btn" id="receiverHelpBtn" href="https://1kuli1.github.io/dX-START/dx-help.html#receiverhub" target="_blank" rel="noopener">❓ HJÄLP</a>
-<a class="back-btn" id="receiverBackBtn" href="./centralen.html" style="text-decoration:none">← TILLBAKA TILL DX CENTRALEN</a>
+<a class="help-btn" href="./asta.html" target="_blank" rel="noopener">🤖 ASTA</a>
+<a class="help-btn" href="./guider.html" target="_blank" rel="noopener">📚 GUIDER & PDF</a>
+<a class="help-btn" id="receiverHelpBtn" href="./dx-help.html#receiverhub" target="_blank" rel="noopener">❓ HJÄLP</a>
+<a class="back-btn" id="receiverBackBtn" href="./centralen.html" style="text-decoration:none">← TILLBAKA TILL DXPORTALEN</a>
 </nav>
 
 <!-- ===== HEADER ===== -->
@@ -579,7 +579,7 @@ footer{
 <h1>Receiver Hub</h1>
 
 <p>
-DX Centralens mottagarlista för WebSDR, KiwiSDR, OpenWebRX, FM-DX, flygradio, satellit och UberSDR.
+DXportalens mottagarlista för WebSDR, KiwiSDR, OpenWebRX, FM-DX, flygradio, satellit och UberSDR.
 </p>
 
 </header>
@@ -1154,7 +1154,7 @@ class="favorite-btn"
 <!-- ===== FOOTER ===== -->
 <footer>
 
-DX Centralen • Receiver Hub • välj mottagare och återvänd alltid via knappen högst upp
+DXportalen • Receiver Hub • välj mottagare och återvänd alltid via knappen högst upp
 
 </footer>
 
@@ -1165,7 +1165,7 @@ function goBackReceiverHub(){
     if(document.referrer && document.referrer !== location.href){
         history.back();
     }else{
-        location.href = "https://1kuli1.github.io/dX-START/";
+        location.href = "./";
     }
 }
 
@@ -1182,7 +1182,7 @@ function showAllReceivers(){
  const input=document.getElementById('searchInput');if(input)input.value='';
  document.body.classList.remove('band-view');
  const h1=document.querySelector('header h1');if(h1)h1.textContent='Receiver Hub';
- const back=document.getElementById('receiverBackBtn');if(back){back.textContent='← TILLBAKA TILL DX CENTRALEN';back.href='./centralen.html';}
+ const back=document.getElementById('receiverBackBtn');if(back){back.textContent='← TILLBAKA TILL DXPORTALEN';back.href='./centralen.html';}
  updateReceiverVisibility();
 }
 /* ===== ÖPPNA VALT BAND FRÅN URL ===== */
@@ -1210,26 +1210,26 @@ function applyBandFromUrl(){
 
         if(backBtn){
             backBtn.textContent="← TILLBAKA TILL RECEIVER HUB";
-            backBtn.href="https://1kuli1.github.io/dX-START/receiver-hub.html";
+            backBtn.href="./receiver-hub.html";
         }
         if(helpBtn){
             const hm={"fm":"fmdx","air-simple":"airband","airband":"airband","sat-simple":"satellite","satellite":"satellite","uber":"uber"};
-            helpBtn.href="https://1kuli1.github.io/dX-START/dx-help.html#"+(hm[band]||"receiverhub");
+            helpBtn.href="./dx-help.html#"+(hm[band]||"receiverhub");
         }
     }else{
         if(backBtn){
-            backBtn.textContent="← TILLBAKA TILL DX CENTRALEN";
+            backBtn.textContent="← TILLBAKA TILL DXPORTALEN";
             backBtn.href="./centralen.html";
         }
         if(helpBtn){
-            helpBtn.href="https://1kuli1.github.io/dX-START/dx-help.html#receiverhub";
+            helpBtn.href="./dx-help.html#receiverhub";
         }
     }
 }
 window.addEventListener("DOMContentLoaded", applyBandFromUrl);
 
 function addReceiverHelpButtons(){
-    const base="https://1kuli1.github.io/dX-START/dx-help.html#";
+    const base="./dx-help.html#";
     document.querySelectorAll(".receiver-card").forEach(card=>{
         if(card.querySelector(".receiver-help")) return;
         const t=(card.textContent||'').toLowerCase();
@@ -1328,7 +1328,7 @@ window.addEventListener('DOMContentLoaded',()=>{rxApplyFavoriteButtons();updateR
 <script>
 if('serviceWorker' in navigator && (location.protocol==='https:' || location.hostname==='localhost')){
  window.addEventListener('load',()=>navigator.serviceWorker.register('./sw.js',{scope:'./'})
-   .catch(err=>console.warn('DX Centralen offline-läge kunde inte startas:',err)));
+   .catch(err=>console.warn('DXportalen offline-läge kunde inte startas:',err)));
 }
 </script>
 <script>

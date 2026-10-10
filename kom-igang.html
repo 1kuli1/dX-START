@@ -4,8 +4,8 @@
 <meta charset="utf-8">
 <meta name="viewport" content="width=device-width,initial-scale=1">
 <meta name="theme-color" content="#07111f">
-<meta name="description" content="Lär dig installera DX Centralen och komma igång med att lyssna och logga. Tydliga vägar för nybörjare och erfarna DX-are.">
-<title>Kom igång med DX Centralen – nybörjare och erfarna</title>
+<meta name="description" content="Lär dig installera DXportalen och komma igång med att lyssna och logga. Tydliga vägar för nybörjare och erfarna DX-are.">
+<title>Kom igång med DXportalen – nybörjare och erfarna</title>
 <link rel="manifest" href="./manifest.webmanifest">
 <link rel="icon" href="./icon.svg" type="image/svg+xml">
 <link rel="apple-touch-icon" href="./icon-192.png">
@@ -51,12 +51,12 @@ footer{border-top:1px solid var(--line);margin-top:40px;color:var(--muted)}
 @media(max-width:710px){.grid{grid-template-columns:1fr}.container{padding:12px}.card,section.panel{padding:16px}.steps li{padding-left:58px}}
 @media print{body{background:white;color:#111;font-size:11pt}.container{max-width:100%;padding:0}header,footer{border:0}.skip,nav,.buttons{display:none!important}.card,section.panel,aside,details{break-inside:avoid;border:1px solid #999;background:white;color:#111}h1,h2,h3,a,.tag{color:#111}.lead,p,small,.muted,.card p{color:#111}details:not([open]){display:block}details:not([open])>*:not(summary){display:block!important}a::after{content:""}.grid{grid-template-columns:1fr}.section{margin-top:18px}}
 </style>
-</head>
-<body>
+<style>.dxportal-nav{display:flex;flex-wrap:wrap;gap:8px;padding:12px;background:#07111f;border-bottom:1px solid #405577;font:600 16px system-ui;position:relative;z-index:10}.dxportal-nav a{display:inline-block;padding:10px 12px;border:1px solid #405577;border-radius:8px;color:#fff;background:#17243a;text-decoration:none}.dxportal-nav a:focus-visible{outline:3px solid #eab308;outline-offset:3px}</style></head>
+<body><nav aria-label="DXportalens huvudmeny" class="dxportal-nav"><a href="./centralen.html">DXportalen</a><a href="./receiver-hub.html">Lyssna</a><a href="./index.html?tool=book">Loggbok</a><a href="./index.html?tool=map">DX-karta</a><a href="./academy/index.html">DX Academy</a><a href="./guider.html">Guider</a><a href="./asta.html">Asta</a></nav>
 <a class="skip" href="#innehall">Hoppa till innehållet</a>
 <header><div class="container">
 <nav aria-label="Huvudnavigation">
-<a class="btn" href="./centralen.html">← DX Centralen</a>
+<a class="btn" href="./centralen.html">← DXportalen</a>
 <a href="#installera">Installera</a>
 <a href="#nyborjare">Nybörjare</a>
 <a href="#erfaren">Erfaren DX-are</a>
@@ -65,7 +65,7 @@ footer{border-top:1px solid var(--line);margin-top:40px;color:var(--muted)}
 </nav>
 </div></header>
 <main class="container" id="innehall">
-<p class="tag">Välkommen • DX Centralen</p>
+<p class="tag">Välkommen • DXportalen</p>
 <h1>Börja lyssna på världen</h1>
 <p class="lead">Du behöver inte kunna något om radio för att börja. Du behöver bara en mobil, surfplatta eller dator med internet. Har du redan DX:at? Hoppa direkt till dina verktyg.</p>
 <div class="grid" aria-label="Välj hur du vill börja">
@@ -82,28 +82,28 @@ footer{border-top:1px solid var(--line);margin-top:40px;color:var(--muted)}
 </div>
 
 <section class="section panel" id="installera" aria-labelledby="installera-title">
-<h2 id="installera-title">1. Installera DX Centralen (frivilligt)</h2>
+<h2 id="installera-title">1. Installera DXportalen (frivilligt)</h2>
 <p>Du kan <a href="./centralen.html">börja direkt i webbläsaren</a> utan installation eller konto. Installationen lägger till en appikon och gör det lättare att öppna programmet nästa gång. Den här testversionen är en PWA, inte en nedladdad APK.</p>
 <details><summary>📱 Android – Samsung och andra mobiler eller surfplattor</summary>
-<ol><li>Öppna <a href="./centralen.html">DX Centralen</a> i Google Chrome.</li>
+<ol><li>Öppna <a href="./centralen.html">DXportalen</a> i Google Chrome.</li>
 <li>Tryck på Chromes meny med tre prickar (⋮).</li>
 <li>Välj <strong>Installera app</strong> eller <strong>Lägg till på startskärmen</strong> – namnet beror på webbläsaren och enheten.</li>
-<li>Bekräfta med <strong>Installera</strong> eller <strong>Lägg till</strong>. Leta efter ikonen <strong>DX Centralen</strong>.</li>
+<li>Bekräfta med <strong>Installera</strong> eller <strong>Lägg till</strong>. Leta efter ikonen <strong>DXportalen</strong>.</li>
 <li>Tryck på ikonen för att öppna programmet. Saknas installationsvalet? Fortsätt gärna direkt i Chrome; funktionen behöver kontrolleras på din enhet.</li></ol>
 </details>
 <details><summary>💻 Windows – Microsoft Edge</summary>
-<ol><li>Öppna <a href="./centralen.html">DX Centralen</a> i Microsoft Edge.</li>
+<ol><li>Öppna <a href="./centralen.html">DXportalen</a> i Microsoft Edge.</li>
 <li>Titta efter en installationsikon i adressfältet, eller öppna menyn <strong>… → Appar</strong> eller <strong>Fler verktyg → Appar</strong> (menyvalen varierar).</li>
 <li>Välj <strong>Installera den här webbplatsen som en app</strong> och bekräfta.</li>
 <li>Öppna den installerade appen från Startmenyn. I Edge kan du även hantera installerade appar via <code>edge://apps</code>.</li></ol>
 </details>
 <details><summary>🍎 iPhone eller iPad – Safari</summary>
-<ol><li>Öppna <a href="./centralen.html">DX Centralen</a> i Safari.</li>
+<ol><li>Öppna <a href="./centralen.html">DXportalen</a> i Safari.</li>
 <li>Tryck på <strong>Dela</strong> (eller sidmenyn och sedan Dela).</li>
 <li>Välj <strong>Lägg till på hemskärmen</strong>.</li>
 <li>Välj <strong>Öppna som webbapp</strong> om alternativet visas och tryck på <strong>Lägg till</strong>.</li></ol>
 </details>
-<aside><strong>Viktigt om dina loggar:</strong> Dina personliga loggar sparas lokalt i den webbläsare där du använder DX Centralen. De följer inte automatiskt med mellan enheter. Rensa inte webbplatsdata och avinstallera inte med riktiga loggar utan att först hämta en <a href="./?tool=sync">JSON-säkerhetskopia</a>. Den automatiska Google Drive-synkningen är ännu avstängd.</aside>
+<aside><strong>Viktigt om dina loggar:</strong> Dina personliga loggar sparas lokalt i den webbläsare där du använder DXportalen. De följer inte automatiskt med mellan enheter. Rensa inte webbplatsdata och avinstallera inte med riktiga loggar utan att först hämta en <a href="./?tool=sync">JSON-säkerhetskopia</a>. Den automatiska Google Drive-synkningen är ännu avstängd.</aside>
 </section>
 
 <section class="section panel" id="nyborjare" aria-labelledby="nyborjare-title">
@@ -163,10 +163,10 @@ footer{border-top:1px solid var(--line);margin-top:40px;color:var(--muted)}
 <details><summary>Var tog min loggbok vägen?</summary><p>Loggar sparas i den webbläsare och på den webbadress där du loggade. Använder du en annan webbläsare eller enhet kan loggboken se tom ut. Öppna <a href="./?tool=sync">Säkerhetskopia</a> och använd en tidigare JSON-export om du har en. Rensa inte lagringen som innehåller originalet.</p></details>
 <details><summary>Kan Asta lyssna på mottagaren åt mig?</summary><p>Inte automatiskt. <a href="./asta.html">Asta</a> hjälper dig formulera en fråga och öppnar ChatGPT i en separat flik. Du kan beskriva ljudet, frekvensen och vad du hörde för att få hjälp med nästa steg.</p></details>
 <details><summary>Fungerar programmet utan internet?</summary><p>Vissa redan besökta program- och hjälpsidor kan fungera offline. Externa WebSDR-/KiwiSDR-mottagare behöver internet, och hjälp via ChatGPT behöver uppkoppling. Offlinefunktionen ska testas på varje plattform före slutlig utgåva.</p></details>
-<div class="buttons"><a class="btn main" href="./dx-help.html#start">❓ Fler hjälpsidor</a><a class="btn" href="./asta.html" target="_blank" rel="noopener noreferrer">🤖 Fråga Asta ↗</a><a class="btn" href="./centralen.html">← Återgå till DX Centralen</a><button type="button" class="btn" onclick="window.print()">🖨 Skriv ut guiden</button></div>
+<div class="buttons"><a class="btn main" href="./dx-help.html#start">❓ Fler hjälpsidor</a><a class="btn" href="./asta.html" target="_blank" rel="noopener noreferrer">🤖 Fråga Asta ↗</a><a class="btn" href="./centralen.html">← Återgå till DXportalen</a><button type="button" class="btn" onclick="window.print()">🖨 Skriv ut guiden</button></div>
 </section>
 </main>
-<footer><div class="container"><strong>DX Centralen – introduktionsguide</strong><p>Den här guiden ingår i testversionen. Installationsmenyer och mottagarsidor kan se olika ut på olika enheter. En testperson ska kunna börja utan hjälp; en erfaren DX-are ska kunna gå direkt till sina verktyg.</p></div></footer>
+<footer><div class="container"><strong>DXportalen – introduktionsguide</strong><p>Den här guiden ingår i testversionen. Installationsmenyer och mottagarsidor kan se olika ut på olika enheter. En testperson ska kunna börja utan hjälp; en erfaren DX-are ska kunna gå direkt till sina verktyg.</p></div></footer>
 <script>
 if('serviceWorker' in navigator&&(location.protocol==='https:'||location.hostname==='localhost')){
  window.addEventListener('load',()=>navigator.serviceWorker.register('./sw.js',{scope:'./'}).catch(e=>console.warn('Offlineguiden kunde inte registreras',e)));

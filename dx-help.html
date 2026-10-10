@@ -8,7 +8,7 @@
 <meta charset="utf-8">
 <meta name="viewport" content="width=device-width,initial-scale=1">
 <meta name="theme-color" content="#07111f">
-<title>DX-hjälp – DX Centralen</title>
+<title>DX-hjälp – DXportalen</title>
 <style>
 :root{--bg:#07111f;--panel:#101b2d;--panel2:#16243a;--line:#2d405e;--text:#f4f7fb;--muted:#b5c0d2;--accent:#eab308}
 *{box-sizing:border-box}.skip-link{position:absolute;left:-9999px;top:6px;z-index:10001;background:#fff;color:#000;padding:10px 14px;border-radius:8px;font-weight:800}.skip-link:focus{left:8px}a:focus-visible,button:focus-visible,input:focus-visible,select:focus-visible,textarea:focus-visible,summary:focus-visible{outline:3px solid #fff;outline-offset:3px}html{scroll-behavior:smooth}body{margin:0;background:linear-gradient(180deg,#06101d,#0b1525);color:var(--text);font:16px system-ui,-apple-system,Segoe UI,Roboto,Arial,sans-serif}
@@ -24,15 +24,15 @@ details{background:#0b1525;border:1px solid #263955;border-radius:10px;padding:1
 .levels{display:grid;grid-template-columns:repeat(3,minmax(0,1fr));gap:10px;margin:14px 0}.level{background:#0b1525;border:1px solid #31425f;border-radius:12px;padding:13px}.level h3{margin:0 0 7px;font-size:17px}.level p,.level li{font-size:14px}.level ol,.level ul{margin:6px 0;padding-left:20px}.begin{border-top:4px solid #22c55e}.continue{border-top:4px solid #eab308}.advanced{border-top:4px solid #60a5fa}.callout{background:#17243a;border:1px solid #405577;border-radius:10px;padding:11px 13px;margin:10px 0}.mistake{color:#fde68a;font-weight:800}
 @media(max-width:800px){.levels{grid-template-columns:1fr}}@media(max-width:650px){.wrap{padding:13px}.top{justify-content:stretch}.top a{flex:1;text-align:center;font-size:13px;padding:9px 7px}.section{padding:14px}.term{grid-template-columns:1fr;gap:2px}.quick{grid-template-columns:1fr}}
 </style>
-</head>
-<body>
+<style>.dxportal-nav{display:flex;flex-wrap:wrap;gap:8px;padding:12px;background:#07111f;border-bottom:1px solid #405577;font:600 16px system-ui;position:relative;z-index:10}.dxportal-nav a{display:inline-block;padding:10px 12px;border:1px solid #405577;border-radius:8px;color:#fff;background:#17243a;text-decoration:none}.dxportal-nav a:focus-visible{outline:3px solid #eab308;outline-offset:3px}</style></head>
+<body><nav aria-label="DXportalens huvudmeny" class="dxportal-nav"><a href="./centralen.html">DXportalen</a><a href="./receiver-hub.html">Lyssna</a><a href="./index.html?tool=book">Loggbok</a><a href="./index.html?tool=map">DX-karta</a><a href="./academy/index.html">DX Academy</a><a href="./guider.html">Guider</a><a href="./asta.html">Asta</a></nav>
 <p style="margin:10px"><a href="./kom-igang.html">🚀 Installera och kom igång – nybörjare och erfaren DX-are</a></p>
 <a class="skip-link" href="#main-content">Hoppa till huvudinnehåll</a>
 <nav class="top" aria-label="DX-hjälpens navigation">
-<a href="https://1kuli1.github.io/dX-START/asta.html" target="_blank" rel="noopener">🤖 Asta</a>
-<a href="./centralen.html">← DX Centralen</a>
-<a href="https://1kuli1.github.io/dX-START/receiver-hub.html">🎧 Receiver Hub</a>
-<a class="main" href="https://1kuli1.github.io/dX-START/">📻 DX Start</a>
+<a href="./asta.html" target="_blank" rel="noopener">🤖 Asta</a>
+<a href="./centralen.html">← DXportalen</a>
+<a href="./receiver-hub.html">🎧 Receiver Hub</a>
+<a class="main" href="./">📻 DXportalen</a>
 </nav>
 <main class="wrap" id="main-content">
 <h1>❓ DX-hjälp</h1>
@@ -356,7 +356,7 @@ details{background:#0b1525;border:1px solid #263955;border-radius:10px;padding:1
 <script>
 if('serviceWorker' in navigator && (location.protocol==='https:' || location.hostname==='localhost')){
  window.addEventListener('load',()=>navigator.serviceWorker.register('./sw.js',{scope:'./'})
-   .catch(err=>console.warn('DX Centralen offline-läge kunde inte startas:',err)));
+   .catch(err=>console.warn('DXportalen offline-läge kunde inte startas:',err)));
 }
 </script>
 </body>

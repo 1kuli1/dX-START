@@ -1,5 +1,5 @@
-/* DX Centralen beta: sidor offline; inga personliga loggar eller externa radioströmmar cachas. */
-const CACHE='dx-centralen-beta-v4-20261009';
+/* DXportalen beta: sidor offline; inga personliga loggar eller externa radioströmmar cachas. */
+const CACHE='dxportalen-v5-20261010';
 const SHELL=['./','./index.html','./centralen.html','./katastrof-dx.html','./receiver-hub.html','./asta.html','./dx-help.html','./guider.html','./kom-igang.html','./academy/index.html','./academy/lektioner.html','./academy/nyborgare/index.html','./manifest.webmanifest','./icon-192.png','./icon-512.png','./icon.svg'];
 const ALLOWED=new Set(SHELL.map(p=>new URL(p,self.registration.scope).pathname));
 const ACADEMY_ROOT=new URL('./academy/',self.registration.scope).pathname;
@@ -7,7 +7,7 @@ self.addEventListener('install',event=>{
  event.waitUntil(caches.open(CACHE).then(cache=>cache.addAll(SHELL)));
 });
 self.addEventListener('activate',event=>{
- event.waitUntil(caches.keys().then(keys=>Promise.all(keys.filter(k=>k.startsWith('dx-centralen-beta-')&&k!==CACHE).map(k=>caches.delete(k)))).then(()=>self.clients.claim()));
+ event.waitUntil(caches.keys().then(keys=>Promise.all(keys.filter(k=>(k.startsWith('dx-centralen-beta-')||k.startsWith('dxportalen-'))&&k!==CACHE).map(k=>caches.delete(k)))).then(()=>self.clients.claim()));
 });
 self.addEventListener('fetch',event=>{
  const req=event.request,url=new URL(req.url);

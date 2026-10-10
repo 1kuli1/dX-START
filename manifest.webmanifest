@@ -1,9 +1,9 @@
 {
   "id": "./",
-  "name": "DX Centralen – personlig testversion",
-  "short_name": "DX Centralen",
+  "name": "DXportalen",
+  "short_name": "DXportalen",
   "lang": "sv",
-  "description": "DX Centralen med mottagare, loggbok, katastrof-DX och DX Academy. Testversion utan konto.",
+  "description": "DXportalen med mottagare, loggbok, katastrof-DX och DX Academy. Testversion utan konto.",
   "start_url": "./centralen.html",
   "scope": "./",
   "display": "standalone",

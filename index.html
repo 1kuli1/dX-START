@@ -7,7 +7,7 @@
 <link rel="apple-touch-icon" href="./icon-192.png">
 <meta charset="utf-8">
 <meta name="viewport" content="width=device-width,initial-scale=1">
-<title>DX Start 7 – Excelkopplad loggbok & stationsfakta</title>
+<title>DXportalen – Lyssna & logga</title>
 <style>
 :root{
   --bg:#07111f;--panel:#101b2d;--panel2:#16243a;--line:#263955;
@@ -94,7 +94,7 @@ footer{color:#7f8da3;font-size:13px;margin:28px 0 10px}
 .pin.amateur{background:#22c55e}.pin.broadcast{background:#3b82f6}.pin.receiver{background:#94a3b8;width:13px;height:13px}
 .leaflet-popup-content{line-height:1.45}.leaflet-popup-content b{color:#111827}
 
-/* DX Start 7.23 Online: stable local map without Leaflet positioning */
+/* DXportalen 7.23 Online: stable local map without Leaflet positioning */
 #dxMap{
   position:relative;
   width:100%;
@@ -207,7 +207,7 @@ footer{color:#7f8da3;font-size:13px;margin:28px 0 10px}
 .cw-scan-item b{color:#eab308;display:block;margin-bottom:3px}
 .cw-scan-item span{font-size:12px;color:#aebbd0}
 
-/* DX Start 7.28 – Digital DX / FT8 / FT4 */
+/* DXportalen 7.28 – Digital DX / FT8 / FT4 */
 .digital-band-grid{display:grid;grid-template-columns:repeat(auto-fit,minmax(155px,1fr));gap:10px;margin-top:12px}
 .digital-band{background:#111d31;border:1px solid #31425f;border-radius:12px;padding:12px;color:#fff;cursor:pointer;text-align:left}
 .digital-band:hover,.digital-band.active{border-color:#eab308;background:#17243a}
@@ -218,7 +218,7 @@ footer{color:#7f8da3;font-size:13px;margin:28px 0 10px}
 </style>
 
 <script>
-// DX Start 7.30: visa vald verktygssida redan under sidladdningen.
+// DXportalen 7.30: visa vald verktygssida redan under sidladdningen.
 (function(){
   try{
     var t=new URLSearchParams(location.search).get('tool');
@@ -241,28 +241,28 @@ html[data-dx-tool="profile"] #profile{display:block;}
 html[data-dx-tool="special"] #special{display:block;}
 html[data-dx-tool] header,html[data-dx-tool] .tabs{display:none !important;}
 </style>
-</head>
-<body>
+<style>.dxportal-nav{display:flex;flex-wrap:wrap;gap:8px;padding:12px;background:#07111f;border-bottom:1px solid #405577;font:600 16px system-ui;position:relative;z-index:10}.dxportal-nav a{display:inline-block;padding:10px 12px;border:1px solid #405577;border-radius:8px;color:#fff;background:#17243a;text-decoration:none}.dxportal-nav a:focus-visible{outline:3px solid #eab308;outline-offset:3px}</style></head>
+<body><nav aria-label="DXportalens huvudmeny" class="dxportal-nav"><a href="./centralen.html">DXportalen</a><a href="./receiver-hub.html">Lyssna</a><a href="./index.html?tool=book">Loggbok</a><a href="./index.html?tool=map">DX-karta</a><a href="./academy/index.html">DX Academy</a><a href="./guider.html">Guider</a><a href="./asta.html">Asta</a></nav>
 <a class="skip-link" href="#main-content">Hoppa till huvudinnehåll</a>
 <div class="wrap">
-<nav class="dx-central-nav" aria-label="DX-navigation"><a href="./kom-igang.html">🚀 BÖRJA HÄR / INSTALLERA</a><a href="https://1kuli1.github.io/dX-START/asta.html" target="_blank" rel="noopener">🤖 ASTA</a><a href="https://1kuli1.github.io/dX-START/guider.html" target="_blank" rel="noopener">📚 GUIDER & PDF</a><a id="dxHelpLink" href="https://1kuli1.github.io/dX-START/dx-help.html#start" target="_blank" rel="noopener">❓ HJÄLP</a><a href="./centralen.html">← DX CENTRALEN</a></nav>
+<nav class="dx-central-nav" aria-label="DX-navigation"><a href="./kom-igang.html">🚀 BÖRJA HÄR / INSTALLERA</a><a href="./asta.html" target="_blank" rel="noopener">🤖 ASTA</a><a href="./guider.html" target="_blank" rel="noopener">📚 GUIDER & PDF</a><a id="dxHelpLink" href="./dx-help.html#start" target="_blank" rel="noopener">❓ HJÄLP</a><a href="./centralen.html">← DXPORTALEN</a></nav>
 <script>
 (function(){
   const map={receivers:"receiverhub",log:"log",book:"book",sync:"sync",map:"map",cw:"cw",digital:"digital",audio:"audio",profile:"profile",special:"special"};
   const tool=new URLSearchParams(location.search).get("tool");
   const a=document.getElementById("dxHelpLink");
-  if(a) a.href="https://1kuli1.github.io/dX-START/dx-help.html#"+(map[tool]||"start");
+  if(a) a.href="./dx-help.html#"+(map[tool]||"start");
 })();
 </script>
 <header>
   <div>
-    <h1>📻 DX Start 7.30 Online</h1>
+    <h1>📻 DXportalen – Lyssna & logga</h1>
     <div class="sub">Mottagare, Excel-import, loggbok, QSL-uppföljning, stationsfakta och DX-karta i samma verktyg</div>
   </div>
   <div class="clock" id="utc">--:--:-- UTC</div>
 </header>
 
-<div class="notice" style="margin-top:16px"><b>Onlineversion 7.23:</b> CW-känsligheten, Drive-synken och stoppknappen är kvar. Nytt: <b>🤖 DX-expert</b>, uppdaterad NDB-adress och möjlighet att lägga till egna mottagare per område.</div>
+<div class="notice" style="margin-top:16px">Mottagare, loggböcker, verktyg och <a href="./academy/">DX Academy</a> ingår i samma DXportal.</div>
 
 <div class="tabs">
   <button type="button" onclick="dxOpenToolWindow('receivers')">Mottagare ↗</button>
@@ -283,11 +283,11 @@ html[data-dx-tool] header,html[data-dx-tool] .tabs{display:none !important;}
 <section id="receivers">
   <div class="kicker">Snabbstart</div>
   <h2>Mottagare och hjälpsidor</h2>
-  <div class="notice"><b>Tips:</b> stoppknappen stoppar DX Starts egen ljudinspelning och CW-avkodning. Externa WebSDR-/KiwiSDR-flikar behöver du stänga själv i webbläsaren.</div>
-  <div class="actions"><button type="button" class="btn danger" onclick="dxStopReception()">⏹ Stoppa ljud i DX Start</button></div>
+  <div class="notice"><b>Tips:</b> stoppknappen stoppar DXportalens egen ljudinspelning och CW-avkodning. Externa WebSDR-/KiwiSDR-flikar behöver du stänga själv i webbläsaren.</div>
+  <div class="actions"><button type="button" class="btn danger" onclick="dxStopReception()">⏹ Stoppa ljud i DXportalen</button></div>
   <div class="small" role="status" aria-live="polite" id="dxReceptionStopStatus"></div>
   <div class="receiver-grid">
-    <a class="linkcard" href="https://1kuli1.github.io/dX-START/receiver-hub.html">
+    <a class="linkcard" href="./receiver-hub.html">
       <b>🎧 Öppna Receiver Hub</b>
       <div class="small">Alla publika mottagare samlade och sorterade efter band och användningsområde</div>
     </a>
@@ -298,7 +298,7 @@ html[data-dx-tool] header,html[data-dx-tool] .tabs{display:none !important;}
   </div>
 
   <div class="notice">
-    <b>Dina personliga loggar</b> sparas lokalt i DX Start. Vill du säkerhetskopiera dem,
+    <b>Dina personliga loggar</b> sparas lokalt i DXportalen. Vill du säkerhetskopiera dem,
     öppna Synk/Säkerhetskopia och hämta en JSON-fil. Egna Google Drive-dokument kopplas
     inte automatiskt till en publik testversion.
   </div>
@@ -356,7 +356,7 @@ html[data-dx-tool] header,html[data-dx-tool] .tabs{display:none !important;}
 <section id="digital" class="hidden">
   <div class="kicker">Digital DX</div>
   <h2>📡 FT8 / FT4 – lyssning och tävlingsstöd</h2>
-  <div class="notice"><b>SWL-läge:</b> DX Start hjälper dig att lyssna och logga. Ingen sändning startas härifrån. Välj mode och band, öppna SDR-mottagaren och använd FT8TW för avkodningen.</div>
+  <div class="notice"><b>SWL-läge:</b> DXportalen hjälper dig att lyssna och logga. Ingen sändning startas härifrån. Välj mode och band, öppna SDR-mottagaren och använd FT8TW för avkodningen.</div>
   <div class="card" style="margin-top:14px">
     <div class="grid">
       <div><label for="digitalMode">Digitalmode</label><select id="digitalMode" onchange="dxDigitalRenderBands()"><option>FT8</option><option>FT4</option></select></div>
@@ -680,7 +680,7 @@ html[data-dx-tool] header,html[data-dx-tool] .tabs{display:none !important;}
 </section>
 
 </main>
-<footer>DX Start 7.30 Online • 7.23-design + specialmottagare + ljudarkiv + lokal loggning och säkerhetskopior • originalfiler ändras aldrig</footer>
+<footer>DXportalen – Lyssna & logga • 7.23-design + specialmottagare + ljudarkiv + lokal loggning och säkerhetskopior • originalfiler ändras aldrig</footer>
 </div>
 
 <script>
@@ -1698,13 +1698,13 @@ function dxStopReception(){
     try{if(el.srcObject?.getTracks)el.srcObject.getTracks().forEach(t=>t.stop());}catch(e){}
   }
   const st=document.getElementById('cwStatus');
-  if(st)st.textContent='DX Starts egen ljudmottagning är stoppad.';
+  if(st)st.textContent='DXportalens egen ljudmottagning är stoppad.';
   const ds=document.getElementById('cwDecodeState');if(ds)ds.textContent='stoppad';
   const result=document.getElementById('dxReceptionStopStatus');
-  if(result)result.textContent='DX Starts ljud och inspelning stoppades. Stäng eventuella externa SDR-flikar separat.';
+  if(result)result.textContent='DXportalens ljud och inspelning stoppades. Stäng eventuella externa SDR-flikar separat.';
 }
 
-// Publika mottagare öppnas säkert separat; externa flikar kan inte stängas från DX Start.
+// Publika mottagare öppnas säkert separat; externa flikar kan inte stängas från DXportalen.
 document.addEventListener('DOMContentLoaded',()=>{
   const sec=document.getElementById('receivers');
   if(!sec) return;
@@ -2172,7 +2172,7 @@ function cwToLog(){
   const content=document.getElementById('content');
   if(content)content.value=(content.value?content.value+'\n':'')+'CW-avkodning original: '+txt+(sv?'\nSvensk tolkning: '+sv:'');
   const notes=document.getElementById('notes');
-  if(notes)notes.value=(notes.value?notes.value+'\n':'')+'CW live-avkodat i DX Start. Ton '+document.getElementById('cwTone').value+' Hz, inställd '+document.getElementById('cwWpm').value+' WPM.';
+  if(notes)notes.value=(notes.value?notes.value+'\n':'')+'CW live-avkodat i DXportalen. Ton '+document.getElementById('cwTone').value+' Hz, inställd '+document.getElementById('cwWpm').value+' WPM.';
   updateExtraFields();
 }
 
@@ -2297,7 +2297,7 @@ function dxPreviewAudioFile(inp){const f=inp.files&&inp.files[0];if(!f)return;dx
 function dxSaveRecording(){if(!dxLastAudioBlob)return;const a=document.createElement('a'),now=new Date().toISOString().replace(/[:.]/g,'-');a.href=URL.createObjectURL(dxLastAudioBlob);a.download='DX_'+now+'.'+dxLastAudioExt;a.click();setTimeout(()=>URL.revokeObjectURL(a.href),1000)}
 
 
-// DX Start 7.27 – Digital DX
+// DXportalen 7.27 – Digital DX
 const DX_DIGITAL_FREQS=[
   {band:'160 m',ft8:'1.840',ft4:'1.840',note:'Kväll/natt'},
   {band:'80 m',ft8:'3.573',ft4:'3.575',note:'Kväll/natt'},
@@ -2344,7 +2344,7 @@ window.addEventListener('DOMContentLoaded',dxApplyToolWindow);
 <script>
 if('serviceWorker' in navigator && (location.protocol==='https:' || location.hostname==='localhost')){
  window.addEventListener('load',()=>navigator.serviceWorker.register('./sw.js',{scope:'./'})
-   .catch(err=>console.warn('DX Centralen offline-läge kunde inte startas:',err)));
+   .catch(err=>console.warn('DXportalen offline-läge kunde inte startas:',err)));
 }
 </script>
 </body>
