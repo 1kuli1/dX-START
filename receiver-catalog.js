@@ -1,14 +1,13 @@
 (()=>{
  'use strict';
  const button=document.getElementById('rxCatalogSearch');if(!button)return;
- const search=document.getElementById('searchInput'),country=document.getElementById('rxCatalogCountry'),type=document.getElementById('rxCatalogType'),status=document.getElementById('rxCatalogStatus'),box=document.getElementById('rxCatalogResults'),more=document.getElementById('rxCatalogMore');
+ const country=document.getElementById('rxCatalogCountry'),type=document.getElementById('rxCatalogType'),status=document.getElementById('rxCatalogStatus'),box=document.getElementById('rxCatalogResults'),more=document.getElementById('rxCatalogMore');
  let catalog=null,limit=30,date='';
  const norm=s=>String(s||'').normalize('NFD').replace(/[\u0300-\u036f]/g,'').toLowerCase();
  function address(s){const u=new URL(s);if(!['http:','https:'].includes(u.protocol)||u.username||u.password)throw Error('Invalid address');return u.href;}
  function render(){
   if(!catalog)return;
-  const terms=norm(search.value).trim().split(/\s+/).filter(Boolean);
-  const matches=catalog.filter(r=>(!country.value||r.country===country.value)&&(!type.value||r.type===type.value)&&terms.every(t=>norm([r.name,r.place,r.type,r.countryName,r.country,r.englishCountry].join(' ')).includes(t)));
+  const matches=catalog.filter(r=>(!country.value||r.country===country.value)&&(!type.value||r.type===type.value));
   box.replaceChildren();status.textContent=matches.length+' mottagare hittades. Visar '+Math.min(limit,matches.length)+'. Katalog hämtad '+date+'. Tillgänglighet ej kontrollerad.';
   for(const r of matches.slice(0,limit)){
    const card=document.createElement('article');card.className='receiver-card';const h=document.createElement('h4');h.textContent=r.name;
@@ -21,7 +20,7 @@
   }
   more.hidden=matches.length<=limit;
  }
- async function load(){
+ async function load(showResults=true){
   if(catalog){limit=30;render();return;}
   button.disabled=true;status.textContent='Hämtar mottagarkatalogen…';
   try{
@@ -30,12 +29,14 @@
    let english;try{english=new Intl.DisplayNames(['en'],{type:'region'});}catch(_){}
    catalog=data.receivers.filter(r=>{try{address(r.url);return true;}catch(_){return false;}}).map(r=>({...r,englishCountry:/^[A-Z]{2}$/.test(r.country)&&english?english.of(r.country):''}));
    date=new Date(data.updated).toLocaleDateString('sv-SE');
-   const countries=new Map(catalog.filter(r=>r.country).map(r=>[r.country,r.countryName]));
+   const countries=new Map(catalog.filter(r=>/^[A-Z]{2}$/.test(r.country)).map(r=>[r.country,r.countryName]));
    for(const [code,name] of [...countries].sort((a,b)=>a[1].localeCompare(b[1],'sv'))){const option=document.createElement('option');option.value=code;option.textContent=name;country.append(option);}
-   render();
+   country.disabled=false;type.disabled=false;
+   if(showResults)render();else status.textContent=countries.size+' länder finns i katalogen. Välj land och mottagartyp. Katalog hämtad '+date+'.';
   }catch(e){status.textContent='Katalogen kunde inte hämtas. Försök igen eller använd mottagarlistorna och kartorna nedan.';}
   finally{button.disabled=false;}
  }
- button.onclick=load;search.addEventListener('input',()=>{limit=30;render();});search.addEventListener('keydown',event=>{if(event.key==='Enter'){event.preventDefault();load();}});
+ button.onclick=()=>load(true);
  country.onchange=type.onchange=()=>{limit=30;render();};more.onclick=()=>{limit+=30;render();};
+ load(false);
 })();
