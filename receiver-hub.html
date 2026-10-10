@@ -607,28 +607,7 @@ DXportalens mottagarlista för WebSDR, KiwiSDR, OpenWebRX, FM-DX, flygradio, sat
 
 <!-- ===== FILTERKNAPPAR ===== -->
 <h2>Välj mottagare</h2>
-<section class="hub-guide" aria-labelledby="rxDirectoriesTitle">
-<h3 id="rxDirectoriesTitle">Välj en annan mottagare från lista eller karta</h3>
-<p>Öppna en lista eller karta i en ny flik och välj en mottagare där. Du behöver inte lägga till den som favorit.</p>
-<div class="directory-links">
-<a href="http://rx.kiwisdr.com/" target="_blank" rel="noopener noreferrer">KiwiSDR – mottagarlista ↗</a>
-<a href="http://map.kiwisdr.com/" target="_blank" rel="noopener noreferrer">KiwiSDR – karta ↗</a>
-<a href="https://websdr.org/" target="_blank" rel="noopener noreferrer">WebSDR – mottagarlista ↗</a>
-<a href="https://www.receiverbook.de/map?type=websdr" target="_blank" rel="noopener noreferrer">WebSDR – karta (Receiverbook) ↗</a>
-<a href="https://www.receiverbook.de/?type=openwebrx" target="_blank" rel="noopener noreferrer">OpenWebRX – mottagarlista ↗</a>
-<a href="https://www.receiverbook.de/map?type=openwebrx" target="_blank" rel="noopener noreferrer">OpenWebRX – karta ↗</a>
-<a href="https://servers.fmdx.org/" target="_blank" rel="noopener noreferrer">FM-DX – lista och karta ↗</a>
-<a href="https://instances.ubersdr.org/" target="_blank" rel="noopener noreferrer">UberSDR – lista och karta ↗</a>
-</div>
-<details><summary>Vill du spara en mottagare du hittat där?</summary>
-<p>Kopiera adressen från mottagarens egen sida och klistra in den här. Behåll hela adressen, inklusive http eller https och eventuellt portnummer, till exempel :8073. Kopiera inte adressen till själva listan eller kartan.</p>
-<form id="rxCustomForm">
-<label for="rxCustomName">Namn (behövs bara när du sparar)</label><input id="rxCustomName" maxlength="120" placeholder="Exempel: Min Kiwi i Finland">
-<label for="rxCustomUrl">Mottagarens fullständiga webbadress</label><input id="rxCustomUrl" type="url" required placeholder="http://mottagare.example:8073/" inputmode="url" autocapitalize="none" spellcheck="false">
-<div class="directory-links"><button type="submit">Öppna utan att spara ↗</button><button type="button" id="rxSaveCustom">☆ Spara som egen favorit</button></div>
-<p id="rxCustomStatus" role="status"></p></form></details>
-<div id="rxCustomFavorites"></div>
-</section>
+
 <div class="filters">
 
 <button type="button" onclick="showAllReceivers()">Alla</button>
@@ -666,6 +645,28 @@ onkeyup="searchReceivers()"
 
 </div>
 
+<section class="hub-guide" aria-labelledby="rxDirectoriesTitle">
+<h3 id="rxDirectoriesTitle">Välj en annan mottagare från lista eller karta</h3>
+<p>Öppna en lista eller karta i en ny flik och välj en mottagare där. Du behöver inte lägga till den som favorit.</p>
+<div class="directory-links">
+<a href="http://rx.kiwisdr.com/" target="_blank" rel="noopener noreferrer">KiwiSDR – mottagarlista ↗</a>
+<a href="http://map.kiwisdr.com/" target="_blank" rel="noopener noreferrer">KiwiSDR – karta ↗</a>
+<a href="https://websdr.org/" target="_blank" rel="noopener noreferrer">WebSDR – mottagarlista ↗</a>
+<a href="https://www.receiverbook.de/map?type=websdr" target="_blank" rel="noopener noreferrer">WebSDR – karta (Receiverbook) ↗</a>
+<a href="https://www.receiverbook.de/?type=openwebrx" target="_blank" rel="noopener noreferrer">OpenWebRX – mottagarlista ↗</a>
+<a href="https://www.receiverbook.de/map?type=openwebrx" target="_blank" rel="noopener noreferrer">OpenWebRX – karta ↗</a>
+<a href="https://servers.fmdx.org/" target="_blank" rel="noopener noreferrer">FM-DX – lista och karta ↗</a>
+<a href="https://instances.ubersdr.org/" target="_blank" rel="noopener noreferrer">UberSDR – lista och karta ↗</a>
+</div>
+<details><summary>Vill du spara en mottagare du hittat där?</summary>
+<p>Kopiera adressen från mottagarens egen sida och klistra in den här. Behåll hela adressen, inklusive http eller https och eventuellt portnummer, till exempel :8073. Kopiera inte adressen till själva listan eller kartan.</p>
+<form id="rxCustomForm">
+<label for="rxCustomName">Namn (behövs bara när du sparar)</label><input id="rxCustomName" maxlength="120" placeholder="Exempel: Min Kiwi i Finland">
+<label for="rxCustomUrl">Mottagarens fullständiga webbadress</label><input id="rxCustomUrl" type="url" required placeholder="http://mottagare.example:8073/" inputmode="url" autocapitalize="none" spellcheck="false">
+<div class="directory-links"><button type="submit">Öppna utan att spara ↗</button><button type="button" id="rxSaveCustom">☆ Spara som egen favorit</button></div>
+<p id="rxCustomStatus" role="status"></p></form></details>
+<div id="rxCustomFavorites"></div>
+</section>
 <!-- ===== GRID ===== -->
 <div class="grid" id="receiverGrid">
 
