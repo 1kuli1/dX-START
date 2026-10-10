@@ -601,13 +601,13 @@ DXportalens mottagarlista för WebSDR, KiwiSDR, OpenWebRX, FM-DX, flygradio, sat
 <button type="button" onclick="window.open('guider.html#04_LW_langvags_DX','_blank','noopener')">Hjälp-PDF: LW / långvåg</button>
 <button type="button" onclick="window.open('guider.html#03_MW_mellanvags_DX','_blank','noopener')">Hjälp-PDF: MW / mellanvåg</button>
 <button type="button" onclick="window.open('guider.html#02_SW_kortvags_DX','_blank','noopener')">Hjälp-PDF: SW / kortvåg</button>
+<button type="button" onclick="window.open('HF_hjalp_nyborjare.pdf','_blank','noopener')">Hjälp-PDF: HF</button>
 <button type="button" onclick="window.open('guider.html#08_Amatorradio_SWL','_blank','noopener')">Hjälp-PDF: Amatörradio</button>
 <button type="button" onclick="window.open('guider.html#12_Utility_DX','_blank','noopener')">Hjälp-PDF: Utility</button>
 <button type="button" onclick="window.open('guider.html#13_Flygradio_DX','_blank','noopener')">Hjälp-PDF: Flygradio</button>
 <button type="button" onclick="window.open('guider.html#17_Satellit_DX','_blank','noopener')">Hjälp-PDF: Satellit</button>
 <button type="button" onclick="window.open('guider.html#05_FM_DX','_blank','noopener')">Hjälp-PDF: FM</button></div>
 
-<div class="filters"><a class="help-btn" href="dx-help.html#hf" target="_blank" rel="noopener noreferrer">❓ Hjälp: HF – kom igång</a></div>
 <!-- ===== FILTERKNAPPAR ===== -->
 <h2>Välj mottagare</h2>
 
@@ -1260,7 +1260,7 @@ function applyBandFromUrl(){
             backBtn.href="./receiver-hub.html";
         }
         if(helpBtn){
-            const hm={"hf":"hf","sw":"hf","fm":"fmdx","air-simple":"airband","airband":"airband","sat-simple":"satellite","satellite":"satellite","uber":"uber"};
+            const hm={"fm":"fmdx","air-simple":"airband","airband":"airband","sat-simple":"satellite","satellite":"satellite","uber":"uber"};
             helpBtn.href="./dx-help.html#"+(hm[band]||"receiverhub");
         }
     }else{
