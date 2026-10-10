@@ -438,12 +438,22 @@ html[data-dx-tool] header,html[data-dx-tool] .tabs{display:none !important;}
       <div><label for="txHistory">Historien bakom stationen och sändaren</label><textarea id="txHistory" placeholder="Sändarens historia, effekt, antenn, källa (om känd)"></textarea></div>
       <div><label for="placeHistory">Historien bakom orten och sändarplatsen</label><textarea id="placeHistory" placeholder="Ortens bakgrund, läge, geografi och källor"></textarea></div>
     </div>
-    <div class="context-fields">
+    <div class="context-fields" id="genericExtraFields">
       <div class="kicker">Extra fält för vald signaltyp</div>
       <div class="grid">
         <div><label for="extra1" id="extra1Label">Extra uppgift 1</label><input id="extra1"></div>
         <div><label for="extra2" id="extra2Label">Extra uppgift 2</label><input id="extra2"></div>
         <div><label for="extra3" id="extra3Label">Extra uppgift 3</label><input id="extra3"></div>
+      </div>
+    </div>
+    <div class="context-fields" id="satelliteFields" hidden>
+      <h3>Satellitlyssning</h3>
+      <p class="small">Ange satelliten som förmedlar signalen och den station du hör separat. Frekvensen ovan är nedlänken som du lyssnar på. Alla satellitfält är frivilliga. Passagetider behövs bara för en satellit som passerar; ange datum och tid i UTC, även över midnatt.</p>
+      <div class="grid">
+        <div><label for="satelliteName">Satellitens namn / beteckning</label><input id="satelliteName" placeholder="t.ex. ISS eller QO-100"></div>
+        <div><label for="satelliteCallsign">Hörd stations anropssignal</label><input id="satelliteCallsign" placeholder="Om det är amatörradio"></div>
+        <div><label for="satellitePassStart">Passagens start (datum och UTC)</label><input id="satellitePassStart" type="datetime-local"></div>
+        <div><label for="satellitePassEnd">Passagens slut (datum och UTC)</label><input id="satellitePassEnd" type="datetime-local"></div>
       </div>
     </div>
     <div class="context-fields">
@@ -654,6 +664,7 @@ html[data-dx-tool] header,html[data-dx-tool] .tabs{display:none !important;}
     </div>
 
     <div id="pWebsite" style="margin-top:14px"></div>
+    <div class="notice" id="pSatelliteBox" hidden><b>Satellitlyssning</b><p id="pSatelliteDetails" style="white-space:pre-wrap"></p></div>
     <div class="notice" id="pSwlBox" hidden><b>SWL-rapport (utkast, inte skickad)</b><pre id="pSwlReport" style="white-space:pre-wrap"></pre><button type="button" class="btn" onclick="downloadSelectedSWL()">⬇ Hämta SWL-rapport som text</button></div>
 
     <div class="actions">
@@ -821,7 +832,7 @@ function dxHash(s){
 
 // Alla inlästa fält som visas i gränssnittet görs till strängar. Detta skyddar
 // bl.a. CSV/JSON-import med tal och null utan att radera användarens originalfil.
-const DX_TEXT_FIELDS=['date','time','freq','frequencyUnit','band','mode','rx','rxplace','station','country','place','lang','sinpo','signal','operator','ptype','website','verifyStatus','idwords','content','notes','saved','reportStatus','contact','reply','counterstation','txHistory','placeHistory','signalHistory','source','source1','source2','recording','audioDrive','rds','pi','ps','rt','pty','erp','propagation','distanceKm','bearing','extra1','extra2','extra3'];
+const DX_TEXT_FIELDS=['date','time','freq','frequencyUnit','band','mode','rx','rxplace','station','country','place','lang','sinpo','signal','operator','ptype','website','verifyStatus','idwords','content','notes','saved','reportStatus','contact','reply','counterstation','txHistory','placeHistory','signalHistory','source','source1','source2','recording','audioDrive','rds','pi','ps','rt','pty','erp','propagation','distanceKm','bearing','satelliteName','satelliteCallsign','satellitePassStart','satellitePassEnd','extra1','extra2','extra3'];
 function dxSafeText(v){
  if(v===null||v===undefined)return '';
  if(typeof v==='string'||typeof v==='number'||typeof v==='boolean')return String(v);
@@ -994,6 +1005,7 @@ function dxMakeSWLReport(l){
   'Datum: '+l.date,
   'Tid: '+l.time+' UTC',
   'Frekvens: '+String(l.freq||'').replace(/\s*(mhz|khz)\s*$/i,'')+' '+(l.frequencyUnit||'kHz'),
+  ...(l.satelliteName?['Via satellit: '+l.satelliteName]:[]),
   'Mode: '+(l.mode||'Ej angivet'),
   'Mottagare/SDR: '+(l.rx||'Ej angivet'),
   'Signalrapport: '+(l.signal||l.sinpo||'Ej angiven'),
@@ -1002,13 +1014,15 @@ function dxMakeSWLReport(l){
   'OBS: Rapporten är inte skickad och QSL-status måste följas upp manuellt.'].join('\n');
 }
 async function saveLog(){
-  const station=val('station'),freq=val('freq'),signal=val('signal');
+  const isSatellite=val('band')==='Satellit';
+  const station=val('station')||(isSatellite?val('satelliteCallsign'):''),freq=val('freq'),signal=val('signal');
   if(!station&&!freq){alert('Fyll i åtminstone station eller frekvens.');return;}
   if(freq&&!/^\d+(?:[.,]\d+)?\s*(?:kHz|MHz)?$/i.test(freq)){alert('Ange frekvens som ett tal, till exempel 1008 eller 96,6 MHz.');return;}
+  if(isSatellite && val('satellitePassStart') && val('satellitePassEnd') && val('satellitePassEnd')<val('satellitePassStart')){alert('Passagens slut måste vara efter starten. Kontrollera även datum vid midnatt.');return;}
   const frequencyUnit=/mhz$/i.test(freq)?'MHz':/khz$/i.test(freq)?'kHz':val('frequencyUnit');
   const userSinpo=val('sinpo'),autoSinpo=userSinpo?'':dxEstimateSinpo(signal);
   if(document.getElementById('qsoHeard').checked&&
-    (val('band')!=='Amatörradio'||val('verifyStatus')!=='Bekräftad'||!station||!val('counterstation')||!val('date')||!val('time')||!freq)){
+    (!['Amatörradio','Satellit'].includes(val('band'))||val('verifyStatus')!=='Bekräftad'||!station||!val('counterstation')||!val('date')||!val('time')||!freq)){
     alert('För SWL-rapport krävs bekräftat amatör-QSO, station och motstation, datum, UTC och frekvens. Avmarkera QSO om bara en station hördes.');return;
   }
   const item={
@@ -1016,6 +1030,7 @@ async function saveLog(){
     country:val('country'),place:val('place'),lang:val('lang'),sinpo:userSinpo||autoSinpo,sinpoSource:autoSinpo?'Automatisk preliminär uppskattning från signalbeskrivning':'Manuellt angiven',txHistory:val('txHistory'),placeHistory:val('placeHistory'),
     ptype:val('ptype'),website:val('website'),verifyStatus:val('verifyStatus'),idwords:val('idwords'),
     content:val('content'),notes:val('notes'),extra1:val('extra1'),extra2:val('extra2'),extra3:val('extra3'),
+    satelliteName:isSatellite?val('satelliteName'):'',satelliteCallsign:isSatellite?val('satelliteCallsign'):'',satellitePassStart:isSatellite?val('satellitePassStart'):'',satellitePassEnd:isSatellite?val('satellitePassEnd'):'',
     mode:val('mode'),counterstation:val('counterstation'),signal,operator:val('operator'),listenerName:val('listenerName'),qsoHeard:document.getElementById('qsoHeard').checked,
     reportStatus:val('reportStatus'),contact:val('contact'),reply:val('reply'),saved:new Date().toISOString(),_id:'dx-'+Date.now()+'-'+Math.random().toString(36).slice(2,9),_updatedAt:new Date().toISOString()
   };
@@ -1026,7 +1041,7 @@ async function saveLog(){
   clearForm(); fillNow(); showView('book');
 }
 function clearForm(){
-  ['freq','rx','rxplace','station','country','place','lang','sinpo','ptype','website','idwords','content','notes','txHistory','placeHistory','extra1','extra2','extra3','mode','counterstation','signal','operator','contact','listenerName']
+  ['freq','rx','rxplace','station','country','place','lang','sinpo','ptype','website','idwords','content','notes','txHistory','placeHistory','extra1','extra2','extra3','mode','counterstation','signal','operator','contact','listenerName','satelliteName','satelliteCallsign','satellitePassStart','satellitePassEnd']
    .forEach(id=>document.getElementById(id).value='');
   document.getElementById('reportStatus').value='Ej skapad';
   document.getElementById('verifyStatus').value='Preliminär';
@@ -1091,6 +1106,9 @@ function openProfile(i){
   document.getElementById('pReportStatus').textContent=l.reportStatus||'–';
   document.getElementById('pContact').innerHTML=linkifyText(l.contact||'–');
   document.getElementById('pReply').textContent=l.reply||'–';
+  const satDetails=[l.satelliteName?'Satellit: '+l.satelliteName:'',l.satelliteCallsign?'Anropssignal: '+l.satelliteCallsign:'',l.band==='Satellit'&&l.freq?'Nedlänk: '+l.freq+' '+(l.frequencyUnit||'kHz'):'',l.satellitePassStart?'Passagens start: '+l.satellitePassStart.replace('T',' ')+' UTC':'',l.satellitePassEnd?'Passagens slut: '+l.satellitePassEnd.replace('T',' ')+' UTC':''].filter(Boolean);
+  document.getElementById('pSatelliteBox').hidden=!satDetails.length;
+  document.getElementById('pSatelliteDetails').textContent=satDetails.join('\n');
   const swlBox=document.getElementById('pSwlBox');
   swlBox.hidden=!l.swlReport;
   document.getElementById('pSwlReport').textContent=l.swlReport||'';
@@ -1162,7 +1180,7 @@ function downloadSelectedSWL(){
 function exportJSON(){const records=getLogRecords();if(dxLogStorageWarning){alert(dxLogStorageWarning+' Hämta rådata i stället för en tom säkerhetskopia.');return;}download('dx-loggar-med-raderingshistorik.json',JSON.stringify(records,null,2),'application/json')}
 function exportCSV(){
   const logs=getLogs();
-  const cols=['date','time','freq','band','mode','rx','station','counterstation','country','place','lang','signal','sinpo','reportExchange','operator','ptype','website','idwords','content','notes','reportStatus','contact','reply','extra1','extra2','extra3','txHistory','placeHistory','frequencyUnit','sinpoSource','swlReport','qsoHeard'];
+  const cols=['date','time','freq','band','mode','rx','station','counterstation','country','place','lang','signal','sinpo','reportExchange','operator','ptype','website','idwords','content','notes','reportStatus','contact','reply','extra1','extra2','extra3','txHistory','placeHistory','frequencyUnit','sinpoSource','swlReport','qsoHeard','satelliteName','satelliteCallsign','satellitePassStart','satellitePassEnd'];
   const q=x=>{let v=String(x??'');if(/^[\s]*[=+@-]/.test(v))v="'"+v;return '"'+v.replaceAll('"','""')+'"'};
   const csv='\ufeff'+[cols.join(';'),...logs.map(l=>cols.map(c=>q(l[c])).join(';'))].join('\r\n');
   download('dx-loggar-for-excel.csv',csv,'text/csv;charset=utf-8');
@@ -1287,6 +1305,7 @@ function mapExcelRows(rows,sheetName){
       date,time:excelTimeToHHMM(col(row,'UTC','Tid (UTC)','Tid','Time')),
       freq,frequencyUnit:dxExcelUnit(row,hm,freq,unit),station,
       band:col(row,'Kategori','Band','Band / typ')||(unit==='MHz'?'FM':(/amatör|usb|ssb/i.test(sheetName)?'Amatörradio':'')),
+      satelliteName:col(row,'satelliteName','Satellitens namn','Satellit'),satelliteCallsign:col(row,'satelliteCallsign','Hörd stations anropssignal'),satellitePassStart:col(row,'satellitePassStart','Passagens start'),satellitePassEnd:col(row,'satellitePassEnd','Passagens slut'),
       mode:col(row,'Mode','Modulation'),
       rx:col(row,'Mottagare/SDR','Mottagare','Receiver','SDR'),
       rxplace:col(row,'Plats mottagare','SDR-plats','Mottagarplats','Receiver place','RX-plats'),
@@ -2265,6 +2284,10 @@ updateExtraFields();
 
 function updateExtraFields(){
   const b=document.getElementById('band').value;
+  const sat=b==='Satellit';
+  document.getElementById('satelliteFields').hidden=!sat;
+  document.getElementById('genericExtraFields').hidden=sat;
+  document.querySelector('label[for="freq"]').textContent=sat?'Nedlänksfrekvens':'Frekvens';
   const unit=document.getElementById('frequencyUnit');
   if(unit){if(b==='FM')unit.value='MHz';else if(['LW','MW','SW','NDB','Amatörradio'].includes(b))unit.value='kHz';}
   const m={
