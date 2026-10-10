@@ -590,17 +590,14 @@ DXportalens mottagarlista för WebSDR, KiwiSDR, OpenWebRX, FM-DX, flygradio, sat
 <!-- ===== WRAPPER ===== -->
 <div class="wrapper">
 
-<div class="filters" aria-label="Snabbguider">
-<button type="button" onclick="window.open('guider.html#01_DX_fran_grunden','_blank','noopener')">📖 DX från grunden</button>
-<button type="button" onclick="window.open('guider.html#04_LW_langvags_DX','_blank','noopener')">📖 LW</button>
-<button type="button" onclick="window.open('guider.html#03_MW_mellanvags_DX','_blank','noopener')">📖 MW</button>
-<button type="button" onclick="window.open('guider.html#02_SW_kortvags_DX','_blank','noopener')">📖 SW / HF</button>
-<button type="button" onclick="openBandTab('fm')">📻 FM-mottagare ↗</button>
-<button type="button" onclick="window.open('guider.html#08_Amatorradio_SWL','_blank','noopener')">📖 Amatörradio</button>
-<button type="button" onclick="window.open('guider.html#12_Utility_DX','_blank','noopener')">📖 Utility</button>
-<button type="button" onclick="window.open('guider.html#13_Flygradio_DX','_blank','noopener')">📖 Flygradio</button>
-<button type="button" onclick="window.open('guider.html#17_Satellit_DX','_blank','noopener')">📖 Satellit</button>
-</div>
+<h2>Välj mottagare efter område</h2><div class="filters" aria-label="Mottagarområden"><button type="button" onclick="openBandTab('lw')">LW / långvåg – mottagare ↗</button>
+<button type="button" onclick="openBandTab('mw')">MW / mellanvåg – mottagare ↗</button>
+<button type="button" onclick="openBandTab('hf')">SW / HF – mottagare ↗</button>
+<button type="button" onclick="openBandTab('fm')">FM – mottagare ↗</button>
+<button type="button" onclick="openBandTab('amateur')">Amatörradio – mottagare ↗</button>
+<button type="button" onclick="openBandTab('utility')">Utility – mottagare ↗</button>
+<button type="button" onclick="openBandTab('airband')">Flygradio – mottagare ↗</button>
+<button type="button" onclick="openBandTab('satellite')">Satellit – mottagare ↗</button></div>
 
 <!-- ===== FILTERKNAPPAR ===== -->
 <div class="filters">
@@ -625,6 +622,16 @@ DXportalens mottagarlista för WebSDR, KiwiSDR, OpenWebRX, FM-DX, flygradio, sat
 
 </div>
 
+<details class="pdf-guides"><summary>📚 PDF-guider – läs om de olika DX-områdena</summary><div class="filters" aria-label="PDF-guider">
+<button type="button" onclick="window.open('guider.html#01_DX_fran_grunden','_blank','noopener')">📖 PDF-guide: DX från grunden</button>
+<button type="button" onclick="window.open('guider.html#04_LW_langvags_DX','_blank','noopener')">📖 PDF-guide: LW</button>
+<button type="button" onclick="window.open('guider.html#03_MW_mellanvags_DX','_blank','noopener')">📖 PDF-guide: MW</button>
+<button type="button" onclick="window.open('guider.html#02_SW_kortvags_DX','_blank','noopener')">📖 PDF-guide: SW / HF</button>
+<button type="button" onclick="window.open('guider.html#08_Amatorradio_SWL','_blank','noopener')">📖 PDF-guide: Amatörradio</button>
+<button type="button" onclick="window.open('guider.html#12_Utility_DX','_blank','noopener')">📖 PDF-guide: Utility</button>
+<button type="button" onclick="window.open('guider.html#13_Flygradio_DX','_blank','noopener')">📖 PDF-guide: Flygradio</button>
+<button type="button" onclick="window.open('guider.html#17_Satellit_DX','_blank','noopener')">📖 PDF-guide: Satellit</button>
+</div></details>
 <!-- ===== SÖKFÄLT ===== -->
 <div class="search-box">
 <label class="visually-hidden" for="searchInput">Sök mottagare, land eller typ</label>
