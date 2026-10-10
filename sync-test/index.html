@@ -1,0 +1,61 @@
+<!doctype html><html lang="sv"><head><meta charset="utf-8"><meta name="viewport" content="width=device-width,initial-scale=1"><title>DX Drive-synk – privat test</title><style>body{font:1.1rem system-ui;background:#101827;color:#f5f7fb;max-width:760px;margin:auto;padding:20px;line-height:1.5}input,button{font:inherit;padding:12px;margin:5px 0;width:100%;box-sizing:border-box;border-radius:8px}button{background:#d9edff;color:#132034;border:0;font-weight:700}button:disabled{opacity:.5}input{background:#fff;color:#111}section{border:1px solid #526078;border-radius:12px;padding:18px;margin:16px 0}small{color:#c5d4e6}#status{white-space:pre-wrap}a{color:#b6e4ff}</style></head><body><h1>DX Start – privat Drive-synk</h1><p><strong>Isolerad testversion.</strong> Den här sidan ändrar inte DX Start eller Google Drive. Den läser endast ditt ark efter Google-inloggning och skapar en JSON-testfil.</p><section><label for="client">Google OAuth Client ID (webbklient)</label><input id="client" placeholder="…apps.googleusercontent.com" autocomplete="off"><label for="sheet">Google Sheets dokument-ID</label><input id="sheet" placeholder="Klistra in dokument-ID från Sheets-länken" autocomplete="off"><label for="tab">Bladnamn</label><input id="tab" value="DX Loggbok"><button id="login">Logga in med Google (läsbehörighet)</button><button id="logout" disabled>Koppla från</button><small>OAuth-klienten måste vara konfigurerad i Google Cloud med denna testwebbplats som tillåtet JavaScript-ursprung. Inga åtkomstnycklar lagras på GitHub eller i lokal lagring.</small></section><section><label><input id="auto" type="checkbox" style="width:auto" checked> Hämta automatiskt var femte minut medan sidan är öppen</label><button id="fetch" disabled>Hämta nu</button><button id="export" disabled>Exportera hämtade poster som JSON</button><p id="status" role="status" aria-live="polite">Inte ansluten.</p></section><script src="https://accounts.google.com/gsi/client" async defer></script><script>
+'use strict';
+let accessToken=null,tokenExpires=0,tokenClient=null,timer=null,lastRows=[],lastJson=[];
+const $=id=>document.getElementById(id);
+const status=s=>$('status').textContent=s;
+const val=(r,i)=>String(r[i]??'').trim();
+const norm=s=>String(s??'').trim().toLowerCase().replace(/\s+/g,' ');
+const freq=s=>String(s??'').replace(',','.').replace(/\s*(khz|mhz)$/i,'').trim();
+const seen=new Set();
+function mapRows(rows){
+ const headers=(rows[0]||[]).map(norm);
+ const idx=(...names)=>names.map(n=>headers.indexOf(norm(n))).find(n=>n>=0)??-1;
+ const get=(r,...names)=>{const i=idx(...names);return i<0?'':val(r,i)};
+ const result=[];let invalid=0,duplicate=0;
+ for(const r of rows.slice(1)){
+  if(!r.some(x=>String(x??'').trim()))continue;
+  const date=get(r,'Datum'),time=get(r,'UTC'),station=get(r,'Trolig station/signal'),f=freq(get(r,'Frekvens kHz'));
+  if(!/^\d{4}-\d{2}-\d{2}$/.test(date)||!/^\d{1,2}:\d{2}$/.test(time)||!station||!Number.isFinite(Number(f))||Number(f)<=0){invalid++;continue}
+  const entry={date,time,freq:f,frequencyUnit:'kHz',band:get(r,'Kategori'),mode:get(r,'Mode'),rx:get(r,'Mottagare'),rxplace:get(r,'Plats mottagare'),station,country:get(r,'Land'),place:get(r,'Sändarort'),lang:get(r,'Språk'),sinpo:get(r,'SINPO'),signal:get(r,'Signal/S-meter'),content:get(r,'Kort innehåll'),idwords:get(r,'ID-ord / transkript'),notes:get(r,'Anteckningar'),verifyStatus:get(r,'Status'),website:get(r,'Stationens hemsida'),txHistory:get(r,'Sändarens historia'),placeHistory:get(r,'Ortens historia'),source1:get(r,'Källa 1'),source2:get(r,'Källa 2')};
+  const key=[date,time,f,norm(station),norm(entry.rx),norm(entry.mode)].join('|');
+  if(seen.has(key)){duplicate++;continue}seen.add(key);result.push(entry);
+ }
+ return {result,invalid,duplicate};
+}
+function ui(){const ok=!!accessToken&&Date.now()<tokenExpires;$('fetch').disabled=!ok;$('logout').disabled=!ok;$('export').disabled=!lastJson.length}
+function disconnect(){accessToken=null;tokenExpires=0;lastRows=[];lastJson=[];seen.clear();ui();status('Frånkopplad. Inga privata loggar lagras på servern.')}
+$('login').onclick=()=>{
+ const client=$('client').value.trim();
+ if(!/^[\w.-]+\.apps\.googleusercontent\.com$/.test(client)){status('Ange giltigt OAuth Client ID från Google Cloud.');return}
+ if(!window.google?.accounts?.oauth2){status('Google-inloggningen kunde inte laddas. Försök igen.');return}
+ tokenClient=google.accounts.oauth2.initTokenClient({client_id:client,scope:'https://www.googleapis.com/auth/spreadsheets.readonly',callback:response=>{
+  if(response.error||!response.access_token){status('Inloggning avbröts eller misslyckades.');return}
+  accessToken=response.access_token;tokenExpires=Date.now()+Math.max(0,(response.expires_in||3500)-90)*1000;ui();fetchLogs();
+ }});
+ tokenClient.requestAccessToken({prompt:'consent'});
+};
+$('logout').onclick=()=>{if(accessToken&&window.google?.accounts?.oauth2)google.accounts.oauth2.revoke(accessToken,()=>{});disconnect()};
+async function fetchLogs(){
+ if(!accessToken||Date.now()>=tokenExpires){disconnect();status('Google-sessionen har gått ut. Logga in igen.');return}
+ const sheet=$('sheet').value.trim(),tab=$('tab').value.trim();
+ if(!/^[\w-]{20,}$/.test(sheet)||!tab){status('Ange dokument-ID och bladnamn.');return}
+ const range="'"+tab.replaceAll("'","''")+"'!A1:AU";
+ const url='https://sheets.googleapis.com/v4/spreadsheets/'+encodeURIComponent(sheet)+'/values/'+encodeURIComponent(range);
+ status('Hämtar skrivskyddat från Google Sheets…');
+ try{
+  const res=await fetch(url,{headers:{Authorization:'Bearer '+accessToken},cache:'no-store'});
+  if(!res.ok){if(res.status===401)disconnect();throw Error('Google Sheets svarade '+res.status+'. Kontrollera behörighet och OAuth-inställningar.')}
+  const json=await res.json();seen.clear();const mapped=mapRows(json.values||[]);
+  lastRows=json.values||[];lastJson=mapped.result;ui();
+  status('Hämtat: '+lastJson.length+' giltiga unika poster. Ogiltiga: '+mapped.invalid+'. Dubbletter i arket: '+mapped.duplicate+'.\nSenast: '+new Date().toLocaleString('sv-SE')+'.\nEndast test: ingen ändring i DX Start.');
+ }catch(e){status('Hämtningen misslyckades: '+e.message)}
+}
+$('fetch').onclick=fetchLogs;
+$('export').onclick=()=>{
+ if(!lastJson.length)return;
+ const blob=new Blob([JSON.stringify(lastJson,null,2)],{type:'application/json'});
+ const url=URL.createObjectURL(blob),a=document.createElement('a');a.href=url;a.download='DX_Drive_testimport.json';a.click();setTimeout(()=>URL.revokeObjectURL(url),2000);
+};
+timer=setInterval(()=>{if($('auto').checked&&accessToken&&Date.now()<tokenExpires)fetchLogs();else ui()},300000);
+document.addEventListener('visibilitychange',()=>{if(!document.hidden&&$('auto').checked&&accessToken&&Date.now()<tokenExpires)fetchLogs()});
+</script></body></html>
