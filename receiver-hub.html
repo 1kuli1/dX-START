@@ -589,8 +589,26 @@ DXportalens mottagarlista för WebSDR, KiwiSDR, OpenWebRX, FM-DX, flygradio, sat
 <main id="main-content">
 <div class="hub-guide"><b>Så gör du:</b> 1. Välj band eller typ &nbsp;→&nbsp; 2. Välj mottagare &nbsp;→&nbsp; 3. Tryck <b>Öppna</b>. Använd sökrutan om du redan vet namn, land eller ort. Du kan alltid öppna och prova en mottagare utan att spara den. Tryck bara på ☆ Spara favorit om du vill behålla den.<p><b>Observera:</b> Mottagarnas tillgänglighet kontrolleras inte automatiskt. Favoriter lagras i webbläsaren på denna enhet.</p></div>
 
+
+
+<!-- ===== WRAPPER ===== -->
+<div class="wrapper">
+
+<h2>Hjälp för de olika DX-ämnena</h2><p>Öppna en hjälp-PDF med förklaringar, inställningar och övningar för ämnet.</p><div class="filters" aria-label="Hjälp-PDF för DX-ämnen">
+<button type="button" onclick="window.open('guider.html#01_DX_fran_grunden','_blank','noopener')">Hjälp-PDF: DX från grunden</button>
+<button type="button" onclick="window.open('guider.html#04_LW_langvags_DX','_blank','noopener')">Hjälp-PDF: LW / långvåg</button>
+<button type="button" onclick="window.open('guider.html#03_MW_mellanvags_DX','_blank','noopener')">Hjälp-PDF: MW / mellanvåg</button>
+<button type="button" onclick="window.open('guider.html#02_SW_kortvags_DX','_blank','noopener')">Hjälp-PDF: SW / HF</button>
+<button type="button" onclick="window.open('guider.html#08_Amatorradio_SWL','_blank','noopener')">Hjälp-PDF: Amatörradio</button>
+<button type="button" onclick="window.open('guider.html#12_Utility_DX','_blank','noopener')">Hjälp-PDF: Utility</button>
+<button type="button" onclick="window.open('guider.html#13_Flygradio_DX','_blank','noopener')">Hjälp-PDF: Flygradio</button>
+<button type="button" onclick="window.open('guider.html#17_Satellit_DX','_blank','noopener')">Hjälp-PDF: Satellit</button>
+<button type="button" onclick="window.open('guider.html#05_FM_DX','_blank','noopener')">Hjälp-PDF: FM</button></div>
+
+<!-- ===== FILTERKNAPPAR ===== -->
+<h2>Välj mottagare</h2>
 <section class="hub-guide" aria-labelledby="rxDirectoriesTitle">
-<h2 id="rxDirectoriesTitle">Välj en annan mottagare från lista eller karta</h2>
+<h3 id="rxDirectoriesTitle">Välj en annan mottagare från lista eller karta</h3>
 <p>Öppna en lista eller karta i en ny flik och välj en mottagare där. Du behöver inte lägga till den som favorit.</p>
 <div class="directory-links">
 <a href="http://rx.kiwisdr.com/" target="_blank" rel="noopener noreferrer">KiwiSDR – mottagarlista ↗</a>
@@ -611,23 +629,6 @@ DXportalens mottagarlista för WebSDR, KiwiSDR, OpenWebRX, FM-DX, flygradio, sat
 <p id="rxCustomStatus" role="status"></p></form></details>
 <div id="rxCustomFavorites"></div>
 </section>
-
-<!-- ===== WRAPPER ===== -->
-<div class="wrapper">
-
-<h2>Hjälp för de olika DX-ämnena</h2><p>Öppna en hjälp-PDF med förklaringar, inställningar och övningar för ämnet.</p><div class="filters" aria-label="Hjälp-PDF för DX-ämnen">
-<button type="button" onclick="window.open('guider.html#01_DX_fran_grunden','_blank','noopener')">Hjälp-PDF: DX från grunden</button>
-<button type="button" onclick="window.open('guider.html#04_LW_langvags_DX','_blank','noopener')">Hjälp-PDF: LW / långvåg</button>
-<button type="button" onclick="window.open('guider.html#03_MW_mellanvags_DX','_blank','noopener')">Hjälp-PDF: MW / mellanvåg</button>
-<button type="button" onclick="window.open('guider.html#02_SW_kortvags_DX','_blank','noopener')">Hjälp-PDF: SW / HF</button>
-<button type="button" onclick="window.open('guider.html#08_Amatorradio_SWL','_blank','noopener')">Hjälp-PDF: Amatörradio</button>
-<button type="button" onclick="window.open('guider.html#12_Utility_DX','_blank','noopener')">Hjälp-PDF: Utility</button>
-<button type="button" onclick="window.open('guider.html#13_Flygradio_DX','_blank','noopener')">Hjälp-PDF: Flygradio</button>
-<button type="button" onclick="window.open('guider.html#17_Satellit_DX','_blank','noopener')">Hjälp-PDF: Satellit</button>
-<button type="button" onclick="window.open('guider.html#05_FM_DX','_blank','noopener')">Hjälp-PDF: FM</button></div>
-
-<!-- ===== FILTERKNAPPAR ===== -->
-<h2>Välj mottagare</h2>
 <div class="filters">
 
 <button type="button" onclick="showAllReceivers()">Alla</button>
