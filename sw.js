@@ -1,5 +1,5 @@
 /* DXportalen beta: sidor offline; inga personliga loggar eller externa radioströmmar cachas. */
-const CACHE='dxportalen-v12-20261010-sw-hf';
+const CACHE='dxportalen-v13-20261010-hf-help';
 const SHELL=['./','./index.html','./centralen.html','./katastrof-dx.html','./receiver-hub.html','./asta.html','./dx-help.html','./guider.html','./kom-igang.html','./academy/index.html','./academy/lektioner.html','./academy/nyborgare/index.html','./pwa-update.js','./receiver-custom.js','./receiver-catalog.js','./receiver-catalog.json','./manifest.webmanifest','./icon-192.png','./icon-512.png','./icon.svg'];
 const ALLOWED=new Set(SHELL.map(p=>new URL(p,self.registration.scope).pathname));
 const ACADEMY_ROOT=new URL('./academy/',self.registration.scope).pathname;
