@@ -165,29 +165,7 @@ function buildPrompt(q){
   return p;
 }
 
-async function askAsta(){
-  const answer=window.prompt("Vad vill du fråga Asta?");
-  if(answer===null) return;
-  const q=answer.trim();
-  const status=document.getElementById("status");
-  if(!q){
-    status.textContent="Skriv en fråga först.";
-    return;
-  }
-  const p=buildPrompt(q);
-  try{
-    await navigator.clipboard.writeText(p);
-    status.textContent="Frågan är kopierad. ChatGPT öppnas – klistra in frågan där och lägg gärna till bild eller ljud om det hjälper.";
-  }catch(e){
-    try{
-      const ta=document.createElement("textarea");
-      ta.value=p; ta.style.position="fixed"; ta.style.opacity="0";
-      document.body.appendChild(ta); ta.select(); document.execCommand("copy"); ta.remove();
-      status.textContent="Frågan är kopierad. Klistra in den i ChatGPT.";
-    }catch(err){
-      status.textContent="ChatGPT öppnas. Kopiera din fråga manuellt om den inte följer med.";
-    }
-  }
+function askAsta(){
   window.open("https://chatgpt.com/","_blank","noopener");
 }
 
