@@ -102,28 +102,19 @@ details ol,details ul{padding-inline-start:clamp(1.25rem,4vw,2rem)}
 <p>På programmets egna sidor finns den gula Asta-knappen nere till höger. När du lyssnar på en extern mottagare kan du öppna Asta i en annan flik eller använda delad skärm.</p>
 <p><a class="btn main" href="./asta.html" target="_blank" rel="noopener">Öppna Asta i en ny flik</a></p>
 <p class="small">Asta-adress: <a href="https://1kuli1.github.io/dX-START/asta.html" style="overflow-wrap:anywhere;color:#facc15;text-decoration:underline;text-underline-offset:3px">https://1kuli1.github.io/dX-START/asta.html</a></p>
-<details>
-<summary>Delad skärm på Samsung-platta, till exempel Tab S9</summary>
-<ol class="inspiration">
-<li>Öppna mottagaren i <b>Chrome</b>.</li>
-<li>Öppna <b>Samsung Internet</b> och skriv in Asta-adressen ovan.</li>
-<li>Visa <b>Senaste appar</b> med navigeringsknappen eller den gest du brukar använda.</li>
-<li>Tryck på <b>Chrome-symbolen ovanför förhandsbilden</b> och välj <b>Öppna i delad skärm</b>.</li>
-<li>Välj <b>Samsung Internet</b> som den andra appen. Nu har du mottagaren och Asta bredvid varandra.</li>
-</ol>
-<p>Du kan dra skiljelinjen för att ge mottagaren eller Asta mer plats. Menynamn och placering kan skilja sig mellan programversioner.</p>
-<p><b>När du trycker på Fråga Asta öppnas ChatGPT.</b> Där sker själva samtalet. Om ChatGPT öppnas som en separat app kan du välja den som den andra appen i delad skärm.</p>
-<p class="small"><a href="https://www.samsung.com/us/support/answer/ANS10002884/" target="_blank" rel="noopener">Samsungs guide till delad skärm</a></p>
-</details>
-<details>
-<summary>Spara Asta som bokmärke i Samsung Internet</summary>
-<ol class="inspiration">
-<li>Öppna Asta-adressen i <b>Samsung Internet</b>.</li>
-<li>Tryck på <b>bokmärkessymbolen (stjärnan)</b> för att spara sidan. Namnge bokmärket <b>Asta – DX-hjälp</b> om du får välja namn.</li>
-<li>Nästa gång öppnar du webbläsarens <b>Bokmärken</b> och väljer Asta.</li>
-</ol>
-<p class="small">Stjärnans placering kan variera. <a href="https://www.samsung.com/us/support/answer/ANS10012958/" target="_blank" rel="noopener">Samsungs guide till bokmärken</a></p>
-</details>
+<label for="device-choice" style="font-size:1rem;color:#facc15;font-weight:700">Instruktioner för din enhet</label>
+<select id="device-choice" aria-label="Välj enhet" style="display:block;width:100%;max-width:440px;padding:12px;margin:8px 0 14px;background:#0b1525;color:#fff;border:1px solid #facc15;border-radius:9px;font:inherit">
+<option value="samsung-tablet">Samsung-platta</option>
+<option value="android-tablet">Annan Android-platta</option>
+<option value="android-phone">Android-mobil</option>
+<option value="ipad">iPad</option>
+<option value="iphone">iPhone</option>
+<option value="windows">Windows-dator</option>
+<option value="mac">Mac</option>
+<option value="linux">Linux-dator</option>
+</select>
+<p class="small" id="device-detected" role="status"></p>
+<div id="device-instructions" aria-live="polite"></div>
 </section>
 
 <section class="card">
@@ -197,6 +188,27 @@ if('serviceWorker' in navigator && (location.protocol==='https:' || location.hos
  window.addEventListener('load',()=>navigator.serviceWorker.register('./sw.js',{scope:'./'})
    .catch(err=>console.warn('DXportalen offline-läge kunde inte startas:',err)));
 }
+</script>
+
+<script>
+(function(){
+const guides={
+"samsung-tablet":{title:"Delad skärm på Samsung-platta",steps:["Öppna mottagaren i Chrome.","Öppna Asta i Samsung Internet eller ChatGPT-appen.","Visa Senaste appar med navigeringsknappen eller din vanliga gest.","Tryck på appikonen ovanför Chrome-förhandsbilden och välj Öppna i delad skärm.","Välj Samsung Internet eller ChatGPT som den andra appen. Dra skiljelinjen för att justera storleken."]},
+"android-tablet":{title:"Delad skärm på Android-platta",steps:["Öppna mottagaren i webbläsaren.","Öppna Asta eller ChatGPT i en annan app.","Öppna vyn Senaste appar.","Välj Delad skärm från appens meny om funktionen finns.","Välj den andra appen. Menyerna varierar mellan tillverkare."]},
+"android-phone":{title:"Asta på Android-mobil",steps:["Öppna mottagaren i Chrome.","Tryck på Fråga Asta för att öppna ChatGPT.","Växla mellan apparna via Senaste appar. Om mobilen stöder delad skärm kan du välja det där."]},
+"ipad":{title:"Asta på iPad",steps:["Öppna mottagaren i Safari.","Öppna ChatGPT i Safari eller i appen.","På iPad-modeller som stöder multitasking kan du visa appar sida vid sida med fönster- eller multitaskingreglagen.","Om delad vy inte är tillgänglig växlar du mellan apparna."]},
+"iphone":{title:"Asta på iPhone",steps:["Öppna mottagaren i Safari.","Tryck på Fråga Asta för att öppna ChatGPT.","Växla mellan Safari och ChatGPT via appväxlaren. iPhone har normalt inte delad skärm för två appar."]},
+"windows":{title:"Asta bredvid mottagaren i Windows",steps:["Öppna mottagaren i ett webbläsarfönster.","Öppna Asta eller ChatGPT i ett annat fönster.","Använd Windows-tangenten + vänsterpil på ena fönstret och Windows-tangenten + högerpil på det andra.","Justera fönstrens bredd efter behov."]},
+"mac":{title:"Asta bredvid mottagaren på Mac",steps:["Öppna mottagaren och ChatGPT i varsitt fönster.","Placera pekaren över den gröna fönsterknappen och välj alternativet att placera fönstret på ena sidan av skärmen.","Välj det andra fönstret på andra sidan. Alternativens namn kan variera med macOS-version."]},
+"linux":{title:"Asta bredvid mottagaren i Linux",steps:["Öppna mottagaren och ChatGPT i varsitt webbläsarfönster.","Dra ett fönster mot vänster skärmkant och det andra mot höger, om skrivbordsmiljön stöder fönsterfästning.","På många Linux-skrivbord fungerar även Super + vänsterpil respektive högerpil."]}
+};
+const choice=document.getElementById("device-choice"),out=document.getElementById("device-instructions"),detected=document.getElementById("device-detected");
+const ua=navigator.userAgent||"",platform=navigator.platform||"";
+const tablet=/iPad/i.test(ua)||(/Android/i.test(ua)&&!/Mobile/i.test(ua));
+let kind=/iPad/i.test(ua)||(/Mac/i.test(platform)&&navigator.maxTouchPoints>1)?"ipad":/iPhone/i.test(ua)?"iphone":/Android/i.test(ua)?(tablet?(/Samsung|SM-|SAMSUNG/i.test(ua)?"samsung-tablet":"android-tablet"):"android-phone"):/Win/i.test(platform)?"windows":/Mac/i.test(platform)?"mac":/Linux/i.test(platform)?"linux":"windows";
+function show(){const g=guides[choice.value];out.replaceChildren();const d=document.createElement("details");d.open=true;const h=document.createElement("summary");h.textContent=g.title;d.appendChild(h);const ol=document.createElement("ol");ol.className="inspiration";g.steps.forEach(step=>{const li=document.createElement("li");li.textContent=step;ol.appendChild(li)});d.appendChild(ol);out.appendChild(d)}
+choice.value=kind;detected.textContent="Föreslagen enhet: "+choice.selectedOptions[0].textContent+". Välj en annan om det inte stämmer.";choice.addEventListener("change",()=>{detected.textContent="Vald enhet: "+choice.selectedOptions[0].textContent;show()});show();
+})();
 </script>
 <script src="pwa-update.js" defer></script>
 </body>
