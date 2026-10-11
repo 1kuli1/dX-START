@@ -33,8 +33,8 @@ textarea:focus{outline:2px solid var(--accent);outline-offset:1px}
 .note{background:#0b1525;border-left:4px solid var(--accent);border-radius:9px;padding:12px 14px;color:#dce5f3;line-height:1.5}
 .small{font-size:13px;color:var(--muted);line-height:1.5}
 details{background:#0b1525;border:1px solid #31425f;border-radius:12px;padding:12px 14px;margin-top:14px}
-summary{cursor:pointer;font-weight:800;color:#fff}
-.inspiration{margin:10px 0 0;padding-left:20px;color:#dce5f3;line-height:1.55}
+summary{cursor:pointer;font-weight:800;color:#facc15}
+.inspiration{margin:10px 0 0;padding-left:20px;color:#facc15;line-height:1.55}
 .context{margin-top:10px;color:#7f8da3;font-size:12px}
 .status{margin-top:10px;color:#fde68a;font-size:13px;line-height:1.4}
 @media(max-width:650px){
@@ -104,8 +104,7 @@ summary{cursor:pointer;font-weight:800;color:#fff}
 
 <section class="card">
 <h2>Vad vill du fråga Asta?</h2>
-<label for="question">Din fråga</label>
-<textarea id="question" autofocus placeholder="Skriv precis det du funderar på..."></textarea>
+
 
 <details>
 <summary>Behöver du inspiration?</summary>
@@ -125,7 +124,7 @@ summary{cursor:pointer;font-weight:800;color:#fff}
 
 <div class="actions">
 <button type="button" class="btn main" onclick="askAsta()">🤖 Fråga Asta</button>
-<button type="button" class="btn" onclick="clearQuestion()">Töm frågan</button>
+
 </div>
 
 <div id="context" class="context"></div>
@@ -157,8 +156,7 @@ function sourceContext(){
 
 const pageContext=sourceContext();
 
-function buildPrompt(){
-  const q=(document.getElementById("question").value||"").trim();
+function buildPrompt(q){
   let p="Du är Asta, min DX- och SWL-assistent. Svara på svenska, konkret och hjälpsamt. Min fråga är:\n\n"+q;
   if(pageContext){
     p+="\n\nBakgrund: Jag öppnade Asta från "+pageContext+". Använd bara den informationen om den hjälper dig att förstå frågan; låt den inte begränsa vad frågan kan handla om.";
@@ -168,14 +166,15 @@ function buildPrompt(){
 }
 
 async function askAsta(){
-  const q=(document.getElementById("question").value||"").trim();
+  const answer=window.prompt("Vad vill du fråga Asta?");
+  if(answer===null) return;
+  const q=answer.trim();
   const status=document.getElementById("status");
   if(!q){
     status.textContent="Skriv en fråga först.";
-    document.getElementById("question").focus();
     return;
   }
-  const p=buildPrompt();
+  const p=buildPrompt(q);
   try{
     await navigator.clipboard.writeText(p);
     status.textContent="Frågan är kopierad. ChatGPT öppnas – klistra in frågan där och lägg gärna till bild eller ljud om det hjälper.";
@@ -190,12 +189,6 @@ async function askAsta(){
     }
   }
   window.open("https://chatgpt.com/","_blank","noopener");
-}
-
-function clearQuestion(){
-  document.getElementById("question").value="";
-  document.getElementById("status").textContent="";
-  document.getElementById("question").focus();
 }
 
 if(pageContext){
