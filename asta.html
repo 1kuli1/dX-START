@@ -102,8 +102,8 @@ details ol,details ul{padding-inline-start:clamp(1.25rem,4vw,2rem)}
 <p>På programmets egna sidor finns den gula Asta-knappen nere till höger. När du lyssnar på en extern mottagare kan du öppna Asta i en annan flik eller använda delad skärm.</p>
 <p><a class="btn main" href="./asta.html" target="_blank" rel="noopener">Öppna Asta i en ny flik</a></p>
 <p class="small">Asta-adress: <a href="https://1kuli1.github.io/dX-START/asta.html" style="overflow-wrap:anywhere;color:#facc15;text-decoration:underline;text-underline-offset:3px">https://1kuli1.github.io/dX-START/asta.html</a></p>
-<label for="device-choice" style="font-size:1rem;color:#facc15;font-weight:700">Instruktioner för din enhet</label>
-<select id="device-choice" aria-label="Välj enhet" style="display:block;width:100%;max-width:440px;padding:12px;margin:8px 0 14px;background:#0b1525;color:#fff;border:1px solid #facc15;border-radius:9px;font:inherit">
+<label for="device-choice" style="font-size:1rem;color:#facc15;font-weight:700">Instruktioner för delad skärm på din enhet</label>
+<select id="device-choice" aria-label="Välj enhet för instruktioner om delad skärm" style="display:block;width:100%;max-width:440px;padding:12px;margin:8px 0 14px;background:#0b1525;color:#fff;border:1px solid #facc15;border-radius:9px;font:inherit">
 <option value="samsung-tablet">Samsung-platta</option>
 <option value="android-tablet">Annan Android-platta</option>
 <option value="android-phone">Android-mobil</option>
@@ -207,7 +207,7 @@ const ua=navigator.userAgent||"",platform=navigator.platform||"";
 const tablet=/iPad/i.test(ua)||(/Android/i.test(ua)&&!/Mobile/i.test(ua));
 let kind=/iPad/i.test(ua)||(/Mac/i.test(platform)&&navigator.maxTouchPoints>1)?"ipad":/iPhone/i.test(ua)?"iphone":/Android/i.test(ua)?(tablet?(/Samsung|SM-|SAMSUNG/i.test(ua)?"samsung-tablet":"android-tablet"):"android-phone"):/Win/i.test(platform)?"windows":/Mac/i.test(platform)?"mac":/Linux/i.test(platform)?"linux":"windows";
 function show(){const g=guides[choice.value];out.replaceChildren();const d=document.createElement("details");d.open=true;const h=document.createElement("summary");h.textContent=g.title;d.appendChild(h);const ol=document.createElement("ol");ol.className="inspiration";g.steps.forEach(step=>{const li=document.createElement("li");li.textContent=step;ol.appendChild(li)});d.appendChild(ol);out.appendChild(d)}
-choice.value=kind;detected.textContent="Föreslagen enhet: "+choice.selectedOptions[0].textContent+". Välj en annan om det inte stämmer.";choice.addEventListener("change",()=>{detected.textContent="Vald enhet: "+choice.selectedOptions[0].textContent;show()});show();
+choice.value=kind;detected.textContent="Föreslagen enhet för delad skärm: "+choice.selectedOptions[0].textContent+". Välj en annan om det inte stämmer.";choice.addEventListener("change",()=>{detected.textContent="Vald enhet för delad skärm: "+choice.selectedOptions[0].textContent;show()});show();
 })();
 </script>
 <script src="pwa-update.js" defer></script>
