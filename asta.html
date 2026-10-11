@@ -127,8 +127,6 @@ summary{cursor:pointer;font-weight:800;color:#facc15}
 
 </div>
 
-<div id="context" class="context"></div>
-<div id="status" class="status" role="status" aria-live="polite"></div>
 </section>
 </main>
 
@@ -169,9 +167,6 @@ function askAsta(){
   window.open("https://chatgpt.com/","_blank","noopener");
 }
 
-if(pageContext){
-  document.getElementById("context").textContent="Asta ser att du kom från "+pageContext+", men du kan fråga om vad som helst.";
-}
 </script>
 <script>
 if('serviceWorker' in navigator && (location.protocol==='https:' || location.hostname==='localhost')){
