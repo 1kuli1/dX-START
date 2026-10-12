@@ -1,8 +1,7 @@
 /* DXportalen beta: sidor offline; inga personliga loggar eller externa radioströmmar cachas. */
-const CACHE='dxportalen-v20-20261010-remove-duplicate-asta';
+const CACHE='dxportalen-v21-20261013-restricted-offline-cache';
 const SHELL=['./','./index.html','./centralen.html','./katastrof-dx.html','./receiver-hub.html','./asta.html','./dx-help.html','./guider.html','./HF_hjalp_nyborjare.pdf','./kom-igang.html','./academy/index.html','./academy/lektioner.html','./academy/nyborgare/index.html','./pwa-update.js','./receiver-custom.js','./receiver-catalog.js','./receiver-catalog.json','./manifest.webmanifest','./icon-192.png','./icon-512.png','./icon.svg'];
 const ALLOWED=new Set(SHELL.map(p=>new URL(p,self.registration.scope).pathname));
-const ACADEMY_ROOT=new URL('./academy/',self.registration.scope).pathname;
 self.addEventListener('install',event=>{
  event.waitUntil(caches.open(CACHE).then(cache=>cache.addAll(SHELL)));
 });
@@ -14,7 +13,7 @@ self.addEventListener('activate',event=>{
 });
 self.addEventListener('fetch',event=>{
  const req=event.request,url=new URL(req.url);
- if(req.method!=='GET'||url.origin!==self.location.origin||(!ALLOWED.has(url.pathname)&&!url.pathname.startsWith(ACADEMY_ROOT)))return;
+ if(req.method!=='GET'||url.origin!==self.location.origin||!ALLOWED.has(url.pathname))return;
  event.respondWith((async()=>{
   const cache=await caches.open(CACHE);
   try{
@@ -22,7 +21,7 @@ self.addEventListener('fetch',event=>{
    if(response.ok && response.type==='basic'){try{await cache.put(req,response.clone());}catch(e){console.warn('Offline-kopia kunde inte uppdateras',e);}}
    return response;
   }catch(error){
-   const saved=await cache.match(req,{ignoreSearch:true});
+   const saved=await cache.match(req);
    if(saved)return saved;
    if(req.mode==='navigate'){
      const home=await cache.match(new URL('./index.html',self.registration.scope));

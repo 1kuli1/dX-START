@@ -1050,9 +1050,25 @@ function clearForm(){
 }
 function esc(s){return String(s??'').replace(/[&<>"']/g,m=>({'&':'&amp;','<':'&lt;','>':'&gt;','"':'&quot;',"'":'&#39;'}[m]))}
 function linkifyText(s){
-  const safe=esc(String(s||''));
-  return safe.replace(/(https?:\/\/[^\s|<]+)/g,'<a target="_blank" style="color:#eab308" href="$1" rel="noopener noreferrer">$1</a>')
-             .replace(/(^|[\s|])([A-Z0-9._%+-]+@[A-Z0-9.-]+\.[A-Z]{2,})/gi,'$1<a style="color:#eab308" href="mailto:$2">$2</a>');
+  const raw=String(s||'');
+  const token=/(https?:\/\/[^\s|<>"']+|[A-Z0-9._%+-]+@[A-Z0-9.-]+\.[A-Z]{2,})/gi;
+  let result='',last=0,match;
+  while((match=token.exec(raw))!==null){
+    result+=esc(raw.slice(last,match.index));
+    const value=match[0];
+    if(/^https?:\/\//i.test(value)){
+      try{
+        const url=new URL(value);
+        if(url.protocol==='https:'||url.protocol==='http:'){
+          result+='<a target="_blank" style="color:#eab308" href="'+esc(url.href)+'" rel="noopener noreferrer">'+esc(value)+'</a>';
+        }else result+=esc(value);
+      }catch(e){result+=esc(value);}
+    }else{
+      result+='<a style="color:#eab308" href="mailto:'+encodeURIComponent(value)+'">'+esc(value)+'</a>';
+    }
+    last=token.lastIndex;
+  }
+  return result+esc(raw.slice(last));
 }
 document.addEventListener('keydown',function(event){
   const row=event.target.closest?.('tr[data-profile-index]');
